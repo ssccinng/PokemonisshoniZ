@@ -1,0 +1,39 @@
+﻿@using EasyValueToRef
+@using PokemonisshoniZ.Components.Pages
+@inherits LayoutComponentBase
+
+ <RadzenComponents />
+<ThemeControl Theme="@theme" ></ThemeControl>
+@* <RadzenButton Click="TogglePanel">test</RadzenButton> *@
+<RadzenLayout>
+
+    <LayoutIsland 
+        ThemeChange="ClickHandler"></LayoutIsland>
+
+    <RadzenBody class="content px-4">
+        @Body
+    </RadzenBody>
+</RadzenLayout>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+@code
+{
+    // string theme = "material3";
+
+    string theme = "material3";
+    void TogglePanel()
+    {
+        // sidebar1Expanded = !sidebar1Expanded;
+    }
+
+    void ClickHandler(string newMessage)
+    {
+        theme = newMessage;
+    }
+    // string theme = "default";
+}

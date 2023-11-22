@@ -1,0 +1,68 @@
+﻿@using EasyValueToRef
+@using PokemonisshoniZ.Components.Pages
+
+@* @rendermode InteractiveServer *@
+
+<RadzenSidebar @bind-Expanded="@sidebar1Expanded">
+    <NavMenu @rendermode=InteractiveServer />
+
+</RadzenSidebar>
+<RadzenHeader >
+    <RadzenRow>
+        <RadzenColumn SizeMD="6" SizeXS="12">
+            <RadzenStack Orientation="Orientation.Horizontal"
+                         AlignItems="AlignItems.Center" Gap="0">
+                <RadzenSidebarToggle @rendermode=InteractiveServer
+                    Click="@(() => sidebar1Expanded = !sidebar1Expanded)" />
+                <RadzenLabel Text="Pokemonisshoni Z" Style="font-weight:600" />
+
+            </RadzenStack>
+        </RadzenColumn>
+        <RadzenColumn SizeMD="6" SizeXS="12">
+
+            <RadzenStack JustifyContent="JustifyContent.End" class="h-100 mr-5"
+                         AlignItems="AlignItems.Center"
+                         Orientation="Orientation.Horizontal" Gap="5">
+                <AuthorizeView>
+                    <Authorized>
+
+                    </Authorized>
+                    <NotAuthorized>
+                        <div class="nav-item px-3">
+                            <NavLink class="nav-link" href="Account/Register">
+                                <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
+                            </NavLink>
+                        </div>
+                        <div class="nav-item px-3">
+                            <NavLink class="nav-link" href="Account/Login">
+                                <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login
+                            </NavLink>
+                        </div>
+                    </NotAuthorized>
+                </AuthorizeView>
+                <RadzenDropDown 
+                    Data="themes" @bind-Value="Theme" 
+                
+                @bind-Value:after="Test" />
+            </RadzenStack>
+        </RadzenColumn>
+
+    </RadzenRow>
+
+</RadzenHeader>
+@code {
+    bool sidebar1Expanded = true;
+    string[] themes = ["material3", "material3-dark", "fluent", "fluent-dark", "material", "material-dark", "default", "standard", "software", "dark", "humanistic"];
+
+
+    public string Theme { get; set; } = "material3";
+    [Parameter] public EventCallback<string> ThemeChange { get; set; }
+
+    async Task Test()
+    {
+        await ThemeChange.InvokeAsync(Theme);
+    }
+
+
+
+}

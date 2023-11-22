@@ -1,0 +1,6 @@
+﻿<link rel="stylesheet" href=@($"_content/Radzen.Blazor/css/{Theme}-base.css")>
+<link rel="stylesheet" href=@($"{Theme}-base.css")>
+
+@code {
+    [Parameter] public string Theme { get; set; } = "default";
+}

@@ -1,0 +1,35 @@
+﻿@page "/counter"
+@rendermode InteractiveAuto
+@attribute [StreamRendering]
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int currentCount = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            currentCount++;
+            await Task.Delay(1000);
+            StateHasChanged();
+        }
+    }
+
+    private async void IncrementCount()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            currentCount++;
+            await Task.Delay(1000);
+            StateHasChanged();
+        } 
+    }
+}

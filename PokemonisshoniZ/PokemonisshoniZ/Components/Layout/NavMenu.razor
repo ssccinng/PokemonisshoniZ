@@ -1,0 +1,163 @@
+﻿@using Microsoft.AspNetCore.Identity
+@implements IDisposable
+
+@inject NavigationManager NavigationManager
+@* @inject UserManager<IdentityUser> userManager *@
+
+@* <RadzenSidebar @bind-Expanded="@sidebar1Expanded" @rendermode=@InteractiveServer onclick="@TogglePanel"> *@
+    <RadzenPanelMenu Style="user-select:none;">
+        <RadzenPanelMenuItem Text="主页" Path="/" />
+        <RadzenPanelMenuItem Text="对战竞技场">
+        <RadzenPanelMenuItem Text="创办联盟赛" Path="/match/create" Icon="add"></RadzenPanelMenuItem>
+            @*<RadzenPanelMenuItem Text="系列赛" Path="SeriesMatchList" Icon="list" ></RadzenPanelMenuItem>*@
+        <RadzenPanelMenuItem Text="联盟赛列表" Path="/match/list" Icon="list"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="Test" Path="counter" Icon="list"></RadzenPanelMenuItem>
+        </RadzenPanelMenuItem>
+        <AuthorizeView>
+            <Authorized>
+                <RadzenPanelMenuItem Text="@context.User.Identity?.Name" Expanded="true">
+                    <RadzenPanelMenuItem Text="宝可梦盒子" Path="teammanager" Icon="ballot"></RadzenPanelMenuItem>
+                    <RadzenPanelMenuItem Text="训练师证" Path="myinfo" Icon="credit_card"></RadzenPanelMenuItem>
+                    <RadzenPanelMenuItem Text="对战记录器" Path="battlerecorder" Icon="ad_units"></RadzenPanelMenuItem>
+                    <RadzenPanelMenuItem Text="联盟登记信息" Path="mymanager" Icon="info"></RadzenPanelMenuItem>
+                    @*<RadzenPanelMenuItem Text="我的文章" Path="textbox" Icon="pages"></RadzenPanelMenuItem>
+                    <RadzenPanelMenuItem Text="对战数据" Path="textbox" Icon="data_usage"></RadzenPanelMenuItem>*@
+                </RadzenPanelMenuItem>
+            </Authorized>
+        </AuthorizeView>
+        <AuthorizeView>
+            <Authorized>
+                <RadzenPanelMenuItem Text="联盟信息中心" Expanded="false">
+                    <RadzenPanelMenuItem Text="编写文章" Path="InformationCenter/EditArticle" Icon="border_color"></RadzenPanelMenuItem>
+                    <RadzenPanelMenuItem Text="联盟新闻" Path="InformationCenter/News" Icon="sms"></RadzenPanelMenuItem>
+                    <RadzenPanelMenuItem Text="队伍报告" Path="InformationCenter/TeamReport" Icon="pages"></RadzenPanelMenuItem>
+                </RadzenPanelMenuItem>
+            </Authorized>
+            <NotAuthorized>
+                <RadzenPanelMenuItem Text="联盟信息中心" Expanded="false">
+                    <RadzenPanelMenuItem Text="联盟新闻" Path="InformationCenter/News" Icon="sms"></RadzenPanelMenuItem>
+                    <RadzenPanelMenuItem Text="队伍报告" Path="InformationCenter/TeamReport" Icon="pages"></RadzenPanelMenuItem>
+                </RadzenPanelMenuItem>
+          @*   <NavLink class="nav-link" href="Account/Register">
+                <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
+            </NavLink> *@
+            </NotAuthorized>
+        </AuthorizeView>
+        <AuthorizeView Roles="Admin">
+            <Authorized>
+                <RadzenPanelMenuItem Text="洛托姆手机" Expanded="false">
+                    <RadzenPanelMenuItem Text="信息箱" Path="" Icon="email"></RadzenPanelMenuItem>
+                </RadzenPanelMenuItem>
+            </Authorized>
+        </AuthorizeView>
+        <RadzenPanelMenuItem Text="计算器" Path="http://calc.pokemonisshoni.top" Target="_blank">
+        </RadzenPanelMenuItem>
+        <RadzenPanelMenuItem Text="宝可梦表" Expanded="false">
+            <RadzenPanelMenuItem Text="掷硬币" Path="throwcoin" Icon="panorama_photosphere"></RadzenPanelMenuItem>
+            @*<RadzenPanelMenuItem Text="宝可梦检索" Path="panel" Icon="content_paste"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="队伍盲点分析" Path="fieldset" Icon="account_balance_wallet"></RadzenPanelMenuItem>*@
+            <RadzenPanelMenuItem Text="阿尔宙斯随机化" Path="RandomNumGen" Icon="track_changes"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="PS格式翻译" Path="pstools" Icon="g_translate"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="伤害显示" Path="damagedisplay" Icon="stacked_bar_chart"></RadzenPanelMenuItem>
+        </RadzenPanelMenuItem>
+        <AuthorizeView Roles="Admin">
+            <RadzenPanelMenuItem Text="成员管理" Path="adminpage">
+            </RadzenPanelMenuItem>
+        </AuthorizeView>
+
+        @* <RadzenDropDown Data="themes" @bind-Value="theme" @rendermode=@InteractiveServer /> *@
+
+
+    </RadzenPanelMenu>
+
+@* </RadzenSidebar> *@
+  @*   <nav class="flex-column">
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="counter">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="weather">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="auth">
+                <span class="bi bi-lock-nav-menu" aria-hidden="true"></span> Auth Required
+            </NavLink>
+        </div>
+
+        <AuthorizeView>
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Account/Manage">
+                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <form action="Account/Logout" method="post">
+                        <AntiforgeryToken />
+                        <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                        <button type="submit" class="nav-link">
+                            <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
+                        </button>
+                    </form>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Account/Register">
+                        <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Account/Login">
+                        <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login
+                    </NavLink>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
+    </nav> *@
+
+
+@code {
+
+    // bool sidebar1Expanded = true;
+    // string[] themes = ["material3", "material3-dark", "fluent", "fluent-dark", "material", "material-dark", "default", "standard", "software", "dark", "humanistic"];
+    // string theme = "material3";
+    private string? currentUrl;
+
+    protected override void OnInitialized()
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+
+    // void TogglePanel()
+    // {
+    //     sidebar1Expanded = !sidebar1Expanded;
+    //     StateHasChanged();
+    // }
+}
+
