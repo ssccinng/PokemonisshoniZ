@@ -1,6 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using PokemonisshoniZ.Data
 @implements IDisposable
 
+@inject UserManager<ApplicationUser> UserManager
 @inject NavigationManager NavigationManager
 @* @inject UserManager<IdentityUser> userManager *@
 
@@ -15,7 +17,8 @@
         </RadzenPanelMenuItem>
         <AuthorizeView>
             <Authorized>
-                <RadzenPanelMenuItem Text="@context.User.Identity?.Name" Expanded="true">
+                @* <RadzenPanelMenuItem Text="@context.User.Identity?.Name" Expanded="true"> *@
+            <RadzenPanelMenuItem Text="@UserManager.GetUserAsync(context.User).Result.NickName" Expanded="true">
                     <RadzenPanelMenuItem Text="宝可梦盒子" Path="teammanager" Icon="ballot"></RadzenPanelMenuItem>
                     <RadzenPanelMenuItem Text="训练师证" Path="myinfo" Icon="credit_card"></RadzenPanelMenuItem>
                     <RadzenPanelMenuItem Text="对战记录器" Path="battlerecorder" Icon="ad_units"></RadzenPanelMenuItem>

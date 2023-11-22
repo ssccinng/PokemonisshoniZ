@@ -20,12 +20,10 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0-beta.2" />
     <PackageReference Include="Radzen.Blazor" Version="4.21.3" />
   
-	<PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.9" />
+	<PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.8" />
+	 <PackageReference Include="Microsoft.SemanticKernel" Version="1.0.0-beta4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.0" />
 
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Components\Chatbot\" />
   </ItemGroup>
 
 </Project>

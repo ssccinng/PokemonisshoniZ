@@ -18,7 +18,7 @@
 
 <PageTitle>注册</PageTitle>
 
-<h1>Register</h1>
+<h1>注册</h1>
 
 <div class="row">
     <div class="col-md-4">
@@ -30,19 +30,50 @@
             <ValidationSummary class="text-danger" role="alert" />
             <div class="form-floating mb-3">
                 <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label for="email">Email</label>
+                <label for="email">邮箱</label>
                 <ValidationMessage For="() => Input.Email" class="text-danger" />
             </div>
             <div class="form-floating mb-3">
                 <InputText type="password" @bind-Value="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label for="password">Password</label>
+                <label for="password">密码</label>
                 <ValidationMessage For="() => Input.Password" class="text-danger" />
             </div>
             <div class="form-floating mb-3">
                 <InputText type="password" @bind-Value="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label for="confirm-password">Confirm Password</label>
+                <label for="confirm-password">确认密码</label>
                 <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
             </div>
+
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="Input.NickName" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label for="nickName">昵称</label>
+                <ValidationMessage For="() => Input.NickName" class="text-danger" />
+            </div>
+
+            <div class="form-floating mb-3">
+                <InputDate  @bind-Value="Input.DOB" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label for="dob">生日</label>
+                <ValidationMessage For="() => Input.DOB" class="text-danger" />
+            </div>
+
+            <div class="form-floating mb-3">
+                <InputText  @bind-Value="Input.City" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label for="city">所在城市</label>
+                <ValidationMessage For="() => Input.City" class="text-danger" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="Input.QQ" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label for="qq">QQ</label>
+                <ValidationMessage For="() => Input.QQ" class="text-danger" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="Input.HomeName" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label for="homeName">游戏ID</label>
+                <ValidationMessage For="() => Input.HomeName" class="text-danger" />
+            </div>
+
+
+
             <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </EditForm>
     </div>
@@ -68,7 +99,21 @@
 
     public async Task RegisterUser(EditContext editContext)
     {
+        Random rnd = new Random();
+        int b = rnd.Next(99999999);
+        while (UserManager.Users.Any(s => s.TrainerId == b))
+        {
+            b = rnd.Next(99999999);
+        }
+
         var user = CreateUser();
+        user.QQ = Input.QQ;
+        user.DOB = Input.DOB;
+        user.City = Input.City;
+        user.HomeName = Input.HomeName;
+        user.NickName = Input.NickName;
+        user.TrainerId = b;
+
 
         await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
         var emailStore = GetEmailStore();
@@ -142,5 +187,31 @@
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = "";
+
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "昵称")]
+        [StringLength(12)]
+        public string NickName { get; set; } = string.Empty;
+
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "QQ号")]
+        public string QQ { get; set; } // 剑盾游戏名字
+
+        [Required]
+        [Display(Name = "生日")]
+        [DataType(DataType.Date)]
+        public DateTime DOB { get; set; } = DateTime.Now;
+
+        //[Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "所在城市")]
+        public string City { get; set; } = string.Empty;// 城市
+                                                        //[Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "朱紫游戏名")]
+        public string HomeName { get; set; } = string.Empty; // 剑盾游戏名字
+
     }
 }

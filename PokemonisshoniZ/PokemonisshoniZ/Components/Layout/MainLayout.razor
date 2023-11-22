@@ -1,4 +1,5 @@
 ﻿@using EasyValueToRef
+@using PokemonisshoniZ.Components.Chatbot
 @using PokemonisshoniZ.Components.Pages
 @inherits LayoutComponentBase
 
@@ -10,8 +11,10 @@
     <LayoutIsland 
         ThemeChange="ClickHandler"></LayoutIsland>
 
-    <RadzenBody class="content px-4">
+    <RadzenBody class="content px-4"
+                style="background:url(Image/Pokemon_Legends_Arceus_1.jpg) no-repeat 50% 0;background-size:cover;background-attachment: fixed;">
         @Body
+        <ShowChatbotButton />
     </RadzenBody>
 </RadzenLayout>
 

@@ -1,0 +1,14 @@
+﻿@inject NavigationManager Nav
+
+<a class="show-chatbot" style="background-image:url(389px-手机洛托姆_SV.png)"
+href="@Nav.GetUriWithQueryParameter("chat", true)" title="Show chatbot"></a>
+@* <RadzenLink class="show-chatbot" Image="库库伊_Masters_Sprite_4.png" Path="@Nav.GetUriWithQueryParameter("chat", true)"></RadzenLink> *@
+@if (ShowChat)
+{
+    <Chatbot />
+}
+
+@code {
+    [SupplyParameterFromQuery(Name = "chat")]
+    public bool ShowChat { get; set; }
+}
