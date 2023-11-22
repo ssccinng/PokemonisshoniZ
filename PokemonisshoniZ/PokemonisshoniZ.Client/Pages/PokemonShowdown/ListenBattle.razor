@@ -1,0 +1,20 @@
+﻿@page "/PS/ListenBattle"
+
+<RadzenStack Orientation="Orientation.Vertical" Gap="10" class="h-100">
+    <RadzenRow>
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenDropDown Data="ids" @bind-Value="selectId" />
+
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenButton>开始监听</RadzenButton>
+        </RadzenColumn>
+    </RadzenRow>
+
+</RadzenStack>
+
+
+@code {
+    string selectId;
+    string[] ids = ["scixing", "mooob"];
+}

@@ -1,0 +1,11 @@
+﻿@PokemonisshoniZ_HostAddress = https://localhost:7145
+
+POST {{PokemonisshoniZ_HostAddress}}/api/psusernames
+Content-Type: application/json
+
+{
+  //PSUsername
+
+}
+
+###
