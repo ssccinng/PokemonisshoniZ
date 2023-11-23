@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PokemonisshoniZ.Client.Pages;
+using PokemonisshoniZ.Client.Services;
 using PokemonisshoniZ.Components;
 using PokemonisshoniZ.Components.Account;
 using PokemonisshoniZ.Data;
@@ -48,6 +49,10 @@ public class Program
             options.User.RequireUniqueEmail = false;
         });
 
+        //builder.Services.AddHttpClient("BlazorApp2.ServerAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
+
+        //builder.Services.AddHttpClient();
+        builder.Services.AddScoped<PSPluginService>();
 
 
         builder.Services.AddRadzenComponents();
@@ -76,6 +81,7 @@ public class Program
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
         builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddSignInManager()
             .AddDefaultTokenProviders();

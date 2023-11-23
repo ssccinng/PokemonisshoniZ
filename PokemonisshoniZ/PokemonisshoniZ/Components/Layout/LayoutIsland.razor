@@ -1,5 +1,12 @@
 ﻿@using EasyValueToRef
+@using Microsoft.AspNetCore.Identity
 @using PokemonisshoniZ.Components.Pages
+@using PokemonisshoniZ.Data
+
+@implements IDisposable
+
+@inject NavigationManager NavigationManager
+@inject UserManager<ApplicationUser> UserManager
 
 @* @rendermode InteractiveServer *@
 
@@ -25,17 +32,33 @@
                          Orientation="Orientation.Horizontal" Gap="5">
                 <AuthorizeView>
                     <Authorized>
-
+                        <div class="nav-item px-3">
+                            <NavLink class="nav-link" href="Account/Manage">
+                                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> 
+                                @UserManager.GetUserAsync(context.User).Result?.NickName
+                                @* @context.User.Identity?.Name *@
+                            </NavLink>
+                        </div>
+                        <div class="nav-item px-3">
+                            <form action="Account/Logout" method="post">
+                                <AntiforgeryToken />
+                                <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                                <button type="submit" class="btn btn-outline-dark">
+                                    <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span>
+                                    登出
+                                </button>
+                            </form>
+                        </div>
                     </Authorized>
                     <NotAuthorized>
                         <div class="nav-item px-3">
                             <NavLink class="nav-link" href="Account/Register">
-                                <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
+                                <span class="bi bi-person-nav-menu" aria-hidden="true"></span> 注册
                             </NavLink>
                         </div>
                         <div class="nav-item px-3">
                             <NavLink class="nav-link" href="Account/Login">
-                                <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login
+                                <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> 登陆
                             </NavLink>
                         </div>
                     </NotAuthorized>
@@ -54,6 +77,7 @@
     bool sidebar1Expanded = true;
     string[] themes = ["material3", "material3-dark", "fluent", "fluent-dark", "material", "material-dark", "default", "standard", "software", "dark", "humanistic"];
 
+    private string? currentUrl;
 
     public string Theme { get; set; } = "material3";
     [Parameter] public EventCallback<string> ThemeChange { get; set; }
@@ -62,7 +86,22 @@
     {
         await ThemeChange.InvokeAsync(Theme);
     }
+    protected override void OnInitialized()
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
 
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
 
 
 }

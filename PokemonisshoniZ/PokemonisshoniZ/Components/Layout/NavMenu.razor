@@ -2,8 +2,13 @@
 @using PokemonisshoniZ.Data
 @implements IDisposable
 
+@attribute [StreamRendering]
+
 @inject UserManager<ApplicationUser> UserManager
 @inject NavigationManager NavigationManager
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
 @* @inject UserManager<IdentityUser> userManager *@
 
 @* <RadzenSidebar @bind-Expanded="@sidebar1Expanded" @rendermode=@InteractiveServer onclick="@TogglePanel"> *@
@@ -18,13 +23,13 @@
         <AuthorizeView>
             <Authorized>
                 @* <RadzenPanelMenuItem Text="@context.User.Identity?.Name" Expanded="true"> *@
-            <RadzenPanelMenuItem Text="@UserManager.GetUserAsync(context.User).Result.NickName" Expanded="true">
+            @* <RadzenPanelMenuItem Text="@user?.NickName" Expanded="true"> *@
+            <RadzenPanelMenuItem Text="@UserManager.GetUserAsync(context.User).Result?.NickName" Expanded="true">
                     <RadzenPanelMenuItem Text="宝可梦盒子" Path="teammanager" Icon="ballot"></RadzenPanelMenuItem>
                     <RadzenPanelMenuItem Text="训练师证" Path="myinfo" Icon="credit_card"></RadzenPanelMenuItem>
                     <RadzenPanelMenuItem Text="对战记录器" Path="battlerecorder" Icon="ad_units"></RadzenPanelMenuItem>
                     <RadzenPanelMenuItem Text="联盟登记信息" Path="mymanager" Icon="info"></RadzenPanelMenuItem>
-                    @*<RadzenPanelMenuItem Text="我的文章" Path="textbox" Icon="pages"></RadzenPanelMenuItem>
-                    <RadzenPanelMenuItem Text="对战数据" Path="textbox" Icon="data_usage"></RadzenPanelMenuItem>*@
+                   
                 </RadzenPanelMenuItem>
             </Authorized>
         </AuthorizeView>
@@ -147,10 +152,17 @@
     // string theme = "material3";
     private string? currentUrl;
 
-    protected override void OnInitialized()
+    ApplicationUser user;
+
+    protected override async Task OnInitializedAsync()
     {
         currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
         NavigationManager.LocationChanged += OnLocationChanged;
+        // var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        // // 是否为null return
+        // var user1 = authState.User;
+        // if (user1 != null)
+        // user = await UserManager.GetUserAsync(user1);
     }
 
     private void OnLocationChanged(object? sender, LocationChangedEventArgs e)

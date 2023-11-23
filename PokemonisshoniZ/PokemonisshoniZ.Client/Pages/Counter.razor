@@ -1,6 +1,10 @@
 ﻿@page "/counter"
+@using Microsoft.AspNetCore.Authorization
 @rendermode InteractiveAuto
 @attribute [StreamRendering]
+
+@attribute [Authorize]
+
 
 <PageTitle>Counter</PageTitle>
 

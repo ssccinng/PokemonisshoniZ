@@ -1,6 +1,15 @@
 ﻿@page "/PS/MyId"
+@using PokemonisshoniZ.Client.Services
 @rendermode InteractiveAuto
+@inject PSPluginService psPluginService
+
 
 @code {
-
+    protected override async Task OnInitializedAsync()
+    {
+        HttpClient httpClient = new();
+        await httpClient.GetAsync("https://baidu.com");
+        // await  psPluginService.GetAllPsUser();
+        // return base.OnInitializedAsync();
+    }
 }
