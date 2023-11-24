@@ -1,9 +1,9 @@
 ﻿@page "/counter"
 @using Microsoft.AspNetCore.Authorization
 @rendermode InteractiveAuto
-@attribute [StreamRendering]
+@* @attribute [StreamRendering] *@
 
-@attribute [Authorize]
+ @* @attribute [Authorize]  *@
 
 
 <PageTitle>Counter</PageTitle>
@@ -19,16 +19,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        for (int i = 0; i < 5; i++)
-        {
-            currentCount++;
-            await Task.Delay(1000);
-            StateHasChanged();
-        }
+        // for (int i = 0; i < 5; i++)
+        // {
+        //     currentCount++;
+        //     await Task.Delay(1000);
+        //     StateHasChanged();
+        // }
     }
 
     private async void IncrementCount()
     {
+        currentCount++;
+
+        return;
         for (int i = 0; i < 5; i++)
         {
             currentCount++;

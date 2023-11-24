@@ -58,7 +58,7 @@ public class ChatState
             you refuse to answer, and you instead ask 这些话题好像与宝可梦无关, 请'再来一次'吧洛托.
             """);
         //_chatHistory.AddAssistantMessage("阿罗拉!\n我是顺风而来的库库伊，需要我用华丽的招式帮你一些忙吗?");
-        _chatHistory.AddAssistantMessage("阿罗拉!\n这里是洛托姆手机, 如果有想问的事，请点击下面洛~");
+        _chatHistory.AddAssistantMessage("阿罗拉!\n这里是洛托姆图鉴, 如果有想问的事，请点击下面洛~");
     }
 
     public List<ChatMessageBase> Messages => _chatHistory;

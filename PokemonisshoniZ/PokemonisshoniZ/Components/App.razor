@@ -14,11 +14,13 @@
     @* <ThemeControl Theme="@theme" ></ThemeControl> *@
 
     @* <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css"> *@
-    <HeadOutlet @rendermode=RenderModeForPage />
+    <HeadOutlet />
 </head>
 
 <body>
-    <Routes @rendermode=RenderModeForPage />
+    <RadzenComponents />
+
+    <Routes  />
 
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
     <script src="_framework/blazor.web.js"></script>

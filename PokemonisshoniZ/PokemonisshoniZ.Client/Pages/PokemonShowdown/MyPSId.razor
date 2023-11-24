@@ -4,12 +4,24 @@
 @inject PSPluginService psPluginService
 
 
+<RadzenButton Click="Test">dani</RadzenButton>
+<p>@text</p>
+
 @code {
+    string text;
     protected override async Task OnInitializedAsync()
     {
-        HttpClient httpClient = new();
-        await httpClient.GetAsync("https://baidu.com");
+        // HttpClient httpClient = new();
+        // var res =await httpClient.GetAsync("https://baidu.com");
+        // text = await res.Content.ReadAsStringAsync();
         // await  psPluginService.GetAllPsUser();
         // return base.OnInitializedAsync();
+    }
+
+    async void Test()
+    {
+        // HttpClient httpClient = new();
+        // var res = await httpClient.GetAsync("https://www.baidu.com");
+        text = Random.Shared.Next(10000).ToString();
     }
 }

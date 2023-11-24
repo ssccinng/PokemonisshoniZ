@@ -8,13 +8,13 @@
 @inject NavigationManager NavigationManager
 @inject UserManager<ApplicationUser> UserManager
 
-@* @rendermode InteractiveServer *@
+<ThemeControl Theme="@Theme"></ThemeControl>
 
 <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
     <NavMenu @rendermode=InteractiveServer />
-
+    @* <div style="position:inherit"></div> *@
 </RadzenSidebar>
-<RadzenHeader >
+<RadzenHeader Style="position:inherit">
     <RadzenRow>
         <RadzenColumn SizeMD="6" SizeXS="12">
             <RadzenStack Orientation="Orientation.Horizontal"
@@ -66,7 +66,7 @@
                 <RadzenDropDown 
                     Data="themes" @bind-Value="Theme" 
                 
-                @bind-Value:after="Test" />
+                 />
             </RadzenStack>
         </RadzenColumn>
 
