@@ -12,6 +12,8 @@
 @* @inject UserManager<IdentityUser> userManager *@
 
 @* <RadzenSidebar @bind-Expanded="@sidebar1Expanded" @rendermode=@InteractiveServer onclick="@TogglePanel"> *@
+   
+    
     <RadzenPanelMenu Style="user-select:none;">
         <RadzenPanelMenuItem Text="主页" Path="/" />
         <RadzenPanelMenuItem Text="对战竞技场">
@@ -33,6 +35,7 @@
                 </RadzenPanelMenuItem>
             </Authorized>
         </AuthorizeView>
+        @* <PokemonisshoniZ.Client.Pages.Counter></PokemonisshoniZ.Client.Pages.Counter> *@
         <AuthorizeView>
             <Authorized>
                 <RadzenPanelMenuItem Text="联盟信息中心" Expanded="false">
@@ -154,15 +157,21 @@
 
     ApplicationUser user;
 
+    // string userId;
+
+
     protected override async Task OnInitializedAsync()
     {
         currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
         NavigationManager.LocationChanged += OnLocationChanged;
         // var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        // // 是否为null return
+        // 是否为null return
         // var user1 = authState.User;
         // if (user1 != null)
+        // {
         // user = await UserManager.GetUserAsync(user1);
+            
+        // }
     }
 
     private void OnLocationChanged(object? sender, LocationChangedEventArgs e)

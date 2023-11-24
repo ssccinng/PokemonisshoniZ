@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokePSCore", "..\PokeSci\Po
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokemonDataAccess", "..\PokeSci\PokemonDataAccess\PokemonDataAccess.csproj", "{E67798FA-46E3-4FF4-8B2F-582B54C63F53}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSThonk.API", "PSThonk.API\PSThonk.API.csproj", "{1B868F13-9B74-4D07-B02E-B62FA36ED81A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{E67798FA-46E3-4FF4-8B2F-582B54C63F53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E67798FA-46E3-4FF4-8B2F-582B54C63F53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E67798FA-46E3-4FF4-8B2F-582B54C63F53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B868F13-9B74-4D07-B02E-B62FA36ED81A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B868F13-9B74-4D07-B02E-B62FA36ED81A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B868F13-9B74-4D07-B02E-B62FA36ED81A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B868F13-9B74-4D07-B02E-B62FA36ED81A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

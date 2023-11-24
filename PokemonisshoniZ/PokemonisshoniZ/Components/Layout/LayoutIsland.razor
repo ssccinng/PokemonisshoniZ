@@ -8,6 +8,8 @@
 @inject NavigationManager NavigationManager
 @inject UserManager<ApplicationUser> UserManager
 
+@rendermode InteractiveServer
+
 <ThemeControl Theme="@Theme"></ThemeControl>
 
 <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
@@ -35,7 +37,7 @@
                         <div class="nav-item px-3">
                             <NavLink class="nav-link" href="Account/Manage">
                                 <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> 
-                                @UserManager.GetUserAsync(context.User).Result?.NickName
+                                @* @UserManager.GetUserAsync(context.User).Result?.NickName *@
                                 @* @context.User.Identity?.Name *@
                             </NavLink>
                         </div>
@@ -64,6 +66,7 @@
                     </NotAuthorized>
                 </AuthorizeView>
                 <RadzenDropDown 
+                    @rendermode="InteractiveServer"
                     Data="themes" @bind-Value="Theme" 
                 
                  />

@@ -1,0 +1,181 @@
+﻿@page "/PS/MyId"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@using PokePSCore
+@using PokemonisshoniZ.Data
+@using System.Text.RegularExpressions
+@using eShop.ServiceDefaults
+@rendermode InteractiveAuto
+@attribute [StreamRendering]
+
+@inject ApplicationDbContext _context 
+@inject NotificationService NotificationService
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize]
+@inject NavigationManager NavigationManager
+
+@inject ILogger<MyPSId> _logger
+
+<RadzenCard style="background-color:var(--rz-base-background-color)">
+
+
+    <RadzenRow>
+        <RadzenColumn Size="12" class="px-4">
+            <RadzenRow  AlignItems="AlignItems.Center"
+            >
+            <RadzenColumn Size="12" SizeMD="3"  >
+                    <RadzenText>PS ID: </RadzenText>
+                    <RadzenTextBox @bind-Value="psid" class="w-100"></RadzenTextBox>
+            </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="3" >
+                    <RadzenText>密码: </RadzenText>
+                    <RadzenPassword @bind-Value="password" class="w-100"></RadzenPassword>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="3">
+
+                    <RadzenButton class="mt-3" Click="VerifyId" Disabled="isVerify">@btnText</RadzenButton>
+                </RadzenColumn>
+                
+               
+            </RadzenRow>
+        </RadzenColumn>
+        <RadzenColumn Size="12">
+            @if (_pSUsernames == null)
+            {
+                <p>Loading...</p>
+            }
+            else
+            {
+                <RadzenDataList Data="_pSUsernames" Density="Density.Compact" PageSize="20">
+                 <Template>
+                    <RadzenCard Style="width: 100%; padding: 0;">
+                        <RadzenRow Gap="0">
+                            <RadzenColumn Size="12" SizeLG="3">
+                                <RadzenText>@context.PSName</RadzenText>
+                            </RadzenColumn>
+
+                                <RadzenColumn Size="12" SizeLG="3">
+                                    <RadzenButton Click="@(() => NavigationManager.NavigateTo($"{context.PSName}"))">查看详情</RadzenButton>
+                                </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenCard>
+                 </Template>
+                </RadzenDataList>
+            }
+       
+
+
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenCard>
+@code {
+
+
+    List<PSUsername> _pSUsernames;
+    string text;
+    string userId;
+
+    bool isVerify = false;
+
+    string btnText = "认证并添加PS Id";
+    protected override async Task OnInitializedAsync()
+    {
+        // await Task.Delay(10);
+        var authState = await   AuthenticationStateProvider.GetAuthenticationStateAsync();
+        // 是否为null return
+        userId = authState.User.GetUserIdBlazor();
+
+        _pSUsernames = _context.PSUsername.Where(s => s.UserId == userId)
+        .ToList();
+    }
+    string psid = string.Empty;
+    string password = string.Empty;
+    async void Test()
+    {
+        HttpClient httpClient = new();
+        var res = await httpClient.GetAsync("https://www.baidu.com");
+        text = Random.Shared.Next(10000).ToString() + await res.Content.ReadAsStringAsync();
+    }
+
+    async Task VerifyId()
+    {
+
+        isVerify = true;
+
+        StateHasChanged();
+        psid = Regex.Replace(psid, @"[^A-Za-z0-9]", "").ToLower();
+        // psid 要最简化
+        if (_pSUsernames.Any(s => s.PSName == psid))
+        {
+            ShowNotification(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Detail = "绑定错误",
+                    Summary = $"{psid}已经绑定过了"
+                });
+            isVerify = false;
+
+            return;
+        }
+        // check一下
+        try
+        {
+            PSClient pSClient =new(psid, password);
+
+            _logger.LogInformation("{id} 尝试登陆PS验证Id", psid);
+            await pSClient.ConnectAsync();
+            await Task.Delay(1000);
+            if (!await pSClient.LoginAsync())
+            {
+                _logger.LogWarning("{id} 验证失败", psid);
+
+                ShowNotification(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Detail = "绑定错误",
+                        Summary = $"请检查密码和用户名"
+                    });
+            }
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning("{id} 验证失败 {ex}", psid, ex.Message);
+            isVerify = false;
+            return;
+        }
+       
+        PSUsername entity = new PSUsername { UserId = userId, PSName = psid };
+        _context.PSUsername.Add(entity);
+        if (_context.SaveChanges() == 1)
+        {
+            _pSUsernames.Add(entity);
+            _logger.LogWarning("{id} 绑定成功", psid);
+
+            ShowNotification(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Info,
+                    Detail = "绑定成功",
+                });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Detail = "绑定错误",
+                    Summary = $"未知错误"
+                });
+        }
+        isVerify = false;
+
+
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+
+    }
+}

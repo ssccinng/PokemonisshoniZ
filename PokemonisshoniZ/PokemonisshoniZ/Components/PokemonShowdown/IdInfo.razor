@@ -1,0 +1,52 @@
+﻿@page "/PS/MyId/{Name}"
+@using Microsoft.AspNetCore.Authorization
+@using PokemonisshoniZ.Data
+
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+
+@attribute [StreamRendering(false)]
+@attribute [Authorize]
+
+@inject ApplicationDbContext _context
+
+
+@if (isPower)
+{
+    
+}
+else
+{
+    <p>没有权限查看此ID洛~</p>
+}
+
+@code {
+    [Parameter] public string Name { get; set; }
+
+
+    List<PSUsername> _pSUsernames;
+
+    bool isPower;
+    string userId;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        // 是否为null return
+        userId = authState.User.GetUserIdBlazor();
+
+        _pSUsernames = _context.PSUsername.Where(s => s.UserId == userId).ToList();
+
+        if (authState.User.IsInRole("Admin"))
+        {
+            isPower = true;
+        }
+        else if (_pSUsernames.Any(s => s.PSName == Name))
+        {
+            isPower = true;
+        }
+
+
+    }
+}

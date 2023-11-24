@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PokemonisshoniZ\PokemonisshoniZ\PokemonisshoniZ.csproj" />
+    <ProjectReference Include="..\PSThonk.API\PSThonk.API.csproj" />
   </ItemGroup>
 
 </Project>

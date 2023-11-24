@@ -7,8 +7,9 @@ namespace PokemonisshoniZ.Data
     {
         public int Id { get; set; }
         public ApplicationUser User { get; set; }
+        public string UserId { get; set; }
 
-  
+
 
         [Column(TypeName = "varchar(50)")]
         public string PSName { get; set; } = string.Empty;

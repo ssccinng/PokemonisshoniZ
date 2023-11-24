@@ -1,7 +1,10 @@
-﻿@page "/PS/MyId"
+﻿@page "/PS/MyId1111"
+@using Microsoft.AspNetCore.Authorization
 @using PokemonisshoniZ.Client.Services
 @rendermode InteractiveAuto
-@inject PSPluginService psPluginService
+@* @inject PSPluginService psPluginService *@
+@attribute [Authorize]
+
 
 
 <RadzenButton Click="Test">dani</RadzenButton>
@@ -20,8 +23,8 @@
 
     async void Test()
     {
-        // HttpClient httpClient = new();
-        // var res = await httpClient.GetAsync("https://www.baidu.com");
-        text = Random.Shared.Next(10000).ToString();
+        HttpClient httpClient = new();
+        var res = await httpClient.GetAsync("https://www.baidu.com");
+        text = Random.Shared.Next(10000).ToString() + await res.Content.ReadAsStringAsync();
     }
 }

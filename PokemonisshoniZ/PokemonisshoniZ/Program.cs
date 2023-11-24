@@ -1,12 +1,18 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PokemonisshoniZ.Client.Pages;
 using PokemonisshoniZ.Client.Services;
 using PokemonisshoniZ.Components;
 using PokemonisshoniZ.Components.Account;
 using PokemonisshoniZ.Data;
 using Radzen;
+
+using Serilog;
+using Serilog.Sinks;
+using Serilog.Formatting;
+using Serilog.Events;
 
 namespace PokemonisshoniZ;
 
@@ -79,7 +85,12 @@ public class Program
 
 
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
+        //builder.Services.AddLogging(loggingBuilder =>
+        //{
+        //    loggingBuilder.AddSerilog();
+        //});
+        builder.Logging.AddSerilog();
+        //builder.Logging.AddDebug();
         builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -117,6 +128,12 @@ public class Program
 
         // Add additional endpoints required by the Identity /Account Razor components.
         app.MapAdditionalIdentityEndpoints();
+
+        Log.Logger = new LoggerConfiguration()
+      .MinimumLevel.Debug()
+      .WriteTo.File("logs/Pokemonisshoni.log", rollingInterval: RollingInterval.Day,
+      outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level}] |{SourceContext}.{Method}| - {Message}{NewLine}{Exception}")
+      .CreateLogger();
 
         app.Run();
     }
