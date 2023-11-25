@@ -1,12 +1,12 @@
 ﻿using System.Security.Claims;
 
-namespace eShop.ServiceDefaults;
+namespace PokemonisshoniZ.ServiceDefaults;
 
 public static class ClaimsPrincipalExtensions
 {
     public static string? GetUserId(this ClaimsPrincipal principal)
         => principal.FindFirst("sub")?.Value;
-    
+
     public static string? GetUserIdBlazor(this ClaimsPrincipal principal)
         => principal.FindFirst(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 

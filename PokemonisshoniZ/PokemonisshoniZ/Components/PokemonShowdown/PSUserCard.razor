@@ -1,10 +1,32 @@
-﻿<RadzenCard>
+﻿@using PokePSCore
+@using PokemonisshoniZ.Services
+@inject PSThonkService PSThonkService
+@attribute [StreamRendering]
 
-</RadzenCard>
+@if (rankDatas != null)
+{
+    <RadzenDataGrid  Data="rankDatas" Style="@Style" PageSize="10" AllowPaging=true>
+        <Columns>
+            <RadzenDataGridColumn TItem="RankData" Property="FormatId" Title="模式" Sortable />
+            <RadzenDataGridColumn TItem="RankData" Property="ELO" Title="分数" Sortable=true />
+        </Columns>
+    </RadzenDataGrid>
+}
+else
+{
+    <p>洛托ing... 洛托ing...</p>
+}
 
 @code {
 
     [Parameter] public string Id { get; set; }
+    [Parameter] public string Style { get; set; }
+    RankData[] rankDatas;
 
+    protected override async Task OnInitializedAsync()
+    {
+        // _userDetail = await PSThonkService.GetUserDetail(Id);
+        rankDatas = await PSThonkService.GetRankDatas(Id);
+    }
 
 }

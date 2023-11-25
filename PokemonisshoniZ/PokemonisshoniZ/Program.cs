@@ -13,12 +13,15 @@ using Serilog;
 using Serilog.Sinks;
 using Serilog.Formatting;
 using Serilog.Events;
+using PokemonisshoniZ.ServiceDefaults;
+using PokemonisshoniZ.Extensions;
+using System.Data;
 
 namespace PokemonisshoniZ;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.AddServiceDefaults();
@@ -81,8 +84,10 @@ public class Program
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-            //options.UseSqlServer(connectionString));
+        //options.UseSqlServer(connectionString));
 
+
+        builder.AddApplicationServices();
 
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
         //builder.Services.AddLogging(loggingBuilder =>
@@ -128,6 +133,28 @@ public class Program
 
         // Add additional endpoints required by the Identity /Account Razor components.
         app.MapAdditionalIdentityEndpoints();
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+            if (roleManager == null)
+            {
+                throw new Exception("roleManager null");
+            }
+
+            if (!await roleManager.RoleExistsAsync("Admin"))
+            {
+               await roleManager.CreateAsync(new IdentityRole("Admin"));
+            }
+            var um = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+            if (um == null)
+            {
+                throw new Exception("userManager null");
+
+            }
+            await um.AddToRoleAsync(await um.FindByEmailAsync("whs11998@163.com"), "Admin");
+
+        }
 
         Log.Logger = new LoggerConfiguration()
       .MinimumLevel.Debug()

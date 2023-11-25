@@ -9,11 +9,16 @@ using Microsoft.SemanticKernel.AI.ChatCompletion;
 using Azure;
 using Microsoft.AspNetCore.Identity;
 using PokemonisshoniZ.Data;
+using PokemonisshoniZ.ServiceDefaults;
+using System.Linq.Dynamic.Core;
 
 namespace eShop.WebApp.Chatbot;
 
 public class ChatState
 {
+
+    private readonly ApplicationDbContext _context;
+
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ClaimsPrincipal _user;
     private readonly NavigationManager _navigationManager;
@@ -24,13 +29,14 @@ public class ChatState
     private readonly ChatHistory _chatHistory;
     private readonly ChatConfig _chatConfig;
 
-    public ChatState(UserManager<ApplicationUser> UserManager, ClaimsPrincipal user, NavigationManager nav, ChatConfig chatConfig, ILoggerFactory loggerFactory)
+    public ChatState(UserManager<ApplicationUser> UserManager, ClaimsPrincipal user, NavigationManager nav, ChatConfig chatConfig, ILoggerFactory loggerFactory, ApplicationDbContext context)
     {
         _userManager = UserManager;
         _user = user;
         _navigationManager = nav;
         _chatConfig = chatConfig;
         _logger = loggerFactory.CreateLogger(typeof(ChatState));
+        _context = context;
 
         if (_logger.IsEnabled(LogLevel.Debug))
         {
@@ -101,6 +107,15 @@ public class ChatState
             static string GetValue(IEnumerable<Claim> claims, string claimType) =>
                 claims.FirstOrDefault(x => x.Type == claimType)?.Value ?? "";
         }
+
+        [SKFunction, Description("Gets All chat user Ps username")]
+        public string GetUserPsId()
+        {
+            var userId = chatState._user.GetUserIdBlazor();
+            return JsonSerializer.Serialize(chatState._context.PSUsername.Where(s => s.UserId == userId));
+
+        }
+
 
         [SKFunction, Description("Searches the Northern Mountains catalog for a provided product description")]
         public async Task<string> SearchCatalog([Description("The product description for which to search")] string productDescription)

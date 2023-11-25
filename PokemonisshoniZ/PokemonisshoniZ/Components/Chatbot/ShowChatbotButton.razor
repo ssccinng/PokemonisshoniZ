@@ -1,14 +1,23 @@
 ﻿@inject NavigationManager Nav
-
+@* @attribute [StreamRendering] *@
+@rendermode InteractiveServer
+@* <a class="show-chatbot" style="background-image:url(t017ee4aa759abc2708.png)"
+href="@Nav.GetUriWithQueryParameter("chat", true)" title="洛托姆图鉴"></a> *@
 <a class="show-chatbot" style="background-image:url(t017ee4aa759abc2708.png)"
-href="@Nav.GetUriWithQueryParameter("chat", true)" title="洛托姆图鉴"></a>
+  @onclick=@(()=> ShowChat = !ShowChat) title="洛托姆图鉴"></a>
 @* <RadzenLink class="show-chatbot" Image="库库伊_Masters_Sprite_4.png" Path="@Nav.GetUriWithQueryParameter("chat", true)"></RadzenLink> *@
 @if (ShowChat)
 {
-    <Chatbot />
+    <Chatbot HideChat="HideChat" />
 }
 
 @code {
-    [SupplyParameterFromQuery(Name = "chat")]
+    // [SupplyParameterFromQuery(Name = "chat")]
     public bool ShowChat { get; set; }
+
+    void HideChat()
+    {
+        ShowChat = false;
+        StateHasChanged();
+    }
 }

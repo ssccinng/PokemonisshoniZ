@@ -13,8 +13,11 @@
 @inject ILoggerFactory LoggerFactory
 @inject UserManager<ApplicationUser> UserManager
 
+@inject ApplicationDbContext _context
+
 <div class="floating-pane rz-border-radius-2 p-2">
-    <a href="@Nav.GetUriWithQueryParameter("chat", (string?)null)" class="hide-chatbot" title="Close .NET Concierge"><span>✖</span></a>
+    @* <a href="@Nav.GetUriWithQueryParameter("chat", (string?)null)" class="hide-chatbot" title="Close .NET Concierge"><span>✖</span></a> *@
+    <a style="cursor: pointer" @onclick=@(() => HideChat.Invoke()) class="hide-chatbot" title="Close .NET Concierge"><span>✖</span></a>
 
     <div class="chatbot-chat" @ref="chat">
         @if (chatState is not null)
@@ -57,12 +60,14 @@
     bool thinking;
     IJSObjectReference? jsModule;
 
+    [Parameter] public Action HideChat{ get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         if (ChatConfig.TryReadFromConfig(Configuration, out var chatConfig))
         {
             AuthenticationState auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            chatState = new ChatState(UserManager, auth.User, Nav, chatConfig, LoggerFactory);
+            chatState = new ChatState(UserManager, auth.User, Nav, chatConfig, LoggerFactory, _context);
         }
         else
         {

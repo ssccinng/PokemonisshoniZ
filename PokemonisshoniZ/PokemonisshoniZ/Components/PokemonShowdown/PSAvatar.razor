@@ -1,0 +1,31 @@
+﻿
+@if (avatarUrl != null)
+{
+    <RadzenImage Path="@avatarUrl" Style="Style" />
+
+}
+
+@code {
+    [Parameter]
+    public string Avatar { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    string avatarUrl;
+
+    protected override void OnInitialized()
+    {
+        Avatar ??= "dawn";
+        if ( Avatar[0] == '#')
+        {
+            avatarUrl = $"https://play.pokemonshowdown.com/sprites/trainers-custom/{Avatar[1..]}.png";
+
+        }
+        else
+        {
+
+            avatarUrl = $"https://play.pokemonshowdown.com/sprites/trainers/{Avatar}.png";
+        }
+    }
+}

@@ -1,8 +1,4 @@
 using PokemonisshoniZ.ServiceDefaults;
-using PokePSCore;
-using PSThonk.API.Apis;
-using PSThonk.API.Infrastructure.Services;
-using PSThonk.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,18 +8,6 @@ builder.AddServiceDefaults();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddMemoryCache();
-builder.Services.AddControllers();
-
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddTransient<IIdentityService, IdentityService>();
-builder.Services.AddSingleton<PSSerivce>();
-
-builder.Services.AddMediatR(option =>
-{
-    option.RegisterServicesFromAssemblyContaining<Program>();
-});
 
 var app = builder.Build();
 
@@ -37,9 +21,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.MapControllers();
-
-//app.MapPSEndpoints();
 
 var summaries = new[]
 {

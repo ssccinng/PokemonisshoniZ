@@ -1,0 +1,38 @@
+﻿<RadzenCard class="@Class">
+    
+    <RadzenRow>
+        <RadzenColumn Size="12">
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="4">
+                    <RadzenRow>
+                        <RadzenTextBox Placeholder="筛选规则..." Change=@(args => OnChange(args)) />
+                    </RadzenRow>
+                    
+
+                </RadzenColumn>
+          @*       <RadzenColumn Size="12" SizeLG="4">
+                    <RadzenButton>查询</RadzenButton>
+                </RadzenColumn> *@
+            </RadzenRow>
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenCard>
+
+@code {
+    [Parameter]
+
+    public string Class { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+
+    async void OnChange(string data)
+    {
+        await Task.Delay(300);
+
+        if (string.IsNullOrEmpty(data))
+        {
+            
+        }
+    }
+}

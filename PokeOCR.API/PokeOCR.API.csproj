@@ -8,13 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="12.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\PokeSci\PokePSCore\PokePSCore.csproj" />
     <ProjectReference Include="..\PokemonisshoniZ.ServiceDefaults\PokemonisshoniZ.ServiceDefaults.csproj" />
   </ItemGroup>
 

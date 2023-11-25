@@ -1,21 +1,59 @@
 ﻿@page "/PS/MyId/{Name}"
+@using PokemonisshoniZ.Data
 @using Microsoft.AspNetCore.Authorization
 @using PokemonisshoniZ.Data
+@using PokemonisshoniZ.Services
 
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 
 
-@attribute [StreamRendering(false)]
+@attribute [StreamRendering]
 @attribute [Authorize]
 
 @inject ApplicationDbContext _context
+@inject PSThonkService PSThonkService
 
 
 @if (isPower)
 {
-    
+    if (_userDetail == null)
+    {
+        <p>洛托ing... 洛托ing...</p>
+
+    }
+    else
+    {
+        <RadzenCard Style="background-color:var(--rz-base-background-color)" data-permanent>
+
+            <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+                <RadzenColumn Size="12" Style="height: 50px">
+                    <RadzenText TextStyle="TextStyle.DisplayH6">账号信息</RadzenText>
+                </RadzenColumn>
+                <RadzenColumn SizeLG="6" Size="12">
+                    <RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+
+                        <PSAvatar Avatar="@_userDetail.Avatar"></PSAvatar>
+                        <RadzenText>@_userDetail.Name</RadzenText>
+                    </RadzenStack>
+                </RadzenColumn>
+                <RadzenColumn SizeLG="6" Size="12">
+                    <PSUserCard Id="@Name" @rendermode=InteractiveAuto></PSUserCard>
+
+                </RadzenColumn>
+                <RadzenColumn Size="12" class="mt-3">
+
+                    <RadzenText TextStyle="TextStyle.DisplayH6">我的对局录像</RadzenText>
+                    <PSUserReplay Id="@userId" Class="mt-3" />
+
+                </RadzenColumn>
+            </RadzenRow>
+
+        </RadzenCard>
+
+    }
+
 }
 else
 {
@@ -27,6 +65,7 @@ else
 
 
     List<PSUsername> _pSUsernames;
+    UserDetail _userDetail;
 
     bool isPower;
     string userId;
@@ -46,6 +85,12 @@ else
         {
             isPower = true;
         }
+        else
+        {
+            return;
+        }
+
+        _userDetail = await PSThonkService.GetUserDetail(Name);
 
 
     }

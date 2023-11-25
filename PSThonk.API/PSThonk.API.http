@@ -5,6 +5,21 @@ Accept: application/json
 
 ###
 
-GET {{PSThonk.API_HostAddress}}/GetPSUserData/scixing
+GET {{PSThonk.API_HostAddress}}/GetPSUserRankData/scixing
+
+###
+
+
+GET {{PSThonk.API_HostAddress}}/api/v1/PsThonk/GetPSUserRankData/scixing
+
+###
+
+GET {{PSThonk.API_HostAddress}}/api/v1/PsThonk/GetUserDetail/scixing
+
+###
+
+
+
+GET {{PSThonk.API_HostAddress}}/api/v1/PSThonk/GetUserDetail/scixing
 
 ###

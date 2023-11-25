@@ -12,81 +12,88 @@
 @* @inject UserManager<IdentityUser> userManager *@
 
 @* <RadzenSidebar @bind-Expanded="@sidebar1Expanded" @rendermode=@InteractiveServer onclick="@TogglePanel"> *@
-   
-    
-    <RadzenPanelMenu Style="user-select:none;">
-        <RadzenPanelMenuItem Text="主页" Path="/" />
-        <RadzenPanelMenuItem Text="对战竞技场">
+
+
+<RadzenPanelMenu Style="user-select:none;">
+    <RadzenPanelMenuItem Text="主页" Path="/" />
+    <RadzenPanelMenuItem Text="对战竞技场">
         <RadzenPanelMenuItem Text="创办联盟赛" Path="/match/create" Icon="add"></RadzenPanelMenuItem>
-            @*<RadzenPanelMenuItem Text="系列赛" Path="SeriesMatchList" Icon="list" ></RadzenPanelMenuItem>*@
+        @*<RadzenPanelMenuItem Text="系列赛" Path="SeriesMatchList" Icon="list" ></RadzenPanelMenuItem>*@
         <RadzenPanelMenuItem Text="联盟赛列表" Path="/match/list" Icon="list"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="Test" Path="counter" Icon="list"></RadzenPanelMenuItem>
-        </RadzenPanelMenuItem>
-        <AuthorizeView>
-            <Authorized>
-                @* <RadzenPanelMenuItem Text="@context.User.Identity?.Name" Expanded="true"> *@
+        <RadzenPanelMenuItem Text="Test" Path="counter" Icon="list"></RadzenPanelMenuItem>
+    </RadzenPanelMenuItem>
+    <AuthorizeView>
+        <Authorized>
+            @* <RadzenPanelMenuItem Text="@context.User.Identity?.Name" Expanded="true"> *@
             @* <RadzenPanelMenuItem Text="@user?.NickName" Expanded="true"> *@
             <RadzenPanelMenuItem Text="@UserManager.GetUserAsync(context.User).Result?.NickName" Expanded="true">
-                    <RadzenPanelMenuItem Text="宝可梦盒子" Path="teammanager" Icon="ballot"></RadzenPanelMenuItem>
-                    <RadzenPanelMenuItem Text="训练师证" Path="myinfo" Icon="credit_card"></RadzenPanelMenuItem>
-                    <RadzenPanelMenuItem Text="对战记录器" Path="battlerecorder" Icon="ad_units"></RadzenPanelMenuItem>
-                    <RadzenPanelMenuItem Text="联盟登记信息" Path="mymanager" Icon="info"></RadzenPanelMenuItem>
-                   
-                </RadzenPanelMenuItem>
-            </Authorized>
-        </AuthorizeView>
-        @* <PokemonisshoniZ.Client.Pages.Counter></PokemonisshoniZ.Client.Pages.Counter> *@
+                <RadzenPanelMenuItem Text="宝可梦盒子" Path="teammanager" Icon="ballot"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="训练师证" Path="myinfo" Icon="credit_card"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="对战记录器" Path="battlerecorder" Icon="ad_units"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="联盟登记信息" Path="mymanager" Icon="info"></RadzenPanelMenuItem>
+
+            </RadzenPanelMenuItem>
+        </Authorized>
+    </AuthorizeView>
+    @* <PokemonisshoniZ.Client.Pages.Counter></PokemonisshoniZ.Client.Pages.Counter> *@
+    <AuthorizeView>
+        <Authorized>
+            <RadzenPanelMenuItem Text="联盟信息中心" Expanded="false">
+                <RadzenPanelMenuItem Text="编写文章" Path="InformationCenter/EditArticle" Icon="border_color"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="联盟新闻" Path="InformationCenter/News" Icon="sms"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="队伍报告" Path="InformationCenter/TeamReport" Icon="pages"></RadzenPanelMenuItem>
+            </RadzenPanelMenuItem>
+        </Authorized>
+        <NotAuthorized>
+            <RadzenPanelMenuItem Text="联盟信息中心" Expanded="false">
+                <RadzenPanelMenuItem Text="联盟新闻" Path="InformationCenter/News" Icon="sms"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="队伍报告" Path="InformationCenter/TeamReport" Icon="pages"></RadzenPanelMenuItem>
+            </RadzenPanelMenuItem>
+            @*   <NavLink class="nav-link" href="Account/Register">
+            <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
+            </NavLink> *@
+        </NotAuthorized>
+    </AuthorizeView>
+
+
+    <RadzenPanelMenuItem Text="PS插件中心" Expanded="false">
         <AuthorizeView>
             <Authorized>
-                <RadzenPanelMenuItem Text="联盟信息中心" Expanded="false">
-                    <RadzenPanelMenuItem Text="编写文章" Path="InformationCenter/EditArticle" Icon="border_color"></RadzenPanelMenuItem>
-                    <RadzenPanelMenuItem Text="联盟新闻" Path="InformationCenter/News" Icon="sms"></RadzenPanelMenuItem>
-                    <RadzenPanelMenuItem Text="队伍报告" Path="InformationCenter/TeamReport" Icon="pages"></RadzenPanelMenuItem>
-                </RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="我的ID" Path="PS/MyId" Icon="panorama_photosphere"></RadzenPanelMenuItem>
+
             </Authorized>
-            <NotAuthorized>
-                <RadzenPanelMenuItem Text="联盟信息中心" Expanded="false">
-                    <RadzenPanelMenuItem Text="联盟新闻" Path="InformationCenter/News" Icon="sms"></RadzenPanelMenuItem>
-                    <RadzenPanelMenuItem Text="队伍报告" Path="InformationCenter/TeamReport" Icon="pages"></RadzenPanelMenuItem>
-                </RadzenPanelMenuItem>
-          @*   <NavLink class="nav-link" href="Account/Register">
-                <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
-            </NavLink> *@
-            </NotAuthorized>
         </AuthorizeView>
-    <RadzenPanelMenuItem Text="PS插件中心" Expanded="false">
-        <RadzenPanelMenuItem Text="我的ID" Path="PS/MyId" Icon="panorama_photosphere"></RadzenPanelMenuItem>
         <RadzenPanelMenuItem Text="PS监听" Path="PS/ListenBattle" Icon="panorama_photosphere"></RadzenPanelMenuItem>
         <RadzenPanelMenuItem Text="使用率查看" Path="throwcoin" Icon="panorama_photosphere"></RadzenPanelMenuItem>
         <RadzenPanelMenuItem Text="使用率洞察" Path="throwcoin" Icon="panorama_photosphere"></RadzenPanelMenuItem>
         <RadzenPanelMenuItem Text="插件下载" Path="PS/PluginDownload" Icon="download"></RadzenPanelMenuItem>
     </RadzenPanelMenuItem>
-        <AuthorizeView Roles="Admin">
-            <Authorized>
-                <RadzenPanelMenuItem Text="洛托姆手机" Expanded="false">
-                    <RadzenPanelMenuItem Text="信息箱" Path="" Icon="email"></RadzenPanelMenuItem>
-                </RadzenPanelMenuItem>
-            </Authorized>
-        </AuthorizeView>
-        <RadzenPanelMenuItem Text="计算器" Path="http://calc.pokemonisshoni.top" Target="_blank">
-        </RadzenPanelMenuItem>
-        <RadzenPanelMenuItem Text="宝可梦表" Expanded="false">
-            <RadzenPanelMenuItem Text="掷硬币" Path="throwcoin" Icon="panorama_photosphere"></RadzenPanelMenuItem>
-            @*<RadzenPanelMenuItem Text="宝可梦检索" Path="panel" Icon="content_paste"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="队伍盲点分析" Path="fieldset" Icon="account_balance_wallet"></RadzenPanelMenuItem>*@
-            <RadzenPanelMenuItem Text="阿尔宙斯随机化" Path="RandomNumGen" Icon="track_changes"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="PS格式翻译" Path="pstools" Icon="g_translate"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="伤害显示" Path="damagedisplay" Icon="stacked_bar_chart"></RadzenPanelMenuItem>
-        </RadzenPanelMenuItem>
-        <AuthorizeView Roles="Admin">
-            <RadzenPanelMenuItem Text="成员管理" Path="adminpage">
+    <AuthorizeView Roles="Admin">
+        <Authorized>
+            <RadzenPanelMenuItem Text="洛托姆手机" Expanded="false">
+                <RadzenPanelMenuItem Text="信息箱" Path="" Icon="email"></RadzenPanelMenuItem>
             </RadzenPanelMenuItem>
-        </AuthorizeView>
+        </Authorized>
+    </AuthorizeView>
+    <RadzenPanelMenuItem Text="计算器" Path="http://calc.pokemonisshoni.top" Target="_blank">
+    </RadzenPanelMenuItem>
+    <RadzenPanelMenuItem Text="宝可梦表" Expanded="false">
+        <RadzenPanelMenuItem Text="掷硬币" Path="throwcoin" Icon="panorama_photosphere"></RadzenPanelMenuItem>
+        @*<RadzenPanelMenuItem Text="宝可梦检索" Path="panel" Icon="content_paste"></RadzenPanelMenuItem>
+        <RadzenPanelMenuItem Text="队伍盲点分析" Path="fieldset" Icon="account_balance_wallet"></RadzenPanelMenuItem>*@
+        <RadzenPanelMenuItem Text="阿尔宙斯随机化" Path="RandomNumGen" Icon="track_changes"></RadzenPanelMenuItem>
+        <RadzenPanelMenuItem Text="PS格式翻译" Path="pstools" Icon="g_translate"></RadzenPanelMenuItem>
+        <RadzenPanelMenuItem Text="伤害显示" Path="damagedisplay" Icon="stacked_bar_chart"></RadzenPanelMenuItem>
+    </RadzenPanelMenuItem>
+    <AuthorizeView Roles="Admin">
+        <RadzenPanelMenuItem Text="成员管理" Path="adminpage">
+        </RadzenPanelMenuItem>
+    </AuthorizeView>
 
-        @* <RadzenDropDown Data="themes" @bind-Value="theme" @rendermode=@InteractiveServer /> *@
+    @* <RadzenDropDown Data="themes" @bind-Value="theme" @rendermode=@InteractiveServer /> *@
 
 
-    </RadzenPanelMenu>
+</RadzenPanelMenu>
 
 @* </RadzenSidebar> *@
   @*   <nav class="flex-column">
@@ -170,7 +177,7 @@
         // if (user1 != null)
         // {
         // user = await UserManager.GetUserAsync(user1);
-            
+
         // }
     }
 
