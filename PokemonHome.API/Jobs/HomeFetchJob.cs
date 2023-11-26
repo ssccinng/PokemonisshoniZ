@@ -1,12 +1,16 @@
-﻿using Quartz;
+﻿using PokemonHome.API.Services;
+using Quartz;
 
 namespace PokemonHome.API.Jobs
 {
-    public class HomeFetchJob : IJob
+    public class HomeFetchJob(HomeSerivce homeSerivce, ILogger<HomeFetchJob> logger) : IJob
     {
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"{nameof(HomeFetchJob)} [{DateTime.Now:s}] 同步数据");
+            await homeSerivce.UpdateSession();
+            logger.LogInformation($"{nameof(HomeFetchJob)} [{DateTime.Now:s}] 同步数据完成");
         }
+
     }
 }

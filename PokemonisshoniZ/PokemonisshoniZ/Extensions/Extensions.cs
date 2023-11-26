@@ -19,8 +19,9 @@ namespace PokemonisshoniZ.Extensions
                 .AddHttpClient<PSThonkService>(o =>o.BaseAddress = new("http://psthonk-api"))
                 .AddAuthToken();
             builder.Services
-                .AddHttpClient<PokemonHomeService>(o => o.BaseAddress = new("http://PokemonHome-api"))
+                .AddHttpClient<PokemonHomeService>(o => o.BaseAddress = new("http://pokemonhome-api"))
                 .AddAuthToken();
+
         }
 
         public static void AddAuthenticationServices(this IHostApplicationBuilder builder)

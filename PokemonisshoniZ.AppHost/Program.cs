@@ -9,7 +9,7 @@ var psthonkApi = builder.AddProject<Projects.PSThonk_API>("psthonk-api")
     .WithEnvironmentForServiceBinding("Identity__Url", pokeIdentityApi); //.WithLaunchProfile("https");
 var pkhomeApi = builder.AddProject<Projects.PokemonHome_API>("pokemonhome-api")
     .WithEnvironmentForServiceBinding("Identity__Url", pokeIdentityApi); //.WithLaunchProfile("https");
-var pokeocrApi = builder.AddProject<Projects.PokeOCR_API>("pokeocr.api")
+var pokeocrApi = builder.AddProject<Projects.PokeOCR_API>("pokeocr-api")
     .WithEnvironmentForServiceBinding("Identity__Url", pokeIdentityApi);
 
 

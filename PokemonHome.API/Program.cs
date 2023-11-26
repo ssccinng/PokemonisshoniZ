@@ -1,5 +1,5 @@
 using PokemonisshoniZ.ServiceDefaults;
-
+using PokemonHome.API.Extenisons;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
@@ -8,7 +8,9 @@ builder.AddServiceDefaults();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
 
+builder.AddHomeServices();
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
@@ -42,6 +44,7 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
+app.MapControllers();
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)

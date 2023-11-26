@@ -1,0 +1,129 @@
+﻿@using PokeCommon.BattleEngine
+@using PokemonisshoniZ.Services
+@using PokeCommon.Models
+
+@inject PokemonHomeService PokemonHomeService
+
+@attribute [StreamRendering]
+@rendermode InteractiveServer
+
+
+@if (TrainDatas.Length == 0)
+{
+    <LoadPage></LoadPage>
+}
+
+else
+{
+
+
+    <RadzenRow class="@Class" Style="@Style">
+        <RadzenColumn Size="12" SizeLG="4">
+            <RadzenText>赛季选择</RadzenText>
+            <RadzenDropDown Data="FliterSessions" TextProperty="Name" ValueProperty="SeasonId" @bind-Value=selectSession @bind-Value:after="Search" />
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeLG="4">
+            <RadzenText>模式</RadzenText>
+            <RadzenRadioButtonList @bind-Value=@BattleType @bind-Value:after=UpdateType class="mt-2">
+                <Items>
+                    <RadzenRadioButtonListItem Text="单打" Value="@BattleType.Single" />
+                    <RadzenRadioButtonListItem Text="双打" Value="@BattleType.Double" />
+                </Items>
+            </RadzenRadioButtonList>
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeLG="4">
+            <RadzenText>搜索用户</RadzenText>
+            <RadzenTextBox @bind-Value:after=Update @bind-Value=filterName></RadzenTextBox>
+        </RadzenColumn>
+        <RadzenColumn Size="12">
+            @if (isdataloading)
+            {
+                <LoadPage />
+            }
+            else
+            {
+
+                <RadzenDataGrid Data="FliterData" PageSize="100" AllowPaging=true IsLoading="isdataloading">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="SVPokemonHomeTrainerRankData" Property="Rank" Title="排名." Sortable />
+                        <RadzenDataGridColumn TItem="SVPokemonHomeTrainerRankData" Title="头像.">
+                            <Template>
+                                <img width=30 src=@($"https://resource.pokemon-home.com/battledata/img/icons/trainer/{context.Icon}")
+                                     onerror="this.onerror=null;this.src='https://resource.pokemon-home.com/battledata/img/icons/icon_prof_icon02.png';" />
+                            </Template>
+                        </RadzenDataGridColumn>
+
+                        <RadzenDataGridColumn TItem="SVPokemonHomeTrainerRankData" Property="Name" Title="名字." Sortable />
+                        <RadzenDataGridColumn TItem="SVPokemonHomeTrainerRankData" Property="RatingValue" Title="分数" Sortable=true />
+                        <RadzenDataGridColumn TItem="SVPokemonHomeTrainerRankData" Property="LanguageType" Title="语言" Sortable=true />
+                    </Columns>
+                </RadzenDataGrid>
+            }
+        </RadzenColumn>
+    </RadzenRow>
+
+}
+@code {
+    [Parameter] public string Style { get; set; }
+    [Parameter] public string Class { get; set; }
+
+    SVPokemonHomeSession[] Sessions { get; set; }
+    SVPokemonHomeTrainerRankData[] TrainDatas { get; set; } = [];
+
+    IEnumerable<SVPokemonHomeTrainerRankData> FliterData;
+    IEnumerable<SVPokemonHomeSession> FliterSessions;
+    SVPokemonHomeSession[] DoubleSessions;
+
+    string filterName = string.Empty;
+
+    BattleType BattleType = BattleType.Double;
+
+    string[] sessionNames = [];
+    string selectSession;
+    bool isdataloading = false;
+    protected override async Task OnInitializedAsync()
+    {
+        Sessions = await PokemonHomeService.GetPokemonHomeSessions();
+        FliterSessions = Sessions.Where(s => s.Type == BattleType);
+        selectSession = FliterSessions.First().SeasonId;
+        TrainDatas = await PokemonHomeService.GetHomeTrainerRankDatas(selectSession);
+        FliterData = TrainDatas;
+
+    }
+
+    public async Task Search()
+    {
+        isdataloading = true;
+        StateHasChanged();
+
+        TrainDatas = await PokemonHomeService.GetHomeTrainerRankDatas(selectSession);
+        if (!string.IsNullOrEmpty(filterName))
+        {
+            FliterData = TrainDatas.Where(s => s.Name.Contains(filterName));
+
+        }
+        else
+        {
+            FliterData = TrainDatas;
+        }
+        isdataloading = false;
+
+    }
+
+    public void Update()
+    {
+        FliterData = TrainDatas.Where(s => s.Name.Contains(filterName) || s.lng == filterName);
+
+
+    }
+
+    public async Task UpdateType()
+    {
+        FliterSessions = Sessions.Where(s => s.Type == BattleType);
+        selectSession = FliterSessions.First().SeasonId;
+
+        await Search();
+    }
+
+
+}
