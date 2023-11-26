@@ -89,6 +89,7 @@ public class Program
 
         builder.AddApplicationServices();
 
+
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
         //builder.Services.AddLogging(loggingBuilder =>
         //{

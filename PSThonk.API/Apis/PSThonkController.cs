@@ -39,7 +39,7 @@ namespace PSThonk.API.Apis
         [HttpGet("GetPSUserRankData/{Id}")]
         public async Task<List<RankData>> GetRankDatasAsync(string Id)
         {
-            //var userId = PSSerivce.IdentityService.GetUserIdentity();
+            var userId = PSSerivce.IdentityService.GetUserIdentity();
             return await Client.GetRankAsync(Id);
         }
 
