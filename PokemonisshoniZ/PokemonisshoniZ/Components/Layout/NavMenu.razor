@@ -39,8 +39,12 @@
     <RadzenPanelMenuItem Text="Home数据查看" Expanded="true">
         <RadzenPanelMenuItem Text="训练家排名" Path="/Home/TrainerData" Icon="ballot"></RadzenPanelMenuItem>
         <RadzenPanelMenuItem Text="宝可梦使用率" Path="/Home/PokemonData" Icon="ballot"></RadzenPanelMenuItem>
+    </RadzenPanelMenuItem>
 
-
+    <RadzenPanelMenuItem Text="宝可梦图鉴" Expanded="true">
+        <RadzenPanelMenuItem Text="宝可梦列表" Path="/Home/TrainerData" Icon="ballot"></RadzenPanelMenuItem>
+        <RadzenPanelMenuItem Text="技能列表" Path="/Home/PokemonData" Icon="ballot"></RadzenPanelMenuItem>
+        <RadzenPanelMenuItem Text="道具列表" Path="/Home/PokemonData" Icon="ballot"></RadzenPanelMenuItem>
     </RadzenPanelMenuItem>
     @* <PokemonisshoniZ.Client.Pages.Counter></PokemonisshoniZ.Client.Pages.Counter> *@
     <AuthorizeView>
@@ -78,6 +82,7 @@
     <AuthorizeView Roles="Admin">
         <Authorized>
             <RadzenPanelMenuItem Text="洛托姆手机" Expanded="false">
+                <RadzenPanelMenuItem Text="通讯录" Path="" Icon="email"></RadzenPanelMenuItem>
                 <RadzenPanelMenuItem Text="信息箱" Path="" Icon="email"></RadzenPanelMenuItem>
             </RadzenPanelMenuItem>
         </Authorized>
