@@ -369,3 +369,6 @@ FodyWeavers.xsd
 /PokemonisshoniZ/PokemonisshoniZ/wwwroot/material3-dark-base.css
 /PokemonisshoniZ/PokemonisshoniZ/appsettings.json
 /PokeIdentity.API/appsettings.json
+/PSThonk.API/appsettings.json
+/PokeOCR.API/TeamImage
+/PokeOCR.API/MLModel.mlnet
