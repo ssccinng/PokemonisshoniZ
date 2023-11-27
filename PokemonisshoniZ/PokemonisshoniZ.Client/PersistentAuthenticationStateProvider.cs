@@ -30,7 +30,8 @@ internal class PersistentAuthenticationStateProvider : AuthenticationStateProvid
             new Claim(ClaimTypes.NameIdentifier, userInfo.UserId),
             new Claim(ClaimTypes.Name, userInfo.Email),
             new Claim(ClaimTypes.Email, userInfo.Email), 
-            new Claim(ClaimTypes.Role, userInfo.Role)
+            new Claim(ClaimTypes.Role, userInfo.Role),
+            new Claim(ClaimTypes.Country, userInfo.Test),
         ];
 
         authenticationStateTask = Task.FromResult(

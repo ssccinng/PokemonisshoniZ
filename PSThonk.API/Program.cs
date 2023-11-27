@@ -3,6 +3,7 @@ using PokePSCore;
 using PSThonk.API.Apis;
 using PSThonk.API.Infrastructure.Services;
 using PSThonk.API.Services;
+using PSThonk.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,14 +17,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
 
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddTransient<IIdentityService, IdentityService>();
-builder.Services.AddSingleton<PSSerivce>();
-
-builder.Services.AddMediatR(option =>
-{
-    option.RegisterServicesFromAssemblyContaining<Program>();
-});
+builder.AddApplicationServices();
 
 var app = builder.Build();
 

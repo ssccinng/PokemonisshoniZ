@@ -96,7 +96,8 @@ internal sealed class PersistingRevalidatingAuthenticationStateProvider : Revali
                 {
                     UserId = userId,
                     Email = email,
-                    Role = role
+                    Role = role,
+                    Test = "test"
                 });
             }
         }
