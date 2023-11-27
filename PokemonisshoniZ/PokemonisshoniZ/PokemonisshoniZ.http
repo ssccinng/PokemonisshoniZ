@@ -9,3 +9,16 @@ Content-Type: application/json
 }
 
 ###
+
+POST {{PokemonisshoniZ_HostAddress}}/upload/teamimage
+Content-Type: application/json
+
+{
+  //IFormFile
+}
+
+###
+
+GET {{PokemonisshoniZ_HostAddress}}/api/psusernames
+
+###

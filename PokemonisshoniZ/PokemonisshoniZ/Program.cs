@@ -31,6 +31,8 @@ public class Program
             .AddInteractiveServerComponents()
             .AddInteractiveWebAssemblyComponents();
 
+        builder.Services.AddControllers();
+
         builder.Services.AddCascadingAuthenticationState();
         builder.Services.AddScoped<IdentityUserAccessor>();
         builder.Services.AddScoped<IdentityRedirectManager>();
@@ -91,6 +93,11 @@ public class Program
 
 
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+        builder.Services.AddServerSideBlazor().AddHubOptions(o =>
+        {
+            o.MaximumReceiveMessageSize = 10 * 1024 * 1024;
+        });
         //builder.Services.AddLogging(loggingBuilder =>
         //{
         //    loggingBuilder.AddSerilog();
@@ -126,6 +133,7 @@ public class Program
 
         app.UseStaticFiles();
         app.UseAntiforgery();
+        app.MapControllers();
 
         app.MapRazorComponents<App>()
             .AddInteractiveServerRenderMode()

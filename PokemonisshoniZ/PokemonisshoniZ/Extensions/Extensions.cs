@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.IdentityModel.JsonWebTokens;
 using PokemonisshoniZ.ServiceDefaults;
+using Polly;
+using Polly.Timeout;
 
 namespace PokemonisshoniZ.Extensions
 {
@@ -21,6 +23,13 @@ namespace PokemonisshoniZ.Extensions
             builder.Services
                 .AddHttpClient<PokemonHomeService>(o => o.BaseAddress = new("http://pokemonhome-api"))
                 .AddAuthToken();
+            builder.Services
+                .AddHttpClient<PokeOCRService>(o => { o.BaseAddress = new("http://pokeocr-api"); })
+                .AddAuthToken()
+                .AddResilienceHandler("dani", config =>
+                {
+                    config.AddTimeout(TimeSpan.FromSeconds(300));
+                });
 
         }
 

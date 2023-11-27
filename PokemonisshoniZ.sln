@@ -27,7 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokeOCR.API", "PokeOCR.API\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokeIdentity.API", "PokeIdentity.API\PokeIdentity.API.csproj", "{0A7508C3-0C10-4F8D-BF82-5F34D31476D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppComponents", "WebAppComponents\WebAppComponents.csproj", "{04DDB8B5-C41D-45EA-AEFC-5FEF6064B966}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppComponents", "WebAppComponents\WebAppComponents.csproj", "{04DDB8B5-C41D-45EA-AEFC-5FEF6064B966}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSThonk.Share", "PSThonk.Share\PSThonk.Share.csproj", "{55397BD1-BC8E-45E6-BAB1-D9B3F3E4D413}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +89,10 @@ Global
 		{04DDB8B5-C41D-45EA-AEFC-5FEF6064B966}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04DDB8B5-C41D-45EA-AEFC-5FEF6064B966}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04DDB8B5-C41D-45EA-AEFC-5FEF6064B966}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55397BD1-BC8E-45E6-BAB1-D9B3F3E4D413}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55397BD1-BC8E-45E6-BAB1-D9B3F3E4D413}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55397BD1-BC8E-45E6-BAB1-D9B3F3E4D413}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55397BD1-BC8E-45E6-BAB1-D9B3F3E4D413}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

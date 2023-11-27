@@ -10,7 +10,7 @@ using PokemonisshoniZ.Components.Account.Pages;
 using PokemonisshoniZ.Components.Account.Pages.Manage;
 using PokemonisshoniZ.Data;
 
-namespace Microsoft.AspNetCore.Routing;
+namespace PokemonisshoniZ.Components.Account;
 
 internal static class IdentityComponentsEndpointRouteBuilderExtensions
 {

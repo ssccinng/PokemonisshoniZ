@@ -36,15 +36,18 @@
         </Authorized>
     </AuthorizeView>
 
-    <RadzenPanelMenuItem Text="Home数据查看" Expanded="true">
+    <RadzenPanelMenuItem Text="Home数据查看" Expanded="false">
         <RadzenPanelMenuItem Text="训练家排名" Path="/Home/TrainerData" Icon="ballot"></RadzenPanelMenuItem>
         <RadzenPanelMenuItem Text="宝可梦使用率" Path="/Home/PokemonData" Icon="ballot"></RadzenPanelMenuItem>
     </RadzenPanelMenuItem>
 
-    <RadzenPanelMenuItem Text="宝可梦图鉴" Expanded="true">
+    <RadzenPanelMenuItem Text="宝可梦图鉴" Expanded="false">
         <RadzenPanelMenuItem Text="宝可梦列表" Path="/Home/TrainerData" Icon="ballot"></RadzenPanelMenuItem>
         <RadzenPanelMenuItem Text="技能列表" Path="/Home/PokemonData" Icon="ballot"></RadzenPanelMenuItem>
         <RadzenPanelMenuItem Text="道具列表" Path="/Home/PokemonData" Icon="ballot"></RadzenPanelMenuItem>
+    </RadzenPanelMenuItem>
+    <RadzenPanelMenuItem Text="宝可AI" Expanded="false">
+        <RadzenPanelMenuItem Text="队伍识别" Path="/AI/TeamDelect" Icon="ballot"></RadzenPanelMenuItem>
     </RadzenPanelMenuItem>
     @* <PokemonisshoniZ.Client.Pages.Counter></PokemonisshoniZ.Client.Pages.Counter> *@
     <AuthorizeView>

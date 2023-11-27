@@ -5,10 +5,17 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+
+	  <PackageReference Include="Microsoft.ML" Version="2.0.0" />
+	  <PackageReference Include="Microsoft.ML.TensorFlow" Version="2.0.0" />
+	  <PackageReference Include="Microsoft.ML.Vision" Version="2.0.0" />
+	  <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.3.1" />
+	  <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
   </ItemGroup>
 
   <ItemGroup>

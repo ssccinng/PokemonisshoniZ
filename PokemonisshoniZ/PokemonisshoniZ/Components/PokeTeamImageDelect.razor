@@ -1,0 +1,30 @@
+﻿@page "/AI/TeamDelect"
+
+@using System.Text.Json;
+@using System.Net.Http.Json;
+@using PokemonisshoniZ.Services
+@inject PokeOCRService PokeOCRService
+@rendermode InteractiveServer
+
+<RadzenRow>
+    <RadzenColumn Size="12" SizeLG="6">
+        <RadzenCard>
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Upload images only</RadzenText>
+            <RadzenUpload Multiple="true" Accept="image/*" Url="upload/teamimage" class="w-100" Complete="(args => OnComplete(args))" />
+        </RadzenCard>
+    </RadzenColumn>
+    <RadzenColumn Size="12" SizeLG="6">
+        <RadzenTextArea @bind-Value=@teamText Rows="30" Cols="30">
+            
+        </RadzenTextArea>
+    </RadzenColumn>
+</RadzenRow>
+@code {
+    string teamText;
+    async Task OnComplete(UploadCompleteEventArgs args)
+    {
+        var bytes = JsonSerializer.Deserialize<byte[]>(args.JsonResponse.RootElement.GetProperty("data"));
+        teamText = await PokeOCRService.GetImageTeamData(bytes, PokeCommon.Models.LanguageType.JPN);
+        StateHasChanged();
+    }
+}
