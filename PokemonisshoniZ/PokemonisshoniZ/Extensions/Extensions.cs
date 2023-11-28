@@ -22,6 +22,9 @@ namespace PokemonisshoniZ.Extensions
                 .AddAuthToken();
             builder.Services
                 .AddHttpClient<PokemonHomeService>(o => o.BaseAddress = new("http://pokemonhome-api"))
+                .AddAuthToken(); 
+            builder.Services
+                .AddHttpClient<PokeCommonService>(o => o.BaseAddress = new("http://pokecommon-api"))
                 .AddAuthToken();
             builder.Services
                 .AddHttpClient<PokeOCRService>(o => { o.BaseAddress = new("http://pokeocr-api"); })

@@ -13,10 +13,14 @@ var pokeocrApi = builder.AddProject<Projects.PokeOCR_API>("pokeocr-api")
     .WithEnvironmentForServiceBinding("Identity__Url", pokeIdentityApi);
 
 
+var pokecommonApi = builder.AddProject<Projects.PokeCommon_API>("pokecommon-api");
+
+
 var webApp = builder.AddProject<Projects.PokemonisshoniZ>("webapp")
     .WithReference(psthonkApi)
     .WithReference(pkhomeApi)
     .WithReference(pokeocrApi)
+    .WithReference(pokecommonApi)
     .WithEnvironmentForServiceBinding("IdentityUrl", pokeIdentityApi)
     .WithLaunchProfile("https"); 
 
@@ -42,8 +46,6 @@ webApp.WithEnvironmentForServiceBinding("CallBackUrl", webApp, bindingName: "htt
 
 
 
-
-builder.AddProject<Projects.PokeCommon_API>("pokecommon.api");
 
 
 

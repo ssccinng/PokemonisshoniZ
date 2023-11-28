@@ -7,7 +7,7 @@ namespace Pokemonisshoni
 {
     public class Racial
     {
-        public int[] Value = new int[6];
+        public int[] Value { get; set; } = new int[6];
         public int GetSumRacial()
         {
             return Value[0] + Value[1] + Value[2] + Value[3] + Value[4] + Value[5];

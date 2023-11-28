@@ -11,12 +11,12 @@ namespace Pokemonisshoni
 
         public string name { get; set; }
         public int PokemonID;
-        public string[] NameList;
-        public int[] TypeId;
-        public int[] AbilityList;
+        public string[] NameList { get; set; }
+        public int[] TypeId { get; set; }
+        public int[] AbilityList { get; set; }
         public string[] movelist; // 未完�?
-        public int FormId;
-        public Racial RacialValue;
+        public int FormId { get; set; }
+        public Racial RacialValue { get; set; }
 
         public PokemonBase(string name, int PokemonID, string[] NameList, int[] TypeId, int[] AbilityList, int FormId,
                 Racial racial)
