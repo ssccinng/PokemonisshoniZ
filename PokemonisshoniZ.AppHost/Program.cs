@@ -43,4 +43,15 @@ webApp.WithEnvironmentForServiceBinding("CallBackUrl", webApp, bindingName: "htt
 
 
 
+builder.AddProject<Projects.PokeCommon_API>("pokecommon.api");
+
+
+
+
+
+
+
+
+
+
 builder.Build().Run();

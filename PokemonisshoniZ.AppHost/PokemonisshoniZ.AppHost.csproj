@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Identity.API\Identity.API.csproj" />
+    <ProjectReference Include="..\PokeCommon.API\PokeCommon.API.csproj" />
     <ProjectReference Include="..\PokeIdentity.API\PokeIdentity.API.csproj" />
     <ProjectReference Include="..\PokemonHome.API\PokemonHome.API.csproj" />
     <ProjectReference Include="..\PokemonisshoniZ\PokemonisshoniZ\PokemonisshoniZ.csproj" />

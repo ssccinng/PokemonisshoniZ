@@ -105,20 +105,21 @@ namespace PokemonisshoniZ.API
 
 
 
-                using (var stream = new MemoryStream())
-                {
+                using var stream = new MemoryStream() ;
+                using var filestream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create) ;
+
                     byte[] aa = new byte[files.Length];
 
                     // Save the file
                     files.CopyTo(stream);
                     var fileBytes = stream.ToArray();
-                    //stream.Write(aa, 0, (int)file.Length);
+                filestream.Write(fileBytes, 0, (int)files.Length);
 
                     // Return the URL of the file
-                    //var url = Url.Content($"~/Upload/{fileName}");
+                    var url = Url.Content($"~/Upload/{fileName}");
 
-                    return Ok(new { Data = fileBytes });
-                }
+                    return Ok(new { Data = fileBytes, Url = url });
+                
             }
             catch (Exception ex)
             {

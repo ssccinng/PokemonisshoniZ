@@ -2,29 +2,76 @@
 
 @using System.Text.Json;
 @using System.Net.Http.Json;
+@using PokeCommon.Models
 @using PokemonisshoniZ.Services
 @inject PokeOCRService PokeOCRService
 @rendermode InteractiveServer
 
 <RadzenRow>
     <RadzenColumn Size="12" SizeLG="6">
-        <RadzenCard>
-            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Upload images only</RadzenText>
-            <RadzenUpload Multiple="true" Accept="image/*" Url="upload/teamimage" class="w-100" Complete="(args => OnComplete(args))" />
+        <RadzenCard style="background-color:var(--rz-base-background-color)">
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">队伍图识别</RadzenText>
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <RadzenUpload Multiple="true" Accept="image/*"
+                                  ChooseText="选择图片"
+                                  Url="upload/teamimage"
+                                  Complete="(args => OnComplete(args))">
+
+                    </RadzenUpload>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="4">
+
+                    <RadzenDropDown @bind-Value="_languageType" Data="_types" Style="width: 200px">
+
+                    </RadzenDropDown>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="2">
+
+                    <RadzenButton Click="() => Change()">识别</RadzenButton>
+                </RadzenColumn>
+
+            </RadzenRow>
+
+
+            @if (imgPre != null)
+            {
+                <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" class="mt-5">
+                    <RadzenImage Path="@imgPre" Style="width: 540px; height: 360px"></RadzenImage>
+
+                </RadzenRow>
+
+            }
         </RadzenCard>
     </RadzenColumn>
     <RadzenColumn Size="12" SizeLG="6">
-        <RadzenTextArea @bind-Value=@teamText Rows="30" Cols="30">
-            
-        </RadzenTextArea>
+        <RadzenCard style="background-color:var(--rz-base-background-color)">
+            <RadzenTextArea @bind-Value=@teamText Rows="30" Cols="50">
+
+            </RadzenTextArea>
+        </RadzenCard>
+
     </RadzenColumn>
 </RadzenRow>
 @code {
     string teamText;
-    async Task OnComplete(UploadCompleteEventArgs args)
+    string imgPre;
+    byte[] imgData;
+    LanguageType _languageType = LanguageType.JPN;
+    LanguageType[] _types = Enum.GetValues<LanguageType>();
+
+
+    void OnComplete(UploadCompleteEventArgs args)
     {
-        var bytes = JsonSerializer.Deserialize<byte[]>(args.JsonResponse.RootElement.GetProperty("data"));
-        teamText = await PokeOCRService.GetImageTeamData(bytes, PokeCommon.Models.LanguageType.JPN);
+        imgPre = args.JsonResponse.RootElement.GetProperty("url").ToString();
+        imgData = JsonSerializer.Deserialize<byte[]>(args.JsonResponse.RootElement.GetProperty("data"));
+
+    }
+
+    async Task Change()
+    {
+        teamText = await PokeOCRService.GetImageTeamData(imgData, _languageType);
         StateHasChanged();
     }
 }
