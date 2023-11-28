@@ -12,7 +12,7 @@ namespace PokemonisshoniZ.ServiceDefaults;
 
 public static partial class Extensions
 {
-    public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
+    public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder, TimeSpan? timeout = null)
     {
         builder.ConfigureOpenTelemetry();
 
@@ -23,7 +23,17 @@ public static partial class Extensions
         builder.Services.ConfigureHttpClientDefaults(http =>
         {
             // Turn on resilience by default
-            http.AddStandardResilienceHandler();
+            http.AddStandardResilienceHandler(config =>
+            {
+                //config.add
+                if (timeout != null)
+                {
+                    config.CircuitBreaker.SamplingDuration = timeout.Value * 2;
+                    config.AttemptTimeout.Timeout = timeout.Value;
+                    config.TotalRequestTimeout.Timeout = timeout.Value * 3;
+                }
+              
+            });
 
             // Turn on service discovery by default
             http.UseServiceDiscovery();

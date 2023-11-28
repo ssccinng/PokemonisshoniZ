@@ -26,9 +26,12 @@ namespace PokemonisshoniZ.Extensions
             builder.Services
                 .AddHttpClient<PokeOCRService>(o => { o.BaseAddress = new("http://pokeocr-api"); })
                 .AddAuthToken()
-                .AddResilienceHandler("dani", config =>
+                .AddStandardResilienceHandler(config =>
                 {
-                    config.AddTimeout(TimeSpan.FromSeconds(300));
+                    TimeSpan timeSpan = TimeSpan.FromMinutes(2);
+                    config.AttemptTimeout.Timeout = timeSpan;
+                    config.CircuitBreaker.SamplingDuration = timeSpan * 2;
+                    config.TotalRequestTimeout.Timeout = timeSpan * 3;
                 });
 
         }
