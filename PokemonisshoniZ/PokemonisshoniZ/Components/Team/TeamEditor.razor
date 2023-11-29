@@ -1,0 +1,35 @@
+﻿@page "/TeamEditor"
+@page "/TeamEditor/{Id:int}"
+
+@rendermode InteractiveAuto
+
+@using PokeCommon.Models
+
+<RadzenCard style="background-color:var(--rz-base-background-color)">
+    <RadzenRow>
+
+        <RadzenColumn Size="12" SizeMD="4">
+            <RadzenTextBox class="w-100"></RadzenTextBox>
+            <RadzenTextArea Cols="50" Rows="50" Style="resize: none; width:100%" />
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="8">
+
+            <RadzenRow>
+                @foreach (var poke in GamePokemon.GamePokemons)
+                {
+                    <RadzenColumn Size="12" SizeLG="6">
+                        <PokemonEditor GamePokemon="poke" @key=poke></PokemonEditor>
+                    </RadzenColumn>
+
+                }
+            </RadzenRow>
+
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenCard>
+@code {
+    [Parameter] public string Style { get; set; }
+    [Parameter] public int Id { get; set; }
+
+    [Parameter] public GamePokemonTeam GamePokemon { get; set; } = new() { GamePokemons = [null, null, null, null, null, null] };
+}

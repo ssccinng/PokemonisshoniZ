@@ -1,0 +1,17 @@
+﻿@using PokeCommon.Models
+<RadzenTabs Style="@Style">
+    <Tabs>
+          <RadzenTabsItem Text="基本信息">
+
+          </RadzenTabsItem>
+          <RadzenTabsItem Text="EV/IV">
+
+          </RadzenTabsItem>
+    </Tabs>
+
+</RadzenTabs>
+@code {
+    [Parameter] public string Style { get; set; }
+
+    [Parameter] public GamePokemon GamePokemon{ get; set; }
+}
