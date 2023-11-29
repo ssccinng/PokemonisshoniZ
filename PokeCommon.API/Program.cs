@@ -1,10 +1,12 @@
 using PokeCommon.API.Data;
 using PokeCommon.API.Extensions;
+using PokeCommon.Utils;
 using PokemonDataAccess.Models;
 using Pokemonisshoni;
 using PokemonisshoniZ.ServiceDefaults;
 using PokeTeamImageTran;
 using System.Text.Json;
+using System.Xml.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,12 +49,262 @@ void Init(IServiceProvider serviceProvider)
     using var scope = serviceProvider.CreateScope();
 
     var db = scope.ServiceProvider.GetService<PokeDBContext>();
+    // 这个有问题 撕烤
+    PokemonTools.PokemonContext = db;
+
+    return;
+
+    var pss = db.PSPokemons.ToArray();
+    var poke = db.Pokemons.ToList();
+
+    //    foreach (var pspoke in pss)
+    //{
+    //    if (pspoke.PSChsName.EndsWith("-超极巨"))
+    //    {
+    //        pspoke.PSChsName = pspoke.PSChsName.Replace("-超极巨", "-超极巨化");
+
+    //    }
+    //}
+    //db.SaveChanges();
+    //return;
+
+    foreach (var pspoke in pss)
+    {
+        var pokemon = poke.FirstOrDefault(s => s.FullNameChs == pspoke.PSChsName);
+        if (pokemon != null)
+        {
+            //Console.WriteLine("{0} - {1}", pokemon.FullNameChs, pspoke.PSChsName);
+            //pspoke.PokemonId = pokemon.Id;
+        }
+        else
+        {
+
+            if (pspoke.PSChsName.Contains("阿尔") || pspoke.PSChsName.Contains("银伴"))
+            {
+                continue;
+            }
+            Console.WriteLine("{0}", pspoke.PSChsName);
+
+        }
+    }
+    db.SaveChanges();
+    return;
+
 
     var pk = JsonSerializer.Deserialize<List<PokeModel>>(File.ReadAllText("pokenameall.json"));
 
 
-    var poke = db.Pokemons.ToList();
     var abs = db.Abilities.ToList();
+    id = poke.Max(s => s.Id);
+
+    foreach (var ppk in Pokemondata.POKEMON)
+    {
+        if (!poke.Any(s => s.PokeFormId == ppk.FormId && ppk.name == s.FullNameChs))
+        {
+            if (ppk.name.Contains("超极巨化"))
+            {
+                continue;
+                var sda = ppk.name.Split("-");
+                var fname = ppk.name;
+                if (sda.Length > 1)
+                {
+                    fname = string.Join("-", sda[1..]);
+                }
+                Console.WriteLine(ppk.name);
+                var ppp = new Pokemon
+                {
+                    Ability1 = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[0]]),
+                    Ability2 = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[1]]),
+                    AbilityH = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[2]]),
+                    BaseHP = ppk.RacialValue.Value[0],
+                    BaseAtk = ppk.RacialValue.Value[1],
+                    BaseDef = ppk.RacialValue.Value[2],
+                    BaseSpa = ppk.RacialValue.Value[3],
+                    BaseSpd = ppk.RacialValue.Value[4],
+                    BaseSpe = ppk.RacialValue.Value[5],
+                    FullNameChs = ppk.name,
+                    FormNameChs = fname,
+                    NameChs = ppk.NameList[0],
+                    NameEng = Pokemondata.EnglishName[(int)Pokemondata.PokemonnameID[ppk.NameList[0]]],
+                    PokeFormId = ppk.FormId,
+                    Id = ++id,
+
+                };
+
+                db.Pokemons.Add(ppp);
+            }
+
+            if (ppk.name.Contains("洗翠"))
+            {
+                continue;
+                Console.WriteLine(ppk.name);
+
+                var sda = ppk.name.Split("-");
+                var fname = ppk.name;
+                if (sda.Length > 1)
+                {
+                    fname = string.Join("-", sda[1..]);
+                }
+                var ppp = new Pokemon
+                {
+                    Ability1 = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[0]]),
+                    Ability2 = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[1]]),
+                    AbilityH = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[2]]),
+                    BaseHP = ppk.RacialValue.Value[0],
+                    BaseAtk = ppk.RacialValue.Value[1],
+                    BaseDef = ppk.RacialValue.Value[2],
+                    BaseSpa = ppk.RacialValue.Value[3],
+                    BaseSpd = ppk.RacialValue.Value[4],
+                    BaseSpe = ppk.RacialValue.Value[5],
+                    FullNameChs = ppk.name,
+                    FormNameChs = fname,
+                    NameChs = ppk.NameList[0],
+                    NameEng = Pokemondata.EnglishName[(int)Pokemondata.PokemonnameID[ppk.NameList[0]]],
+                    PokeFormId = ppk.FormId,
+                    Id = ++id,
+
+                };
+
+                db.Pokemons.Add(ppp);
+            }
+
+            if (ppk.name.Contains("霸主"))
+            {
+                Console.WriteLine(ppk.name);
+                continue;
+                var sda = ppk.name.Split("-");
+                var fname = ppk.name;
+                if (sda.Length > 1)
+                {
+                    fname = string.Join("-", sda[1..]);
+                }
+                var ppp = new Pokemon
+                {
+                    Ability1 = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[0]]),
+                    Ability2 = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[1]]),
+                    AbilityH = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[2]]),
+                    BaseHP = ppk.RacialValue.Value[0],
+                    BaseAtk = ppk.RacialValue.Value[1],
+                    BaseDef = ppk.RacialValue.Value[2],
+                    BaseSpa = ppk.RacialValue.Value[3],
+                    BaseSpd = ppk.RacialValue.Value[4],
+                    BaseSpe = ppk.RacialValue.Value[5],
+                    FullNameChs = ppk.name,
+                    FormNameChs = fname,
+                    NameChs = ppk.NameList[0],
+                    NameEng = Pokemondata.EnglishName[(int)Pokemondata.PokemonnameID[ppk.NameList[0]]],
+                    PokeFormId = ppk.FormId,
+                    Id = ++id,
+
+                };
+
+                db.Pokemons.Add(ppp);
+            }
+            if (ppk.name.Contains("帕底亚"))
+            {
+                continue;
+                Console.WriteLine(ppk.name);
+                var sda = ppk.name.Split("-");
+                var fname = ppk.name;
+                if (sda.Length > 1)
+                {
+                    fname = string.Join("-", sda[1..]);
+                }
+                var ppp = new Pokemon
+                {
+                    Ability1 = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[0]]),
+                    Ability2 = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[1]]),
+                    AbilityH = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[2]]),
+                    BaseHP = ppk.RacialValue.Value[0],
+                    BaseAtk = ppk.RacialValue.Value[1],
+                    BaseDef = ppk.RacialValue.Value[2],
+                    BaseSpa = ppk.RacialValue.Value[3],
+                    BaseSpd = ppk.RacialValue.Value[4],
+                    BaseSpe = ppk.RacialValue.Value[5],
+                    FullNameChs = ppk.name,
+                    FormNameChs = fname,
+                    NameChs = ppk.NameList[0],
+                    NameEng = Pokemondata.EnglishName[(int)Pokemondata.PokemonnameID[ppk.NameList[0]]],
+                    PokeFormId = ppk.FormId,
+                    Id = ++id,
+
+                };
+
+                db.Pokemons.Add(ppp);
+            }
+
+            if (ppk.name.Contains("起源形态"))
+            {
+                Console.WriteLine(ppk.name);
+                continue;
+                var sda = ppk.name.Split("-");
+                var fname = ppk.name;
+                if (sda.Length > 1)
+                {
+                    fname = string.Join("-", sda[1..]);
+                }
+                var ppp = new Pokemon
+                {
+                    Ability1 = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[0]]),
+                    Ability2 = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[1]]),
+                    AbilityH = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[2]]),
+                    BaseHP = ppk.RacialValue.Value[0],
+                    BaseAtk = ppk.RacialValue.Value[1],
+                    BaseDef = ppk.RacialValue.Value[2],
+                    BaseSpa = ppk.RacialValue.Value[3],
+                    BaseSpd = ppk.RacialValue.Value[4],
+                    BaseSpe = ppk.RacialValue.Value[5],
+                    FullNameChs = ppk.name,
+                    FormNameChs = fname,
+                    NameChs = ppk.NameList[0],
+                    NameEng = Pokemondata.EnglishName[(int)Pokemondata.PokemonnameID[ppk.NameList[0]]],
+                    PokeFormId = ppk.FormId,
+                    Id = ++id,
+
+                };
+
+                db.Pokemons.Add(ppp);
+            }
+
+            if (ppk.name.Contains("白条纹"))
+            {
+                Console.WriteLine(ppk.name);
+                continue;
+                var sda = ppk.name.Split("-");
+                var fname = ppk.name;
+                if (sda.Length > 1)
+                {
+                    fname = string.Join("-", sda[1..]);
+                }
+                var ppp = new Pokemon
+                {
+                    Ability1 = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[0]]),
+                    Ability2 = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[1]]),
+                    AbilityH = abs.First(s => s.Name_Eng == Pokemondata.AbilityEngName[ppk.AbilityList[2]]),
+                    BaseHP = ppk.RacialValue.Value[0],
+                    BaseAtk = ppk.RacialValue.Value[1],
+                    BaseDef = ppk.RacialValue.Value[2],
+                    BaseSpa = ppk.RacialValue.Value[3],
+                    BaseSpd = ppk.RacialValue.Value[4],
+                    BaseSpe = ppk.RacialValue.Value[5],
+                    FullNameChs = ppk.name,
+                    FormNameChs = fname,
+                    NameChs = ppk.NameList[0],
+                    NameEng = Pokemondata.EnglishName[(int)Pokemondata.PokemonnameID[ppk.NameList[0]]],
+                    PokeFormId = ppk.FormId,
+                    Id = ++id,
+
+                };
+
+                db.Pokemons.Add(ppp);
+            }
+            Console.WriteLine(ppk.name);
+        }
+    }
+    db.SaveChanges();
+
+
+    return;
     int ii = 0;
 
     id = poke.Max(s => s.Id);

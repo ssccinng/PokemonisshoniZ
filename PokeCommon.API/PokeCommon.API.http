@@ -1,6 +1,19 @@
-@PokeCommon.API_HostAddress = http://localhost:5227
+@PokeCommon.API_HostAddress = https://localhost:7164
 
 GET {{PokeCommon.API_HostAddress}}/weatherforecast/
 Accept: application/json
 
+###
+
+GET {{PokeCommon.API_HostAddress}}/api/v1/pstranslate/PSToPoke
+
+Roaring Moon @ Booster Energy
+Ability: Protosynthesis
+Level: 50
+Tera Type: Flying
+Hardy Nature
+- Acrobatics
+- Protect
+- Breaking Swipe
+- Knock Off
 ###
