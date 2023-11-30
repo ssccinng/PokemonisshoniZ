@@ -16,5 +16,7 @@ namespace PokemonisshoniZ.Data
         public string Name { get; set; }
         public int BoxIdx { get; set; }
 
+        public List<int> PCLPokemonIds { get; set; } = new();
+
     }
 }

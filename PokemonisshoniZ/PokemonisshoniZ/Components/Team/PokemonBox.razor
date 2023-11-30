@@ -2,6 +2,8 @@
 
 @using PokemonisshoniZ.Data
 
+@inject ContextMenuService ContextMenuService
+
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 @attribute [StreamRendering]
@@ -9,6 +11,8 @@
 @attribute [Authorize]
 
 @inject ApplicationDbContext _context
+@inject PokemonisshoniZ.Services.PokemonisshoniService PokemonisshoniService
+
 
 <RadzenRow>
     <RadzenColumn Size="12">
@@ -17,7 +21,9 @@
                 <RadzenButton Icon="keyboard_arrow_left" class="w-100"></RadzenButton>
             </RadzenColumn>
             <RadzenColumn Size="12" SizeMD="10" class="text-center px-lg-5 px-0">
-                <RadzenDropDown Data="@boxes" @bind-Value="ss" class="text-center w-100">
+                <RadzenDropDown Data="@_pCLPokemonBoxes" 
+                    ValueProperty="BoxIdx" TextProperty="Name" @bind-Value="selectIdx"
+                class="text-center w-100">
 
                 </RadzenDropDown>
             </RadzenColumn>
@@ -33,10 +39,10 @@
      <RadzenRow>
             <RadzenColumn Size="0" SizeLG="1"></RadzenColumn>
         <RadzenColumn SizeLG="10" Size="12">
-            <PokemonButton> </PokemonButton>
-            <PokemonButton></PokemonButton>
-            <PokemonButton></PokemonButton>
-            <PokemonButton></PokemonButton>
+                <RadzenDataList Data="_pCLPokemonBoxes[selectIdx].">
+
+            </RadzenDataList>
+                <PokemonButton ContextMenu="ShowContextMenuWithItems"> </PokemonButton>
         </RadzenColumn>
         <RadzenColumn Size="0" SizeLG="1"></RadzenColumn>
 
@@ -46,5 +52,34 @@
 
 @code {
     string[] boxes = Enumerable.Range(1, 30).Select(s => $"箱子{s}").ToArray();
-    string ss = "箱子1";
+    int selectIdx = 0;
+
+    PCLPokemonBox[] _pCLPokemonBoxes;
+
+    // IEnumerable<DataItem> 
+
+    protected override Task OnInitializedAsync()
+    {
+        _pCLPokemonBoxes.Select(s => new DataItem ( s.Name, s.BoxIdx));
+        return base.OnInitializedAsync();
+    }
+
+    void ShowContextMenuWithItems(MouseEventArgs args)
+    {
+        ContextMenuService.Open(args,
+            new List<ContextMenuItem> {
+                new ContextMenuItem(){ Text = "复制", Value = 1, Icon = "search" },
+                new ContextMenuItem(){ Text = "放生", Value = 2, Icon = "delete" },
+                 }, OnMenuItemClick);
+    }
+
+    void OnMenuItemClick(MenuItemEventArgs args)
+    {
+        if ((int)args.Value == 1)
+        {
+
+        }
+    }
+
+    public record DataItem(string Name, int Idx);
 }

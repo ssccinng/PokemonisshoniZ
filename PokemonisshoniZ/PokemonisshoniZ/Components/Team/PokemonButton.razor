@@ -2,12 +2,18 @@
 
 @* @inject ApplicationDbContext _context *@
 
-<RadzenButton  Variant="Variant.Text">
+<RadzenButton Variant="Variant.Text" ContextMenu="ContextMenu" Click="Click">
     <RadzenImage Path="https://play.pokemonshowdown.com/sprites/gen5/bulbasaur.png">
 
     </RadzenImage>
 </RadzenButton>
 
 @code {
-    // [Parameter] public PCLPokemon pokemon { get; set; }
+    [Parameter] public PCLPokemon pokemon { get; set; }
+
+    [Parameter]
+    public Action<MouseEventArgs> ContextMenu{ get; set; }
+    [Parameter]
+    public Action<MouseEventArgs> Click { get; set; }
+    
 }
