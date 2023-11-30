@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using PokemonisshoniZ.Data;
 using PokemonisshoniZ.ServiceDefaults;
 using System.Linq.Dynamic.Core;
+using PokemonisshoniZ.Services;
 
 namespace eShop.WebApp.Chatbot;
 
@@ -18,7 +19,7 @@ public class ChatState
 {
 
     private readonly ApplicationDbContext _context;
-
+    private readonly PokemonisshoniService _pokemonisshoniService;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ClaimsPrincipal _user;
     private readonly NavigationManager _navigationManager;
@@ -29,7 +30,7 @@ public class ChatState
     private readonly ChatHistory _chatHistory;
     private readonly ChatConfig _chatConfig;
 
-    public ChatState(UserManager<ApplicationUser> UserManager, ClaimsPrincipal user, NavigationManager nav, ChatConfig chatConfig, ILoggerFactory loggerFactory, ApplicationDbContext context)
+    public ChatState(UserManager<ApplicationUser> UserManager, ClaimsPrincipal user, NavigationManager nav, ChatConfig chatConfig, ILoggerFactory loggerFactory, ApplicationDbContext context, PokemonisshoniService pokemonisshoniService)
     {
         _userManager = UserManager;
         _user = user;
@@ -37,7 +38,7 @@ public class ChatState
         _chatConfig = chatConfig;
         _logger = loggerFactory.CreateLogger(typeof(ChatState));
         _context = context;
-
+        _pokemonisshoniService = pokemonisshoniService;
         if (_logger.IsEnabled(LogLevel.Debug))
         {
             _logger.LogDebug("ChatModel: {model}", chatConfig.ChatModel);
@@ -116,6 +117,37 @@ public class ChatState
 
         }
 
+        [SKFunction, Description("Find user in seasion")]
+        public async Task<string> FindUserRank([Description("The id of seasion")] int seasionId, [Description("The name of find user")] string name)
+        {
+            try
+            {
+                var sessions = await chatState._pokemonisshoniService.PokemonHomeService.GetPokemonHomeSessions();
+                var session = sessions.LastOrDefault(s => s.Type == PokeCommon.BattleEngine.BattleType.Double &&  s.Name.EndsWith(seasionId.ToString()));
+
+                if (session == null)
+                {
+                    return "不存在此赛季";
+
+                }
+                else
+                {
+                    var ranks = await chatState._pokemonisshoniService.PokemonHomeService.GetHomeTrainerRankDatas(session.SeasonId);
+
+                    var user = ranks.Where(s => s.Name.Contains(name)).Take(10);
+                    return JsonSerializer.Serialize(user);
+                }
+
+            }
+            catch (Grpc.Core.RpcException e) when (e.StatusCode == Grpc.Core.StatusCode.Unauthenticated)
+            {
+                return "Unable to add an item to the cart. You must be logged in.";
+            }
+            catch (Exception e)
+            {
+                return Error(e, "查询失败");
+            }
+        }
 
         [SKFunction, Description("Searches the Northern Mountains catalog for a provided product description")]
         public async Task<string> SearchCatalog([Description("The product description for which to search")] string productDescription)

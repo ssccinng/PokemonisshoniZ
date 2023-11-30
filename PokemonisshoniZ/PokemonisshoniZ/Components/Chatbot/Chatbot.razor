@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.SemanticKernel.AI.ChatCompletion
 @using PokemonisshoniZ.Data
+@using PokemonisshoniZ.Services
 @using eShop.WebApp.Chatbot
 @inject IJSRuntime JS
 @inject NavigationManager Nav
@@ -12,6 +13,7 @@
 @inject IConfiguration Configuration
 @inject ILoggerFactory LoggerFactory
 @inject UserManager<ApplicationUser> UserManager
+@inject PokemonisshoniService PokemonisshoniService
 
 @inject ApplicationDbContext _context
 
@@ -67,7 +69,7 @@
         if (ChatConfig.TryReadFromConfig(Configuration, out var chatConfig))
         {
             AuthenticationState auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            chatState = new ChatState(UserManager, auth.User, Nav, chatConfig, LoggerFactory, _context);
+            chatState = new ChatState(UserManager, auth.User, Nav, chatConfig, LoggerFactory, _context, PokemonisshoniService);
         }
         else
         {
