@@ -1,0 +1,30 @@
+﻿@page "/TeamManager"
+@using PokemonisshoniZ.Data
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@attribute [StreamRendering]
+@rendermode InteractiveAuto
+@attribute [Authorize]
+
+@inject ApplicationDbContext _context
+
+<RadzenCard style="background-color:var(--rz-base-background-color)">
+
+    <RadzenTabs TabPosition="TabPosition.Left">
+        <Tabs>
+            <RadzenTabsItem Text="宝可梦盒子">
+                <PokemonBox />
+            </RadzenTabsItem>
+            <RadzenTabsItem Text="队伍">
+                <TeamList />
+            </RadzenTabsItem>
+        </Tabs>
+
+    </RadzenTabs>
+</RadzenCard>
+
+
+@code {
+    
+}

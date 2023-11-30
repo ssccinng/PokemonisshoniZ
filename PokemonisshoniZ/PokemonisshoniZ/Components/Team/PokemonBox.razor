@@ -1,0 +1,50 @@
+﻿@page "/PokemonBox"
+
+@using PokemonisshoniZ.Data
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@attribute [StreamRendering]
+@rendermode InteractiveAuto
+@attribute [Authorize]
+
+@inject ApplicationDbContext _context
+
+<RadzenRow>
+    <RadzenColumn Size="12">
+        <RadzenRow>
+            <RadzenColumn Size="12" SizeMD="1">
+                <RadzenButton Icon="keyboard_arrow_left" class="w-100"></RadzenButton>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="10" class="text-center px-lg-5 px-0">
+                <RadzenDropDown Data="@boxes" @bind-Value="ss" class="text-center w-100">
+
+                </RadzenDropDown>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="1">
+                <RadzenButton Icon="keyboard_arrow_right" class="w-100"></RadzenButton>
+
+            </RadzenColumn>
+        </RadzenRow>
+
+    </RadzenColumn>
+    <RadzenColumn Size="12">
+
+     <RadzenRow>
+            <RadzenColumn Size="0" SizeLG="1"></RadzenColumn>
+        <RadzenColumn SizeLG="10" Size="12">
+            <PokemonButton> </PokemonButton>
+            <PokemonButton></PokemonButton>
+            <PokemonButton></PokemonButton>
+            <PokemonButton></PokemonButton>
+        </RadzenColumn>
+        <RadzenColumn Size="0" SizeLG="1"></RadzenColumn>
+
+    </RadzenRow>
+   </RadzenColumn>
+</RadzenRow>
+
+@code {
+    string[] boxes = Enumerable.Range(1, 30).Select(s => $"箱子{s}").ToArray();
+    string ss = "箱子1";
+}
