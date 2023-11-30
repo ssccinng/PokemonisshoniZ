@@ -23,13 +23,12 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         team => team.Tags, ownedNavigationBuilder =>
         {
             ownedNavigationBuilder.ToJson();
-        });
-
-        builder.Entity<PokeTeam>().OwnsOne(
+        }).OwnsOne(
        team => team.PokemonIds, ownedNavigationBuilder =>
        {
            ownedNavigationBuilder.ToJson();
-       });
+       }); ;
+
 
 
         builder.Entity<PCLPokemon>().OwnsOne(
@@ -43,10 +42,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
        {
            ownedNavigationBuilder.ToJson();
        });
+        base.OnModelCreating(builder);
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-    }
 }
