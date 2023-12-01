@@ -1,15 +1,25 @@
-﻿@using PokemonisshoniZ.Data
+﻿@using PokemonDataAccess.Models
+@using PokemonisshoniZ.Data
 
 @* @inject ApplicationDbContext _context *@
 
 <RadzenButton Variant="Variant.Text" ContextMenu="ContextMenu" Click="Click">
-    <RadzenImage Path="https://play.pokemonshowdown.com/sprites/gen5/bulbasaur.png">
+    @if (pokemon != null)
+    {
+        <RadzenImage Path=@($"https://play.pokemonshowdown.com/sprites/gen5/{pokemon.PSImgName}.png")>
 
-    </RadzenImage>
+        </RadzenImage>
+    }
+    else
+    {
+        <RadzenImage Path=@($"Image/img_pokei128/icon0000_f00_s0.png")>
+
+        </RadzenImage>
+    }
 </RadzenButton>
 
 @code {
-    // [Parameter] public PCLPokemon pokemon { get; set; }
+    [Parameter] public PSPokemon pokemon { get; set; }
 
     [Parameter]
     public Action<MouseEventArgs> ContextMenu{ get; set; }
