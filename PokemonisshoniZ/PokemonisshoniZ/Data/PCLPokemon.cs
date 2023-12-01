@@ -9,7 +9,9 @@ namespace PokemonisshoniZ.Data
         /// 宝可梦id
         /// </summary>
         public long PokeId { get; set; }
-
+        /// <summary>
+        /// 宝可梦tag
+        /// </summary>
         public List<string> Tags { get; set; } = new();
 
 

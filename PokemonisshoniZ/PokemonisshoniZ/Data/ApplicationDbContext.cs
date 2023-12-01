@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 //using PokemonisshoniZ.Client.Models;
 
 namespace PokemonisshoniZ.Data;
@@ -19,29 +20,31 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<PokeTeam>().OwnsOne(
-        team => team.Tags, ownedNavigationBuilder =>
-        {
-            ownedNavigationBuilder.ToJson();
-        }).OwnsOne(
-       team => team.PokemonIds, ownedNavigationBuilder =>
-       {
-           ownedNavigationBuilder.ToJson();
-       }); ;
+        builder.Entity<PCLPokemon>().Property(e => e.Tags)
+         .HasColumnType("json")
+         .HasConversion(
+         v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+         v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null));
+
+        builder.Entity<PokeTeam>().Property(e => e.Tags)
+         .HasColumnType("json")
+         .HasConversion(
+         v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+         v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null));
 
 
+        builder.Entity<PokeTeam>().Property(e => e.PokemonIds)
+         .HasColumnType("json")
+         .HasConversion(
+         v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+         v => JsonSerializer.Deserialize<int[]>(v, (JsonSerializerOptions)null));
 
-        builder.Entity<PCLPokemon>().OwnsOne(
-       team => team.Tags, ownedNavigationBuilder =>
-       {
-           ownedNavigationBuilder.ToJson();
-       });
+        builder.Entity<PCLPokemonBox>().Property(e => e.PCLPokemonIds)
+        .HasColumnType("json")
+        .HasConversion(
+        v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+        v => JsonSerializer.Deserialize<int[]>(v, (JsonSerializerOptions)null));
 
-        builder.Entity<PCLPokemonBox>().OwnsOne(
-       team => team.PCLPokemonIds , ownedNavigationBuilder =>
-       {
-           ownedNavigationBuilder.ToJson();
-       });
         base.OnModelCreating(builder);
     }
 

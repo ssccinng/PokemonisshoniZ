@@ -16,7 +16,7 @@ namespace PokemonisshoniZ.Data
         public string Name { get; set; }
         public int BoxIdx { get; set; }
 
-        public List<int> PCLPokemonIds { get; set; } = Enumerable.Repeat(0, 30).ToList();
+        public int[] PCLPokemonIds { get; set; } = new int[30];// Enumerable.Repeat(0, 30).ToList();
 
     }
 }
