@@ -11,6 +11,7 @@
         public int[] PokemonIds { get; set; } = new int[6];
 
         public bool Islock { get; set; } = false; //锁住用户修改权限 
+        public string Remark { get; set; } = string.Empty;
         /// <summary>
         /// json化
         /// </summary>

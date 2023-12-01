@@ -18,7 +18,7 @@ namespace PokemonisshoniZ.Data
 
 
         [Column(TypeName = "nvarchar(1000)")]
-        public string PSText { get; set; }
-        public string Remark { get; set; }
+        public string PSText { get; set; } = string.Empty;
+        public string Remark { get; set; } = string.Empty;
     }
 }

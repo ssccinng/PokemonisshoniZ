@@ -10,7 +10,7 @@ namespace PokemonisshoniZ.Meditor.Handlers
         {
             var cnt = dbContext.PCLPokemonBoxes.Where(s => s.UserId == request.userId).Count();
 
-            PCLPokemon[] pCLPokemons = new PCLPokemon[cnt * 30];
+            PCLPokemon[] pCLPokemons = new PCLPokemon[request.cnt * 30];
             for (int i = 0; i < pCLPokemons.Length; i++)
             {
                 pCLPokemons[i] = new() { UserId = request.userId };
