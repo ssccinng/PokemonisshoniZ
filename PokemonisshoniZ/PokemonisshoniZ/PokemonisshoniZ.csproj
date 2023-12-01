@@ -32,4 +32,8 @@
 
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Meditor\Queries\" />
+  </ItemGroup>
+
 </Project>

@@ -17,6 +17,11 @@ namespace PokemonisshoniZ.Extensions
         {
             // builder.AddAuthenticationServices();
 
+            builder.Services.AddMediatR(config =>
+            {
+                config.RegisterServicesFromAssemblyContaining<Program>();
+            });
+
             builder.Services.AddScoped<PokemonisshoniService>();
 
             builder.Services

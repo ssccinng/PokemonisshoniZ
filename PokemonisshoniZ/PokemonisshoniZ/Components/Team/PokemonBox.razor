@@ -1,18 +1,22 @@
 ﻿@page "/PokemonBox"
 
 @using PokemonisshoniZ.Data
+@using PokemonisshoniZ.Meditor.Commands
 
 @inject ContextMenuService ContextMenuService
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
-@attribute [StreamRendering]
-@rendermode InteractiveAuto
+@attribute [StreamRendering(false)]
+@rendermode InteractiveServer
 @attribute [Authorize]
 
 @inject ApplicationDbContext _context
 @inject PokemonisshoniZ.Services.PokemonisshoniService PokemonisshoniService
 
+@if (_pCLPokemonBoxes != null)
+{
+    
 
 <RadzenRow>
     <RadzenColumn Size="12">
@@ -39,37 +43,73 @@
      <RadzenRow>
             <RadzenColumn Size="0" SizeLG="1"></RadzenColumn>
         <RadzenColumn SizeLG="10" Size="12">
-                <RadzenDataList Data="_pCLPokemonBoxes[selectIdx].PCLPokemonIds">
+                    <RadzenCard class="mt-3">
+                    <RadzenRow>
+                        @foreach (var id in _pCLPokemonBoxes[selectIdx].PCLPokemonIds) {
+                            <RadzenColumn>
+                                    <PokemonButton ContextMenu="(args) => {ShowContextMenuWithItems(args, id);}"> </PokemonButton>
+                            </RadzenColumn>
+                        }
+                    </RadzenRow>
 
-            </RadzenDataList>
-                <PokemonButton ContextMenu="ShowContextMenuWithItems"> </PokemonButton>
+                    </RadzenCard>
+            
         </RadzenColumn>
         <RadzenColumn Size="0" SizeLG="1"></RadzenColumn>
 
     </RadzenRow>
    </RadzenColumn>
-</RadzenRow>
+    </RadzenRow>
 
+}
+else
+{
+    <LoadPage/>
+}
 @code {
     string[] boxes = Enumerable.Range(1, 30).Select(s => $"箱子{s}").ToArray();
     int selectIdx = 0;
 
-    PCLPokemonBox[] _pCLPokemonBoxes;
+    List<PCLPokemonBox> _pCLPokemonBoxes;
 
     // IEnumerable<DataItem> 
+    [CascadingParameter]
+    public HttpContext HttpContext { get; set; } = default!;
 
-    protected override Task OnInitializedAsync()
+    string? userId;
+
+    protected override async Task OnInitializedAsync()
     {
-        _pCLPokemonBoxes.Select(s => new DataItem ( s.Name, s.BoxIdx));
-        return base.OnInitializedAsync();
-    }
+        // Httpcontext???
+        var cc = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        userId = cc?.User.GetUserIdBlazor();
+        if (userId == null)
+        {
+            // 无权限desu
+            return;
+        }
+        _pCLPokemonBoxes = _context.PCLPokemonBoxes
+        .Where(s => s.UserId == userId)
+        .ToList();
+        if (_pCLPokemonBoxes.Count == 0)
+        {
+            _pCLPokemonBoxes.AddRange(
+                await PokemonisshoniService.Mediator.Send(new CreatePokemonBoxCommand(userId, 8)));
 
-    void ShowContextMenuWithItems(MouseEventArgs args)
+        }
+
+        // await base.OnInitializedAsync();
+    }
+    // 要加入当前id 用于判断宝是否喜爱
+    void ShowContextMenuWithItems(MouseEventArgs args, int id)
     {
         ContextMenuService.Open(args,
             new List<ContextMenuItem> {
                 new ContextMenuItem(){ Text = "复制", Value = 1, Icon = "search" },
                 new ContextMenuItem(){ Text = "放生", Value = 2, Icon = "delete" },
+                new ContextMenuItem(){ Text = "标记为喜爱", Value = 2, Icon = "delete" },
+                new ContextMenuItem(){ Text = "导出PS", Value = 3, Icon = "delete" },
+                new ContextMenuItem(){ Text = "导入PS", Value = 4, Icon = "delete" },
                  }, OnMenuItemClick);
     }
 

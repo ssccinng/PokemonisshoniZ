@@ -4,6 +4,8 @@ namespace PokemonisshoniZ.Data
 {
     public class PCLPokemon
     {
+        public ApplicationUser User { get; set; }
+        public string UserId { get; set; }
         public long Id { get; set; }
         /// <summary>
         /// 宝可梦id
@@ -17,5 +19,6 @@ namespace PokemonisshoniZ.Data
 
         [Column(TypeName = "nvarchar(1000)")]
         public string PSText { get; set; }
+        public string Remark { get; set; }
     }
 }
