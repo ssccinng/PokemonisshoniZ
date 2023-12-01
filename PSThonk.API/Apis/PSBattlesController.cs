@@ -15,7 +15,7 @@ using PSThonk.Share.Models;
 
 namespace PSThonk.API.Apis
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     //[Authorize]
     public class PSBattlesController : ControllerBase
@@ -274,7 +274,6 @@ namespace PSThonk.API.Apis
         }
 
         [HttpGet("youbattle/{name}/{idx}")]
-        [Authorize]
         public async Task<ActionResult<IEnumerable<PSBattle>>> GetYouPSBattles(string name, int idx)
         {
             DateTime dateTime = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek).AddDays(7 * idx);

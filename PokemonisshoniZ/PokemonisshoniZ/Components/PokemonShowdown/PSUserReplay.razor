@@ -1,4 +1,15 @@
-﻿<RadzenCard class="@Class">
+﻿@using PokemonisshoniZ.Services
+@inject PokemonisshoniService PokemonisshoniService
+
+@if (_pSBattles == null)
+{
+    <LoadPage />
+}
+else
+{
+    
+
+<RadzenCard class="@Class">
     
     <RadzenRow>
         <RadzenColumn Size="12">
@@ -8,7 +19,15 @@
                         <RadzenTextBox Placeholder="筛选规则..." Change=@(args => OnChange(args)) />
                     </RadzenRow>
                     
-
+                    <RadzenRow>
+                        <RadzenDataList Data="_pSBattles" WrapItems=true>
+                            <Template>
+                                <RadzenStack Orientation="Orientation.Horizontal">
+                                    <RadzenText>@context.Player1 vs @context.Player2</RadzenText>
+                                </RadzenStack>
+                            </Template>
+                        </RadzenDataList>
+                    </RadzenRow>
                 </RadzenColumn>
           @*       <RadzenColumn Size="12" SizeLG="4">
                     <RadzenButton>查询</RadzenButton>
@@ -17,7 +36,7 @@
         </RadzenColumn>
     </RadzenRow>
 </RadzenCard>
-
+}
 @code {
     [Parameter]
 
@@ -25,6 +44,14 @@
 
     [Parameter]
     public string Id { get; set; }
+
+    List<PSThonk.Share.Models.PSBattle> _pSBattles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _pSBattles = await PokemonisshoniService.PSThonkService.GetNamePsBattle(Id);
+        await base.OnInitializedAsync();
+    }
 
     async void OnChange(string data)
     {

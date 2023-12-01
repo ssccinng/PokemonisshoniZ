@@ -23,3 +23,7 @@ GET {{PSThonk.API_HostAddress}}/api/v1/PsThonk/GetUserDetail/scixing
 GET {{PSThonk.API_HostAddress}}/api/v1/PSThonk/GetUserDetail/scixing
 
 ###
+
+GET {{PSThonk.API_HostAddress}}/api/v1/psbattles/youbattle/scixing/0
+
+###

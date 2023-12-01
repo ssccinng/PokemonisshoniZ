@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Bcpg;
 using PokeCommon.API.Data;
 using PokeCommon.Models;
 using PokeCommon.PokemonShowdownTools;
@@ -30,9 +31,9 @@ namespace PokeCommon.API.Controllers
         }
 
         [HttpPost("PSToPoke")]
-        public async Task<GamePokemon> PSToPoke([FromBody]string text)
+        public async Task<GamePokemon> PSToPoke(Pack text)
         {
-            return await PSConverter.ConvertToPokemonAsync(text);
+            return await PSConverter.ConvertToPokemonAsync(text.Value);
         }
 
         [HttpPost("PSToPokeTeam")]
@@ -40,5 +41,10 @@ namespace PokeCommon.API.Controllers
         {
             return await PSConverter.ConvertToPokemonsAsync(text);
         }
+    }
+
+    public class Pack
+    {
+        public string Value { get; set; }
     }
 }

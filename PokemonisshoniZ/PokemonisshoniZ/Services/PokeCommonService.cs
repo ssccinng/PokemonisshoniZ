@@ -1,5 +1,6 @@
 ﻿using PokeCommon.Models;
 using PokemonDataAccess.Models;
+using System.Text.Json;
 
 namespace PokemonisshoniZ.Services
 {
@@ -20,7 +21,12 @@ namespace PokemonisshoniZ.Services
 
         public async Task<GamePokemon> PSToPoke(string text)
         {
-            return await (await httpClient.PostAsync($"{remotePSTranslateServiceBaseUrl}PSToPoke", new StringContent(text))).Content.ReadFromJsonAsync<GamePokemon>();
+            var aa = (await httpClient.PostAsJsonAsync($"{remotePSTranslateServiceBaseUrl}PSToPoke", new { Value = text }));
+            
+            var cc = await aa.Content.ReadFromJsonAsync<GamePokemon>();
+
+            //var gg = JsonSerializer.Deserialize<GamePokemon>(cc, new JsonSerializerOptions {  PropertyNamingPolicy = JsonNamingPolicy.CamelCase }); ;
+            return cc;
         }
 
         public GamePokemonTeam PSToPokeTeam(string text)
@@ -35,6 +41,12 @@ namespace PokemonisshoniZ.Services
         {
             // 撕烤缓存
             return httpClient.GetFromJsonAsync<Pokemon[]>($"{remotePokeDataServiceBaseUrl}GetPokemons");
+        }
+
+        public Task<PSPokemon[]> GetPSPokemons()
+        {
+            // 撕烤缓存
+            return httpClient.GetFromJsonAsync<PSPokemon[]>($"{remotePokeDataServiceBaseUrl}GetPSPokemons");
         }
     }
 }

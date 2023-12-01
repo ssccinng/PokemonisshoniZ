@@ -1,21 +1,23 @@
 ﻿@page "/PokemonBox"
 
 @using PokemonDataAccess.Models
+@using PokemonisshoniZ.Components.PCLDialog
 @using PokemonisshoniZ.Data
 @using PokemonisshoniZ.Meditor.Commands
 
 @inject ContextMenuService ContextMenuService
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject DialogService DialogService
 
-@attribute [StreamRendering(false)]
+@* @attribute [StreamRendering(false)] *@
 @rendermode InteractiveServer
 @attribute [Authorize]
 
 @inject ApplicationDbContext _context
 @inject PokemonisshoniZ.Services.PokemonisshoniService PokemonisshoniService
 
-@if (_pCLPokemonBoxes != null && _pCLPokemonBoxes.Count != 0)
+@if (_pCLPokemonBoxes != null && _pCLPokemonBoxes.Count != 0 && _pSPokemons != null && _pSPokemons.Length != 0)
 {
     
 
@@ -23,7 +25,9 @@
     <RadzenColumn Size="12">
         <RadzenRow>
             <RadzenColumn Size="12" SizeMD="1">
-                <RadzenButton Icon="keyboard_arrow_left" class="w-100"></RadzenButton>
+                <RadzenButton Icon="keyboard_arrow_left"
+                    Click="() => {if (selectIdx > 0) selectIdx--;}"
+                    class="w-100"></RadzenButton>
             </RadzenColumn>
             <RadzenColumn Size="12" SizeMD="10" class="text-center px-lg-5 px-0">
                 <RadzenDropDown Data="@_pCLPokemonBoxes" 
@@ -33,7 +37,7 @@
                 </RadzenDropDown>
             </RadzenColumn>
             <RadzenColumn Size="12" SizeMD="1">
-                <RadzenButton Icon="keyboard_arrow_right" class="w-100"></RadzenButton>
+                <RadzenButton Icon="keyboard_arrow_right" class="w-100" Click="() => {if (selectIdx < _pCLPokemonBoxes.Count - 1) selectIdx++;}"></RadzenButton>
 
             </RadzenColumn>
         </RadzenRow>
@@ -47,15 +51,17 @@
                     <RadzenCard class="mt-3">
                     <RadzenRow>
                         @foreach (var id in _pCLPokemonBoxes[selectIdx].PCLPokemonIds) {
-                            <RadzenColumn 
-                                SizeLG="2"
-                                SizeMD="3"
-                                Size="12"
+                                var pid = _pCLPokemons.First(s => s.Id == id);
+                                var tid = _pokemons.FirstOrDefault(s => s.Id == pid.PokeId)?.Id;
+                                var pspoke = _pSPokemons
+                                .FirstOrDefault(s => s.PokemonId == tid);
+                                <RadzenColumn 
+                                Style="width:150px"
                                 >
                                 @* 此处不能超过外侧高度 撕烤 *@
                                     <PokemonButton 
-                                        
-                                        ContextMenu="(args) => {ShowContextMenuWithItems(args, id);}"> </PokemonButton>
+                                        pokemon="pspoke"
+                                                   ContextMenu="(args) => ShowContextMenuWithItems(args, pid)"> </PokemonButton>
                             </RadzenColumn>
                         }
                     </RadzenRow>
@@ -79,6 +85,8 @@ else
     int selectIdx = 0;
 
     List<PCLPokemonBox> _pCLPokemonBoxes;
+    List<PCLPokemon> _pCLPokemons;
+    PSPokemon[] _pSPokemons;
 
     Pokemon[] _pokemons;
 
@@ -99,39 +107,67 @@ else
             return;
         }
         _pCLPokemonBoxes = _context.PCLPokemonBoxes
-        .Where(s => s.UserId == userId)
-        .ToList();
+            .Where(s => s.UserId == userId)
+            .ToList();
+        _pCLPokemons = _context.PCLPokemons
+            .Where(s => s.UserId == userId)
+            .ToList();
 
         _pokemons = await PokemonisshoniService.PokeCommonService.GetPokemons();
+        _pSPokemons = await PokemonisshoniService.PokeCommonService.GetPSPokemons();
 
         if (_pCLPokemonBoxes.Count == 0)
         {
             _pCLPokemonBoxes.AddRange(
                 await PokemonisshoniService.Mediator.Send(new CreatePokemonBoxCommand(userId, 8)));
 
+            // 有问题
+            _pCLPokemons = _context.PCLPokemons
+               .Where(s => s.UserId == userId)
+               .ToList();
+
         }
 
         // await base.OnInitializedAsync();
     }
     // 要加入当前id 用于判断宝是否喜爱
-    void ShowContextMenuWithItems(MouseEventArgs args, long id)
+    void ShowContextMenuWithItems(MouseEventArgs args, PCLPokemon poke)
     {
         ContextMenuService.Open(args,
             new List<ContextMenuItem> {
                 new ContextMenuItem(){ Text = "复制", Value = 1, Icon = "search" },
                 new ContextMenuItem(){ Text = "放生", Value = 2, Icon = "delete" },
                 new ContextMenuItem(){ Text = "标记为喜爱", Value = 2, Icon = "delete" },
-                new ContextMenuItem(){ Text = "导出PS", Value = 3, Icon = "delete" },
-                new ContextMenuItem(){ Text = "导入PS", Value = 4, Icon = "delete" },
-                 }, OnMenuItemClick);
+                new ContextMenuItem(){ Text = "编辑PS", Value = 3, Icon = "delete" },
+                // new ContextMenuItem(){ Text = "导入PS", Value = 4, Icon = "delete" },
+                     }, (args) => OnMenuItemClick(args, poke));
     }
 
-    void OnMenuItemClick(MenuItemEventArgs args)
+    async void OnMenuItemClick(MenuItemEventArgs args, PCLPokemon poke)
     {
-        if ((int)args.Value == 1)
+        if ((int)args.Value == 3)
         {
-
+            await OpenOrder(poke);
         }
+        ContextMenuService.Close();
+    }
+
+    public async Task<string> OpenOrder(PCLPokemon poke)
+    {
+
+        var res = await DialogService.OpenAsync<InputPSDialog>($"输入PS",
+               new Dictionary<string, object>() {  },
+               new DialogOptions() { Width = "700px", Height = "512px", Resizable = false, Draggable = true });
+        if (res !=null )
+        {
+            poke.PSText = res;
+            var pp = await PokemonisshoniService.PokeCommonService.PSToPoke(poke.PSText);
+
+            poke.PokeId = pp.MetaPokemon.Id;
+            _context.SaveChanges();
+            StateHasChanged();
+        }
+        return res;
     }
 
     public record DataItem(string Name, int Idx);

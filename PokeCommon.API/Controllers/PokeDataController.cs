@@ -14,5 +14,10 @@ namespace PokeCommon.API.Controllers
         {
             return pokeDBContext.Pokemons;
         }
-}
+        [HttpGet("GetPSPokemons")]
+        public IEnumerable<PSPokemon> GetPSPokemons()
+        {
+            return pokeDBContext.PSPokemons;
+        }
+    }
 }

@@ -1,10 +1,11 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using PSThonk.Share.Models;
 
 namespace PSThonk.API.Data
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
         public DbSet<PSBattle> PSBattles { get; set; }
         public DbSet<PSTeam> PSTeams { get; set; }

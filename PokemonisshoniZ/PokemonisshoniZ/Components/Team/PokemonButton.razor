@@ -3,16 +3,16 @@
 
 @* @inject ApplicationDbContext _context *@
 
-<RadzenButton Variant="Variant.Text" ContextMenu="ContextMenu" Click="Click">
+<RadzenButton Variant="Variant.Text" ContextMenu="ContextMenu" Click="Click" Style="width:150px; height:150px">
     @if (pokemon != null)
     {
-        <RadzenImage Path=@($"https://play.pokemonshowdown.com/sprites/gen5/{pokemon.PSImgName}.png")>
+        <RadzenImage Style="width:100px; height:100px" Path=@($"https://play.pokemonshowdown.com/sprites/gen5/{pokemon.PSImgName}.png")>
 
         </RadzenImage>
     }
     else
     {
-        <RadzenImage Path=@($"Image/img_pokei128/icon0000_f00_s0.png")>
+        <RadzenImage Style="width:100px; height:100px" Path=@($"Image/img_pokei128/icon0000_f00_s0.png")>
 
         </RadzenImage>
     }

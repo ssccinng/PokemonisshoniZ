@@ -1,0 +1,15 @@
+﻿@using PokemonisshoniZ.Data
+@inject Radzen.DialogService dialogService
+
+
+<RadzenStack Gap="1rem">
+    <RadzenTextArea class="h-100" Rows="15" @bind-Value=text></RadzenTextArea>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
+        <RadzenButton Click="@((args) => dialogService.Close(null))" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Light" Text="Cancel" Style="width: 120px" />
+        <RadzenButton Click="@((args) => dialogService.Close(text))" Variant="Variant.Flat" Text="OK" Style="width: 120px" />
+    </RadzenStack>
+    </RadzenStack>
+@code {
+    string text;
+
+}

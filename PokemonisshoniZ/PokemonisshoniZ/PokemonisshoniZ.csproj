@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\PokeSci\PokePSCore\PokePSCore.csproj" />
     <ProjectReference Include="..\..\PokemonisshoniZ.ServiceDefaults\PokemonisshoniZ.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\PSThonk.Share\PSThonk.Share.csproj" />
     <ProjectReference Include="..\PokemonisshoniZ.Client\PokemonisshoniZ.Client.csproj" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
