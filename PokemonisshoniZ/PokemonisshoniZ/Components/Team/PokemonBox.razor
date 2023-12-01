@@ -101,7 +101,7 @@ else
         // await base.OnInitializedAsync();
     }
     // 要加入当前id 用于判断宝是否喜爱
-    void ShowContextMenuWithItems(MouseEventArgs args, int id)
+    void ShowContextMenuWithItems(MouseEventArgs args, long id)
     {
         ContextMenuService.Open(args,
             new List<ContextMenuItem> {

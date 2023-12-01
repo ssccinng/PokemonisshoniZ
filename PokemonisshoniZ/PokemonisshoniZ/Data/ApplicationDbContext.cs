@@ -43,7 +43,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         .HasColumnType("json")
         .HasConversion(
         v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-        v => JsonSerializer.Deserialize<int[]>(v, (JsonSerializerOptions)null));
+        v => JsonSerializer.Deserialize<long[]>(v, (JsonSerializerOptions)null));
 
         base.OnModelCreating(builder);
     }

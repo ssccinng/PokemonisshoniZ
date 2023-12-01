@@ -18,7 +18,7 @@ namespace PokemonisshoniZ.Meditor.Handlers
             dbContext.PCLPokemons.AddRange(pCLPokemons);
             await dbContext.SaveChangesAsync();
 
-            IEnumerable<PCLPokemonBox> pCLPokemonBoxes = Enumerable.Range(cnt, request.cnt).Select(s => new PCLPokemonBox { BoxIdx = s, Name = $"箱子{s + 1}", UserId = request.userId, PCLPokemonIds = pCLPokemonBoxes.Skip(s * 30).Take(30).Select(s => s.Id).ToArray()});
+            IEnumerable<PCLPokemonBox> pCLPokemonBoxes = Enumerable.Range(cnt, request.cnt).Select(s => new PCLPokemonBox { BoxIdx = s, Name = $"箱子{s + 1}", UserId = request.userId, PCLPokemonIds = pCLPokemons.Skip(s * 30).Take(30).Select(s => s.Id).ToArray()});
             dbContext.PCLPokemonBoxes.AddRange(pCLPokemonBoxes);
             await dbContext.SaveChangesAsync();
             return pCLPokemonBoxes.ToArray();
