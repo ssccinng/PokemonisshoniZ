@@ -18,13 +18,21 @@
     <Tabs>
         <RadzenTabsItem Text="队伍列表">
             <RadzenRow AlignItems="AlignItems.Center">
-                <RadzenButton Text="新建队伍" Click="@OnAddTeam" Style="width:150px;" />
+                <RadzenColumn Size="12">
 
-                <RadzenDropDown Style="" @bind-Value="@propStyle"
-                Data=@(new DataItem[] { new DataItem("默认排序", 0),new DataItem("修改时间", 1),new DataItem("我喜爱的队伍", 2), })
-                                ValueProperty="Value" TextProperty="name"></RadzenDropDown>
-                <RadzenSwitch @bind-Value="@tooSimple" Style="margin-left:5px" />
-                <RadzenText TextStyle="TextStyle.Subtitle1">简易显示</RadzenText>
+              
+
+                <RadzenRow>
+                    <RadzenButton Text="新建队伍" Click="@OnAddTeam" Style="width:150px;" />
+
+                    <RadzenDropDown Style="" @bind-Value="@propStyle"
+                                    Data=@(new DataItem[] { new DataItem("默认排序", 0),new DataItem("修改时间", 1),new DataItem("我喜爱的队伍", 2), })
+                                    ValueProperty="Value" TextProperty="name"></RadzenDropDown>
+                    <RadzenSwitch @bind-Value="@tooSimple" Style="margin-left:5px" />
+                    <RadzenText TextStyle="TextStyle.Subtitle1">简易显示</RadzenText>
+                </RadzenRow>
+                </RadzenColumn>
+                
                 @{
                     IEnumerable<PokeTeam> teamListShow = teamList;
 
@@ -36,7 +44,13 @@
                 else
                 {
                     <RadzenDataList WrapItems="true" Data="teamListShow" TItem="PokeTeam" PageSize="100" AllowPaging="true">
+                        <Template>
+                            <RadzenRow>
+                                <RadzenText>@context.Name</RadzenText>
+                                <RadzenButton Click="@(args =>OnOpenTeam(context))">编辑</RadzenButton>
+                            </RadzenRow>
 
+                        </Template>
                     </RadzenDataList>
                 }
             </RadzenRow>
@@ -46,7 +60,7 @@
         {
             <RadzenTabsItem Text=@(team.Name + " 队伍")>
                 <RadzenButton Icon="close" Text="关闭" Click="@(args =>OnCloseTeam(team))" ButtonStyle="ButtonStyle.Danger" Style="width:100%; margin-top:2px"></RadzenButton>
-                <TeamEditer @key="@team" Team="@team"></TeamEditer>
+                <TeamEditor @key="@team" Team="@team"></TeamEditor>
             </RadzenTabsItem>
         }
     </Tabs>
@@ -71,7 +85,7 @@
 
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         // 是否为null return
-        var userId = authState.User.GetUserIdBlazor();
+        userId = authState.User.GetUserIdBlazor();
 
         teamList = _context.PokeTeams.Where(s => s.UserId == userId).OrderByDescending(s => s.Id).ToList();
         await base.OnInitializedAsync();
@@ -87,7 +101,13 @@
 
     void OnCloseTeam(PokeTeam team)
     {
-        
+        editTeamlist.Remove(team);
+        editIdx = 0;
+    }
+    void OnOpenTeam(PokeTeam team)
+    {
+        editTeamlist.Add(team);
+        editIdx = editTeamlist.Count;
     }
 
     void OnAddTeam()

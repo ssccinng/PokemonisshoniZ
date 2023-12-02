@@ -4,6 +4,7 @@
 @rendermode InteractiveAuto
 
 @using PokeCommon.Models
+@using PokemonisshoniZ.Data
 
 <RadzenCard style="background-color:var(--rz-base-background-color)">
     <RadzenRow>
@@ -30,6 +31,7 @@
 @code {
     [Parameter] public string Style { get; set; }
     [Parameter] public int Id { get; set; }
+    [Parameter] public PokeTeam Team { get; set; }
 
-    [Parameter] public GamePokemonTeam GamePokemon { get; set; } = new() { GamePokemons = [null, null, null, null, null, null] };
+    GamePokemonTeam GamePokemon { get; set; } = new() { GamePokemons = [null, null, null, null, null, null] };
 }
