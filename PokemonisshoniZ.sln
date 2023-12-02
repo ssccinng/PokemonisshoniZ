@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSThonk.Share", "PSThonk.Sh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokeCommon.API", "PokeCommon.API\PokeCommon.API.csproj", "{FE42FAD9-7F2D-48B2-AD67-A0357C05F041}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSReplay.API", "PSReplay.API\PSReplay.API.csproj", "{C84C5F30-D431-4A32-B95C-9CF04D76387C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{FE42FAD9-7F2D-48B2-AD67-A0357C05F041}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE42FAD9-7F2D-48B2-AD67-A0357C05F041}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE42FAD9-7F2D-48B2-AD67-A0357C05F041}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C84C5F30-D431-4A32-B95C-9CF04D76387C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C84C5F30-D431-4A32-B95C-9CF04D76387C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C84C5F30-D431-4A32-B95C-9CF04D76387C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C84C5F30-D431-4A32-B95C-9CF04D76387C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

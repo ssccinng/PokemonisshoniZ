@@ -11,7 +11,8 @@
 @inject DialogService DialogService
 
 @* @attribute [StreamRendering(false)] *@
-@rendermode InteractiveServer
+@* 没用？ *@
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @attribute [Authorize]
 
 @inject ApplicationDbContext _context
@@ -98,6 +99,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+
         // Httpcontext???
         var cc = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         userId = cc?.User.GetUserIdBlazor();

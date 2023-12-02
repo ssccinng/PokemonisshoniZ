@@ -34,7 +34,7 @@
                 <RadzenColumn SizeLG="6" Size="12">
                     <RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
 
-                        <PSAvatar Avatar="@_userDetail.Avatar"></PSAvatar>
+                        <PSAvatar Avatar="@_userDetail.Avatar?.GetRawText()"></PSAvatar>
                         <RadzenText>@_userDetail.Name</RadzenText>
                     </RadzenStack>
                 </RadzenColumn>

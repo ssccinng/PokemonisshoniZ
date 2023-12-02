@@ -14,6 +14,8 @@ builder.AddServiceDefaults();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddRazorPages();
+
 builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
 
@@ -31,6 +33,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapRazorPages();
 app.MapControllers();
 
 //app.MapPSEndpoints();

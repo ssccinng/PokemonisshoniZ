@@ -1,4 +1,5 @@
-﻿@using PokemonisshoniZ.Services
+﻿@using PSThonk.Share.Models
+@using PokemonisshoniZ.Services
 @inject PokemonisshoniService PokemonisshoniService
 
 @if (_pSBattles == null)
@@ -7,35 +8,41 @@
 }
 else
 {
-    
 
-<RadzenCard class="@Class">
-    
-    <RadzenRow>
-        <RadzenColumn Size="12">
-            <RadzenRow>
-                <RadzenColumn Size="12" SizeLG="4">
-                    <RadzenRow>
-                        <RadzenTextBox Placeholder="筛选规则..." Change=@(args => OnChange(args)) />
-                    </RadzenRow>
-                    
-                    <RadzenRow>
-                        <RadzenDataList Data="_pSBattles" WrapItems=true>
-                            <Template>
-                                <RadzenStack Orientation="Orientation.Horizontal">
-                                    <RadzenText>@context.Player1 vs @context.Player2</RadzenText>
-                                </RadzenStack>
-                            </Template>
-                        </RadzenDataList>
-                    </RadzenRow>
-                </RadzenColumn>
-          @*       <RadzenColumn Size="12" SizeLG="4">
-                    <RadzenButton>查询</RadzenButton>
+
+    <RadzenCard class="@Class">
+
+        <RadzenRow>
+            <RadzenColumn Size="12">
+                <RadzenRow>
+                    <RadzenColumn Size="12" SizeLG="4">
+                        <RadzenRow>
+                            <RadzenTextBox Placeholder="筛选规则..." Change=@(args => OnChange(args)) />
+                        </RadzenRow>
+
+                        <RadzenRow>
+                            <RadzenColumn Size="12">
+                                <RadzenDataList Data="_pSBattles" WrapItems=true class="w-100">
+                                    <Template>
+                                        <RadzenStack Orientation="Orientation.Horizontal">
+                                            <RadzenText>@context.BatteTimeDetail</RadzenText>
+                                            <RadzenText>@context.Player1 vs. @context.Player2</RadzenText>
+                                            <PSTeamBadge Pokemons="Pokemons" Team="context.Player1Team" />
+                                            <PSTeamBadge Pokemons="Pokemons" Team="context.Player2Team" />
+                                            <RadzenLink Path=@($"PSReplay?roomId={context.RoomId}") Target="_blank">录像</RadzenLink>
+                                        </RadzenStack>
+                                    </Template>
+                                </RadzenDataList>
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenColumn>
+                    @*       <RadzenColumn Size="12" SizeLG="4">
+                <RadzenButton>查询</RadzenButton>
                 </RadzenColumn> *@
-            </RadzenRow>
-        </RadzenColumn>
-    </RadzenRow>
-</RadzenCard>
+                </RadzenRow>
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenCard>
 }
 @code {
     [Parameter]
@@ -46,9 +53,12 @@ else
     public string Id { get; set; }
 
     List<PSThonk.Share.Models.PSBattle> _pSBattles;
+    public List<PSPokemon> Pokemons { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        Pokemons = await PokemonisshoniService.PSThonkService.GetPSThonkPSPokemon();
+
         _pSBattles = await PokemonisshoniService.PSThonkService.GetNamePsBattle(Id);
         await base.OnInitializedAsync();
     }
@@ -59,7 +69,7 @@ else
 
         if (string.IsNullOrEmpty(data))
         {
-            
+
         }
     }
 }

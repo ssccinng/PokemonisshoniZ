@@ -27,3 +27,15 @@ GET {{PSThonk.API_HostAddress}}/api/v1/PSThonk/GetUserDetail/scixing
 GET {{PSThonk.API_HostAddress}}/api/v1/psbattles/youbattle/scixing/0
 
 ###
+
+GET {{PSThonk.API_HostAddress}}/api/v1/pspokemons
+
+###
+
+GET {{PSThonk.API_HostAddress}}/api/v1/psbattles/battle-gen9vgc2023regulatione-2002292992
+
+###
+
+GET {{PSThonk.API_HostAddress}}/api/v1/psbattles/battlereplay/{id}?roomId=battle-gen9vgc2023regulatione-2002292992
+
+###

@@ -12,6 +12,9 @@ var pkhomeApi = builder.AddProject<Projects.PokemonHome_API>("pokemonhome-api")
 var pokeocrApi = builder.AddProject<Projects.PokeOCR_API>("pokeocr-api")
     .WithEnvironmentForServiceBinding("Identity__Url", pokeIdentityApi);
 
+var psreplayApi = builder.AddProject<Projects.PSReplay_API>("psreplay-api")
+    .WithEnvironmentForServiceBinding("Identity__Url", pokeIdentityApi);
+
 
 var pokecommonApi = builder.AddProject<Projects.PokeCommon_API>("pokecommon-api");
 
@@ -21,6 +24,7 @@ var webApp = builder.AddProject<Projects.PokemonisshoniZ>("webapp")
     .WithReference(pkhomeApi)
     .WithReference(pokeocrApi)
     .WithReference(pokecommonApi)
+    .WithReference(psreplayApi)
     .WithEnvironmentForServiceBinding("IdentityUrl", pokeIdentityApi)
     .WithLaunchProfile("https"); 
 
@@ -30,6 +34,7 @@ webApp.WithEnvironmentForServiceBinding("IdentityUrl", pokeIdentityApi);
 pokeIdentityApi.WithEnvironmentForServiceBinding("PSThonkApiClient", psthonkApi)
            .WithEnvironmentForServiceBinding("PKHomeApiClient", pkhomeApi)
            .WithEnvironmentForServiceBinding("PokeOcrClient", pokeocrApi)
+           .WithEnvironmentForServiceBinding("PSReplayClient", psreplayApi)
            .WithEnvironmentForServiceBinding("WebAppClient", webApp, bindingName: "https");
 
 var identityApi = builder.AddProject<Projects.Identity_API>("identity.api");
@@ -37,6 +42,25 @@ var identityApi = builder.AddProject<Projects.Identity_API>("identity.api");
 
 
 webApp.WithEnvironmentForServiceBinding("CallBackUrl", webApp, bindingName: "https");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

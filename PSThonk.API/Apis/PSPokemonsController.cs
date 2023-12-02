@@ -13,7 +13,7 @@ using PSThonk.Share.Models;
 
 namespace PSThonk.API.Apis
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     [AllowAnonymous]
     public class PSPokemonsController : ControllerBase

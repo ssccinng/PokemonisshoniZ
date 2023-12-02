@@ -22,6 +22,8 @@ namespace PokemonisshoniZ.Extensions
                 config.RegisterServicesFromAssemblyContaining<Program>();
             });
 
+            builder.Services.AddMemoryCache();
+
             builder.Services.AddScoped<PokemonisshoniService>();
 
             builder.Services

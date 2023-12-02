@@ -1,0 +1,41 @@
+﻿@page "/PSReplay/{roomId}"
+@using PSThonk.Share.Models
+@using PokemonisshoniZ.Services
+@inject PokemonisshoniService pokemonisshoniService
+
+@if (_pSBattle == null)
+{
+    <p>没有此录像</p>
+}
+else
+{
+
+    <!DOCTYPE html>
+    <meta charset="utf-8" />
+    <!-- version 1 -->
+    <title>@(new MarkupString(_pSBattle.Tier))</title>
+    <style>
+
+    </style>
+    <div class="wrapper replay-wrapper" style="max-width:1180px;margin:0 auto">
+        <input type="hidden" name="replayid" value="gen8vgc2020-1141262632" />
+        <div class="battle"></div><div class="battle-log"></div><div class="replay-controls"></div><div class="replay-controls-2"></div>
+        <script type="text/plain" class="battle-log-data">
+            @(new MarkupString(_pSBattle.BattleReplay))
+        </script>
+    </div>
+    <script>
+        let daily = Math.floor(Date.now() / 1000 / 60 / 60 / 24); document.write('<script src="https://play.pokemonshowdown.com/js/replay-embed.js?version' + daily + '"></' + 'script>');
+    </script>
+}
+
+
+@code {
+    [Parameter] public string roomId { get; set; }
+    PSBattle _pSBattle;
+    protected override async Task OnInitializedAsync()
+    {
+        _pSBattle = await pokemonisshoniService.PSThonkService.GetPsBattle(roomId);
+        await base.OnInitializedAsync();
+    }
+}

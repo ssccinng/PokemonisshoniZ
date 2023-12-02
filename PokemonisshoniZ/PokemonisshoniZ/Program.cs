@@ -31,7 +31,7 @@ public class Program
         builder.AddServiceDefaults();
 
 
-
+        builder.Services.AddRazorPages();
 
         // Add services to the container.
         builder.Services.AddRazorComponents()
@@ -137,9 +137,10 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
         app.UseStaticFiles();
         app.UseAntiforgery();
+
+        app.MapRazorPages();
         app.MapControllers();
 
         app.MapRazorComponents<App>()

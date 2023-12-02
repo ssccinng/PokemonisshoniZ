@@ -19,6 +19,7 @@
     <ProjectReference Include="..\PokemonHome.API\PokemonHome.API.csproj" />
     <ProjectReference Include="..\PokemonisshoniZ\PokemonisshoniZ\PokemonisshoniZ.csproj" />
     <ProjectReference Include="..\PokeOCR.API\PokeOCR.API.csproj" />
+    <ProjectReference Include="..\PSReplay.API\PSReplay.API.csproj" />
     <ProjectReference Include="..\PSThonk.API\PSThonk.API.csproj" />
   </ItemGroup>
 

@@ -1,0 +1,27 @@
+﻿@using PSThonk.Share.Models
+@using PokemonisshoniZ.Services
+@inject PokemonisshoniService PokemonisshoniService
+
+
+<RadzenRow>
+    @foreach (var item in Team.pokemonids)
+    {
+        <img width="36" src=@($"https://play.pokemonshowdown.com/sprites/gen5/{Pokemons[item - 1].PSImgName}.png") />
+    }
+</RadzenRow>
+
+@code {
+    [Parameter] public PSTeam Team { get; set; }
+
+    [Parameter] public List<PSPokemon> Pokemons { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Pokemons == null)
+        {
+            Pokemons = await PokemonisshoniService.PSThonkService.GetPSThonkPSPokemon();
+        }
+        await base.OnInitializedAsync();
+
+    }
+}
