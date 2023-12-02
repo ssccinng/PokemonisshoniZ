@@ -20,25 +20,43 @@ else
                             <RadzenTextBox Placeholder="筛选规则..." Change=@(args => OnChange(args)) />
                         </RadzenRow>
 
-                        <RadzenRow>
-                            <RadzenColumn Size="12">
-                                <RadzenDataList Data="_pSBattles" WrapItems=true class="w-100">
-                                    <Template>
-                                        <RadzenStack Orientation="Orientation.Horizontal">
-                                            <RadzenText>@context.BatteTimeDetail</RadzenText>
-                                            <RadzenText>@context.Player1 vs. @context.Player2</RadzenText>
-                                            <PSTeamBadge Pokemons="Pokemons" Team="context.Player1Team" />
-                                            <PSTeamBadge Pokemons="Pokemons" Team="context.Player2Team" />
-                                            <RadzenLink Path=@($"PSReplay?roomId={context.RoomId}") Target="_blank">录像</RadzenLink>
-                                        </RadzenStack>
-                                    </Template>
-                                </RadzenDataList>
-                            </RadzenColumn>
-                        </RadzenRow>
+
                     </RadzenColumn>
-                    @*       <RadzenColumn Size="12" SizeLG="4">
-                <RadzenButton>查询</RadzenButton>
-                </RadzenColumn> *@
+                    <RadzenColumn Size="6" SizeLG="12">
+                        <RadzenDataList Data="_pSBattles" WrapItems=true>
+                            <Template>
+                                <RadzenRow AlignItems="AlignItems.Center">
+                                    <RadzenColumn Size="12" SizeLG="2">
+                                        <RadzenText TagName="TagName.Div">@context.Tier</RadzenText>
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="12" SizeLG="1">
+                                        <RadzenText TagName="TagName.Div">@context.Player1</RadzenText>
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="12" SizeLG="3">
+                                        <PSTeamBadge Pokemons="Pokemons" Team="context.Player1Team" />
+
+                                    </RadzenColumn>
+
+                                    <RadzenColumn Size="12" SizeLG="1">
+                                        <RadzenText>@context.Player1Score vs. @context.Player2Score</RadzenText>
+
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="12" SizeLG="3">
+                                        <PSTeamBadge Pokemons="Pokemons" Team="context.Player2Team" />
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="12" SizeLG="1">
+                                        <RadzenText TagName="TagName.Div">@context.Player2</RadzenText>
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="12" SizeLG="1">
+                                        <RadzenLink Path=@($"{MainStroage.ReplayUrl}/PSReplay?roomId={context.RoomId}") Target="_blank">录像</RadzenLink>
+
+
+                                    </RadzenColumn>
+
+                                </RadzenRow>
+                            </Template>
+                        </RadzenDataList>
+                    </RadzenColumn>
                 </RadzenRow>
             </RadzenColumn>
         </RadzenRow>

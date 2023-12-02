@@ -1,0 +1,21 @@
+﻿@page "/my/mymanager"
+
+@attribute [Authorize]
+
+<RadzenCard style="background-color:var(--rz-base-background-color)">
+    <RadzenStack Orientation="Orientation.Vertical">
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center">
+            <RadzenText Style="width: 100px">昵称: </RadzenText>
+            <RadzenTextBox Style="width: 400px"> </RadzenTextBox>
+        </RadzenStack>
+
+        <RadzenStack Orientation="Orientation.Horizontal">
+            <RadzenText Style="width: 100px">QQ: </RadzenText>
+            <RadzenTextBox Style="width: 400px"> </RadzenTextBox>
+        </RadzenStack>
+    </RadzenStack>
+</RadzenCard>
+
+@code {
+
+}

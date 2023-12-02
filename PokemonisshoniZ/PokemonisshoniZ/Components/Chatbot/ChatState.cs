@@ -148,6 +148,34 @@ public class ChatState
                 return Error(e, "查询失败");
             }
         }
+        [SKFunction, Description("Sign up for the contest")]
+        public string NavigateToMatchList()
+        {
+            chatState._navigationManager.NavigateTo("match/list");
+            return "帮你转到了比赛列表页面，请找到你想报名的比赛";
+        }
+
+
+        [SKFunction, Description("modify user infomation")]
+        public string NavigateToUserModfiy()
+        {
+            chatState._navigationManager.NavigateTo("my/mymanager");
+            return "这里就是你的个人信息页面";
+        }
+
+
+
+
+        //[SKFunction, Description("how to use this page")]
+        //public string HelpUser()
+        //{
+        //    var url = chatState._navigationManager.Uri;
+        //    if (url.EndsWith("/TeamManager"))
+        //    {
+        //        return "您当前在宝可梦盒子页面, 可以右键点击宝可梦进行操作";
+        //    }
+        //    return "这个页面好像没有帮助信息";
+        //}
 
         [SKFunction, Description("Searches the Northern Mountains catalog for a provided product description")]
         public async Task<string> SearchCatalog([Description("The product description for which to search")] string productDescription)

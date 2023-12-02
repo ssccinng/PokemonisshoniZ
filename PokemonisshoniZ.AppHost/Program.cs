@@ -26,6 +26,7 @@ var webApp = builder.AddProject<Projects.PokemonisshoniZ>("webapp")
     .WithReference(pokecommonApi)
     .WithReference(psreplayApi)
     .WithEnvironmentForServiceBinding("IdentityUrl", pokeIdentityApi)
+    .WithEnvironmentForServiceBinding("ReplayUrl", psthonkApi)
     .WithLaunchProfile("https"); 
 
 webApp.WithEnvironmentForServiceBinding("IdentityUrl", pokeIdentityApi);

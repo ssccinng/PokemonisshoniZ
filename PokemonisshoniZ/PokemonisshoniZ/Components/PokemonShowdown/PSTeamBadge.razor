@@ -3,12 +3,12 @@
 @inject PokemonisshoniService PokemonisshoniService
 
 
-<RadzenRow>
+@* <RadzenRow> *@
     @foreach (var item in Team.pokemonids)
     {
         <img width="36" src=@($"https://play.pokemonshowdown.com/sprites/gen5/{Pokemons[item - 1].PSImgName}.png") />
     }
-</RadzenRow>
+@* </RadzenRow> *@
 
 @code {
     [Parameter] public PSTeam Team { get; set; }

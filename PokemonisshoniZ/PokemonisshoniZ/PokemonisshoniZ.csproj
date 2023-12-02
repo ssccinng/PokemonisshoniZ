@@ -34,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Components\Match\" />
     <Folder Include="Meditor\Queries\" />
   </ItemGroup>
 
