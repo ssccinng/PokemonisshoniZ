@@ -1,5 +1,121 @@
-﻿<h3>TeamList</h3>
+﻿@using Microsoft.AspNetCore.Identity
+@using PokemonisshoniZ.Data
+
+@attribute [Authorize]
+
+@inject UserManager<ApplicationUser> userManager
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+@inject NavigationManager NavigationManager
+
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+
+@inject ApplicationDbContext _context
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<RadzenTabs @bind-SelectedIndex=editIdx>
+    <Tabs>
+        <RadzenTabsItem Text="队伍列表">
+            <RadzenRow AlignItems="AlignItems.Center">
+                <RadzenButton Text="新建队伍" Click="@OnAddTeam" Style="width:150px;" />
+
+                <RadzenDropDown Style="" @bind-Value="@propStyle"
+                Data=@(new DataItem[] { new DataItem("默认排序", 0),new DataItem("修改时间", 1),new DataItem("我喜爱的队伍", 2), })
+                                ValueProperty="Value" TextProperty="name"></RadzenDropDown>
+                <RadzenSwitch @bind-Value="@tooSimple" Style="margin-left:5px" />
+                <RadzenText TextStyle="TextStyle.Subtitle1">简易显示</RadzenText>
+                @{
+                    IEnumerable<PokeTeam> teamListShow = teamList;
+
+                }
+                @if(tooSimple)
+                {
+                    
+                }
+                else
+                {
+                    <RadzenDataList WrapItems="true" Data="teamListShow" TItem="PokeTeam" PageSize="100" AllowPaging="true">
+
+                    </RadzenDataList>
+                }
+            </RadzenRow>
+        </RadzenTabsItem>
+
+        @foreach (var team in editTeamlist)
+        {
+            <RadzenTabsItem Text=@(team.Name + " 队伍")>
+                <RadzenButton Icon="close" Text="关闭" Click="@(args =>OnCloseTeam(team))" ButtonStyle="ButtonStyle.Danger" Style="width:100%; margin-top:2px"></RadzenButton>
+                <TeamEditer @key="@team" Team="@team"></TeamEditer>
+            </RadzenTabsItem>
+        }
+    </Tabs>
+</RadzenTabs>
 
 @code {
+    int propStyle;
+
+    // 是否显示简易版队伍
+    bool tooSimple = false;
+
+    List<PokeTeam> teamList;
+    List<PokeTeam> editTeamlist = [];
+
+    string userId;
+
+    int editIdx = 0;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        // 是否为null return
+        var userId = authState.User.GetUserIdBlazor();
+
+        teamList = _context.PokeTeams.Where(s => s.UserId == userId).OrderByDescending(s => s.Id).ToList();
+        await base.OnInitializedAsync();
+
+    }
+
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+
+    }
+
+    void OnCloseTeam(PokeTeam team)
+    {
+        
+    }
+
+    void OnAddTeam()
+    {
+        if (editTeamlist.Count() >= 5)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "请关闭一些队伍！", Detail = "", Duration = 4000 });
+            return;
+        }
+
+        if (teamList.Count() >= 50000)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "创建失败", Detail = "由于服务器资源有限目前只支持创建50000个队伍", Duration = 4000 });
+            return;
+        }
+        PokeTeam pokeTeam = new PokeTeam
+        {
+                UserId = userId
+        };
+        _context.PokeTeams.Add(pokeTeam);
+        pokeTeam.Name = "未命名" + (teamList.Count() + 1);
+        // 提取一下
+        _context.SaveChanges();
+        teamList.Insert(0, pokeTeam);
+        editTeamlist.Add(pokeTeam);
+        editIdx = editTeamlist.Count();
+    }
+
+    public record DataItem(string Name, int Value);
 
 }

@@ -1,21 +1,93 @@
 ﻿@page "/my/mymanager"
+@using Microsoft.AspNetCore.Identity
+@using PokemonisshoniZ.Data
 
 @attribute [Authorize]
 
-<RadzenCard style="background-color:var(--rz-base-background-color)">
-    <RadzenStack Orientation="Orientation.Vertical">
-        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center">
-            <RadzenText Style="width: 100px">昵称: </RadzenText>
-            <RadzenTextBox Style="width: 400px"> </RadzenTextBox>
-        </RadzenStack>
+@inject UserManager<ApplicationUser> userManager
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+@inject NavigationManager NavigationManager
 
-        <RadzenStack Orientation="Orientation.Horizontal">
-            <RadzenText Style="width: 100px">QQ: </RadzenText>
-            <RadzenTextBox Style="width: 400px"> </RadzenTextBox>
-        </RadzenStack>
-    </RadzenStack>
-</RadzenCard>
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
+@rendermode InteractiveServer
+@if (usercontext != null)
+{
+
+    <RadzenRow>
+
+
+        <RadzenCard style="background-color:var(--rz-base-background-color)" class="w-75 px-5">
+            <RadzenRow JustifyContent="JustifyContent.Center">
+                <RadzenStack Orientation="Orientation.Vertical">
+                    <RadzenText TagName="TagName.H5" TextStyle="TextStyle.DisplayH5" TextAlign="TextAlign.Center">修改登记信息</RadzenText>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" class="mt-3" Wrap="FlexWrap.Wrap">
+                        <RadzenText Style="width: 200px">昵称: </RadzenText>
+                        <RadzenTextBox Style="width: 300px" @bind-Value=usercontext.NickName></RadzenTextBox>
+                    </RadzenStack>
+
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" class="mt-3" Wrap="FlexWrap.Wrap">
+                        <RadzenText Style="width: 200px">头像: </RadzenText>
+                        <RadzenUpload Error=@(args => OnError(args, "FileInput")) Complete="@OnComplete" Accept="image/*" Url="upload/avatar"></RadzenUpload>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" class="mt-3" Wrap="FlexWrap.Wrap">
+                        <RadzenText Style="width: 200px"> </RadzenText>
+                        <RadzenImage Path="@usercontext.Avatar" Style="width:150px;height:150px; max-width:150px"></RadzenImage>
+                    </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
+                        <RadzenText Style="width: 200px">QQ: </RadzenText>
+                        <RadzenTextBox Style="width: 300px" @bind-Value=usercontext.QQ> </RadzenTextBox>
+                    </RadzenStack>
+
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap">
+                        <RadzenText Style="width: 200px">城市: </RadzenText>
+                        <RadzenTextBox Style="width: 300px" @bind-Value=usercontext.City> </RadzenTextBox>
+                    </RadzenStack>
+                    <RadzenButton Style="width: 300px">保存</RadzenButton>
+                </RadzenStack>
+
+            </RadzenRow>
+        </RadzenCard>
+    </RadzenRow>
+
+}
 @code {
+    ApplicationUser usercontext;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        // 是否为null return
+        var user = authState.User;
 
+        if (user.Identity.IsAuthenticated)
+        {
+            //user.
+            usercontext = userManager.GetUserAsync(user).Result;
+
+
+            if (await userManager.IsLockedOutAsync(usercontext))
+            {
+                NavigationManager.NavigateTo("Identity/Account/LogOut");
+                return;
+            }
+        }
+    }
+
+    void OnComplete(UploadCompleteEventArgs args)
+    {
+        usercontext.Avatar = args.JsonResponse.RootElement.GetProperty("url").ToString();
+        //ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = args.JsonResponse.RootElement.GetProperty("url").ToString(), Detail = "", Duration = 4000 });
+
+    }
+    void OnError(UploadErrorEventArgs args, string name)
+    {
+        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "上传失败", Detail = args.Message, Duration = 4000 });
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+
+    }
 }
