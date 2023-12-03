@@ -16,8 +16,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<PokeTeam> PokeTeams { get; set; }
     public DbSet<PCLPokemon> PCLPokemons { get; set; }
     public DbSet<PCLPokemonBox> PCLPokemonBoxes { get; set; }
+
     #endregion
 
+
+    #region 比赛
+    public DbSet<PCLMatch> PCLMatches { get; set; }
+
+    #region
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<PCLPokemon>().Property(e => e.Tags)
