@@ -44,7 +44,10 @@
                         <RadzenText Style="width: 200px">城市: </RadzenText>
                         <RadzenTextBox Style="width: 300px" @bind-Value=usercontext.City> </RadzenTextBox>
                     </RadzenStack>
-                    <RadzenButton Style="width: 300px">保存</RadzenButton>
+                    <RadzenRow JustifyContent="JustifyContent.Center">
+
+                        <RadzenButton Style="width: 300px" Click="Save">保存</RadzenButton>
+                    </RadzenRow>
                 </RadzenStack>
 
             </RadzenRow>
@@ -90,4 +93,11 @@
         NotificationService.Notify(message);
 
     }
+
+    async void Save()
+    {
+        await userManager.UpdateAsync(usercontext);
+
+    }
 }
+

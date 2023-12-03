@@ -1,17 +1,147 @@
 ﻿@using PokeCommon.Models
-<RadzenTabs Style="@Style">
-    <Tabs>
-          <RadzenTabsItem Text="基本信息">
+@using PokemonisshoniZ.Services
+@using PokemonisshoniZ.Utils
 
-          </RadzenTabsItem>
-          <RadzenTabsItem Text="EV/IV">
+@inject PokemonisshoniService PokemonisshoniService
 
-          </RadzenTabsItem>
-    </Tabs>
 
-</RadzenTabs>
+@if (GamePokemon != null)
+{
+    <RadzenRow>
+
+        <RadzenColumn Size="12">
+            <PokemonisshoniZ.Components.Common.PokeImg PokeId="GamePokemon.MetaPokemon?.Id" />
+        </RadzenColumn>
+        <RadzenColumn Size="12">
+            <RadzenTabs Style="@Style">
+                <Tabs>
+                    <RadzenTabsItem Text="基本信息">
+                        <RadzenRow>
+                            <RadzenColumn Size="4">
+                                <RadzenStack Gap="2">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2"
+                                                Style="font-weight:600;">宝可梦名:</RadzenText>
+                                    <RadzenAutoComplete @bind-Value=_textPokemon.Name
+                                                        @bind-Value:after=OnChange
+                                                        Data="Utils.Pokemons"
+                                                        FilterOperator="StringFilterOperator.Contains"
+                                                        TextProperty="FullNameChs" />
+
+                                    <RadzenText TextStyle="TextStyle.Subtitle2"
+                                                Style="font-weight:600;" class="mt-2">特性:</RadzenText>
+                                    <RadzenAutoComplete Style="width:110px; height:40px"
+                                                        @bind-Value=_textPokemon.Ability
+                                                        @bind-Value:after=OnChange
+                                                        Data="Utils.Abilities"
+                                                        FilterOperator="StringFilterOperator.Contains"
+                                                        TextProperty="Name_Chs" />
+
+                                    <RadzenText TextStyle="TextStyle.Subtitle2"
+                                                Style="font-weight:600;" class="mt-2">道具:</RadzenText>
+                                    <RadzenAutoComplete Style="width:110px; height:40px"
+                                                        @bind-Value=_textPokemon.Item
+                                                        @bind-Value:after=OnChange
+                                                        Data="Utils.Items"
+                                                        FilterOperator="StringFilterOperator.Contains"
+                                                        TextProperty="Name_Chs" />
+                                </RadzenStack>
+                            </RadzenColumn>
+                            <RadzenColumn Size="4">
+                                <RadzenColumn Size="4">
+                                    <RadzenStack Gap="0">
+                                        <RadzenText TextStyle="TextStyle.Subtitle2"
+                                                    Style="font-weight:600;">招式:</RadzenText>
+                                        @for (int mi = 0; mi < _textPokemon.Move.Length; ++mi)
+                                        {
+                                            int mii = mi;
+                                            <RadzenAutoComplete
+                                                class=@(mii == 0 ? "mt-1" :"mt-2")
+                                                Style="width:110px; height:40px"
+                                                                @bind-Value=_textPokemon.Move[mii]
+                                                                @bind-Value:after=OnChange
+                                                                Data="Utils.Moves"
+                                                                FilterOperator="StringFilterOperator.Contains"
+                                                                TextProperty="Name_Chs" />
+                                        }
+
+                                    </RadzenStack>
+                                </RadzenColumn>
+
+                            </RadzenColumn>
+                            <RadzenColumn Size="4">
+                                <RadzenStack Gap="2">
+
+                                    <RadzenText TextStyle="TextStyle.Subtitle2"
+                                                Style="font-weight:600;">等级:</RadzenText>
+                                    <RadzenNumeric @bind-Value=GamePokemon.LV />
+                                    <RadzenText TextStyle="TextStyle.Subtitle2"
+                                                Style="font-weight:600;">闪光:</RadzenText>
+                                    <RadzenCheckBox @bind-Value=GamePokemon.Shiny />
+                                    <RadzenText TextStyle="TextStyle.Subtitle2"
+                                                Style="font-weight:600;">太晶属性:</RadzenText>
+                                    <RadzenDropDown Data="Utils.PokeTypes"
+                                    TextProperty="Name_Chs"
+                                    @bind-Value=GamePokemon.TreaType />
+                                </RadzenStack>
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenTabsItem>
+                    <RadzenTabsItem Text="EV/IV" Disabled=@(GamePokemon.MetaPokemon == null)>
+                        @for (int i = 0; i < 6; ++i)
+                        {
+                            int j = i;
+                            string color1 = "black";
+                            if (GamePokemon.Nature.Stat_Up?.Id == j + 1 ) color1 = "crimson";
+                            if (GamePokemon.Nature.Stat_Down?.Id == j + 1 ) color1 = "blue";
+                            <RadzenRow AlignItems="AlignItems.Center">
+                                <RadzenColumn>
+                                    <RadzenText Style=@($"color:{@color1}")>@valueTag[j]:</RadzenText>
+
+                                </RadzenColumn>
+                                <RadzenColumn Size="2">
+                                    <RadzenNumeric Style="width:50px; height:30px;padding-right:0px" 
+                                    TValue="int" Step="1" Max="31" @bind-Value="@GamePokemon.IVs[j]"></RadzenNumeric>
+
+                                </RadzenColumn>
+                                <RadzenColumn Size="5">
+                                    <RadzenSlider Max="252" Min="0" Step="4" @bind-Value=GamePokemon.EVs[j] />
+                                </RadzenColumn>
+                                <RadzenColumn Size="2">
+                                    <RadzenNumeric Max="252" Min="0" Step="4" @bind-Value=GamePokemon.EVs[j] />
+                                </RadzenColumn>
+                                <RadzenColumn Size="1">
+                                    <RadzenText>@GamePokemon.Stats[j]</RadzenText>
+                                </RadzenColumn>
+                            </RadzenRow>
+                        }
+                    </RadzenTabsItem>
+                </Tabs>
+            </RadzenTabs>
+        </RadzenColumn>
+
+
+    </RadzenRow>
+
+}
+
 @code {
     [Parameter] public string Style { get; set; }
 
-    [Parameter] public GamePokemon GamePokemon{ get; set; }
+    [Parameter] public GamePokemon GamePokemon { get; set; }
+    string[] valueTag = { "ＨＰ", "物攻", "物防", "特攻", "特防", "速度" };
+
+
+    TextPokemon _textPokemon;
+
+    protected override Task OnInitializedAsync()
+    {
+        _textPokemon = Utils.GetTextPokemon(GamePokemon);
+        return base.OnInitializedAsync();
+    }
+
+    void OnChange()
+    {
+        Utils.ModifyGamePokemon(GamePokemon, _textPokemon);
+    }
+
 }

@@ -37,9 +37,14 @@ namespace PokeCommon.API.Controllers
         }
 
         [HttpPost("PSToPokeTeam")]
-        public async Task<GamePokemonTeam> PSToPokeTeam([FromBody] string text)
+        public async Task<GamePokemonTeam> PSToPokeTeam(Pack text)
         {
-            return await PSConverter.ConvertToPokemonsAsync(text);
+            var res = await PSConverter.ConvertToPokemonsAsync(text.Value);
+            while (res.GamePokemons.Count < 6)
+            {
+                res.GamePokemons.Add(new GamePokemon());
+            }
+            return res;
         }
     }
 

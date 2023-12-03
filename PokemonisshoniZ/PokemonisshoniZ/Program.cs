@@ -16,6 +16,8 @@ using Serilog.Events;
 using PokemonisshoniZ.ServiceDefaults;
 using PokemonisshoniZ.Extensions;
 using System.Data;
+using PokemonisshoniZ.Services;
+using PokemonisshoniZ.Utils;
 
 namespace PokemonisshoniZ;
 
@@ -170,6 +172,11 @@ public class Program
 
             }
             await um.AddToRoleAsync(await um.FindByEmailAsync("whs11998@163.com"), "Admin");
+
+            var pokeService = app.Services.GetService<PokeCommonService>();
+            
+
+            await Utils.Utils.Init(pokeService);
 
         }
 

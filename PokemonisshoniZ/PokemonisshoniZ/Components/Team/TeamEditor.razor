@@ -7,14 +7,32 @@
 @using PokemonisshoniZ.Data
 @using PokemonisshoniZ.Services
 
+@inject ApplicationDbContext context
+
 @inject PokemonisshoniService PokemonisshoniService
 
+@if (GamePokemon != null)
+{
+    
 <RadzenCard style="background-color:var(--rz-base-background-color)">
     <RadzenRow>
 
+        <RadzenColumn Size="12">
+            <RadzenRow AlignItems="AlignItems.Center">
+                <RadzenColumn Size="12" SizeMD="4">
+                        <RadzenTextBox class="w-100" @bind-Value="@Team.Name" @bind-Value:after=Save></RadzenTextBox>
+
+                </RadzenColumn>
+                <RadzenColumn>
+                        <RadzenButton Text="生成ps格式并保存" Click="OnPokeToPS" 
+                        ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" />
+
+                </RadzenColumn>
+                    <RadzenUpload ChooseText="从朱紫队伍图识别"></RadzenUpload>
+            </RadzenRow>
+        </RadzenColumn>
         <RadzenColumn Size="12" SizeMD="4">
-            <RadzenTextBox class="w-100" @bind-Value="@Team.Name"></RadzenTextBox>
-            <RadzenTextArea Cols="50" Rows="50" Style="resize: none; width:100%" @bind-Value=Team.PSText />
+            <RadzenTextArea Cols="50" Rows="50" Style="resize: none; width:100%" @bind-Value=Team.PSText @bind-Value:after=OnChangeText />
         </RadzenColumn>
         <RadzenColumn Size="12" SizeMD="8">
 
@@ -31,13 +49,30 @@
         </RadzenColumn>
     </RadzenRow>
 </RadzenCard>
+}
+
 @code {
     [Parameter] public string Style { get; set; }
     [Parameter] public int Id { get; set; }
     [Parameter] public PokeTeam Team { get; set; }
 
-    GamePokemonTeam GamePokemon { get; set; } = new() { GamePokemons = [null, null, null, null, null, null] };
+    GamePokemonTeam GamePokemon { get; set; } // = new() { GamePokemons = [null, null, null, null, null, null] };
 
+    void Save()
+    {
+        context.SaveChanges();
+    }
+
+    async Task OnPokeToPS()
+    {
+        Team.PSText = await PokemonisshoniService.PokeCommonService.PokeTeamToPS(GamePokemon);
+    }
+    async Task OnChangeText()
+    {
+        GamePokemon = await PokemonisshoniService.PokeCommonService.PSToPokeTeam(Team.PSText);
+        Team.PokemonIds = GamePokemon.GamePokemons.Select(s => s.MetaPokemon.Id).ToArray();
+        context.SaveChanges();
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,7 +80,7 @@
         {
 
         }
-        GamePokemon = await PokemonisshoniService.PokeCommonService.PSToPokeTeam(Team.Name);
+        GamePokemon = await PokemonisshoniService.PokeCommonService.PSToPokeTeam(Team.PSText);
         await base.OnInitializedAsync();
     }
 }

@@ -18,6 +18,7 @@ namespace PokemonisshoniZ.Extensions
             // builder.AddAuthenticationServices();
             var configuration = builder.Configuration;
             MainStroage.ReplayUrl = configuration.GetRequiredValue("ReplayUrl");
+
             builder.Services.AddMediatR(config =>
             {
                 config.RegisterServicesFromAssemblyContaining<Program>();

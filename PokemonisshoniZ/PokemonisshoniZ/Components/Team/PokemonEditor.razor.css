@@ -1,0 +1,174 @@
+﻿/*.nav-link.active {
+    background-color: deepskyblue sandybrown !important;
+    color: white !important
+}*/
+
+.nav-link {
+    /*color: deepskyblue !important*/
+}
+
+.nav-vsrc .nav-link {
+    border-radius: .25rem;
+}
+
+    .nav-vsrc .nav-link.active, .nav-usage .show > .nav-link {
+        color: #fff;
+        background-color: mediumblue
+    }
+
+.nav-usage .nav-link {
+    border-radius: .25rem
+}
+
+    .nav-usage .nav-link.active, .nav-usage .show > .nav-link {
+        color: #fff;
+        background-color: coral
+    }
+
+
+.nav-pp .nav-link {
+    border-radius: .25rem
+}
+
+    .nav-pp .nav-link.active, .nav-pp .show > .nav-link {
+        color: #fff;
+        background-color: lightskyblue
+    }
+
+.sec {
+    box-shadow: none;
+    -webkit-transition: .1s; /* Safari 和 Chrome */ /*加过度的动效 时长0.4S*/
+    -moz-transition: .1s; /* Firefox 4 */
+    -o-transition: .1s; /* Opera */
+}
+
+    .sec:hover {
+        box-shadow: 0 6px 14px 0 rgba(0, 0, 0, 0.06) !important;
+        border: solid 1px !important;
+        border-color: gray !important;
+    }
+
+input[type=range] {
+    -webkit-appearance: none;
+    -moz-appearance: range;
+    cursor: pointer;
+    height: 18px;
+    background: 0 0
+}
+
+    input[type=range]::-webkit-slider-runnable-track {
+        width: 300px;
+        height: 5px;
+        background: #f8fbfd;
+        border: 1px solid #aaa;
+        border-radius: 3px;
+        box-shadow: inset 0 1px 1px #ddd,1px 1px 0 rgba(255,255,255,.6)
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 18px;
+        width: 18px;
+        border-radius: 9px;
+        margin-top: -7px;
+        box-shadow: 0 1px 2px rgba(0,0,0,.2),inset 0 -1px 2px #fff;
+        border: 1px solid #777;
+        background: #e3e3e3;
+        background: linear-gradient(to bottom,#f6f6f6,#e3e3e3);
+        cursor: grab
+    }
+
+    input[type=range]:focus {
+        outline: none
+    }
+
+    input[type=range]:hover::-webkit-slider-runnable-track {
+        border: 1px solid #999
+    }
+
+    input[type=range]:hover::-webkit-slider-thumb {
+        background: #cfcfcf;
+        background: linear-gradient(to bottom,#f2f2f2,#c2c2c2);
+        border-color: #606060
+    }
+
+    input[type=range]:focus::-webkit-slider-thumb {
+        border-color: #048;
+        box-shadow: inset 0 -1px 2px #d2d2d2,0 0 6px #26a
+    }
+
+    input[type=range]:active::-webkit-slider-thumb {
+        background: #ddd;
+        cursor: grabbing
+    }
+
+.dark input[type=range]::-webkit-slider-runnable-track {
+    box-shadow: inset 0 1px 1px #ddd
+}
+
+
+
+
+
+.an a {
+    text-decoration: none;
+    color: black;
+}
+
+.abtex {
+    margin-left: 0px !important;
+    -webkit-transition: margin-left .1s; /* Safari 和 Chrome */ /*加过度的动效 时长0.4S*/
+    -moz-transition: margin-left .1s; /* Firefox 4 */
+    -o-transition: margin-left .1s; /* Opera */
+}
+    /*鼠标滑过时需要的左移的距离*/
+    .abtex:hover {
+        margin-left: 3px !important;
+    }
+
+/*正常的未被访问过的链接*/
+.an:link {
+    text-decoration: none;
+    color: black;
+}
+/*已经访问过的链接*/
+.an:visited {
+    text-decoration: none;
+    color: black;
+}
+
+/*.abtex {
+    display: inline-block;
+    font-size: 20px;
+    color: #FFFFFF;
+    font-weight: bold;
+    -webkit-transition: margin-left .4s;*/ /* Safari 和 Chrome */ /*加过度的动效 时长0.4S*/
+/*-moz-transition: margin-left .4s;*/ /* Firefox 4 */
+/*-o-transition: margin-left .4s;*/ /* Opera */
+/*}*/
+/*鼠标滑过时需要的左移的距离*/
+/*.listit:hover .abtex {
+    margin-left: 20px;
+}*/
+/*鼠标划过(停留)的链接*/
+.an:hover {
+    text-decoration: none;
+    color: black;
+    box-shadow: 0 6px 14px 0 rgba(0, 0, 0, 0.26) !important;
+}
+/* 正在点击的链接，鼠标在元素上按下还没有松开*/
+.an:active {
+    text-decoration: none;
+    color: black
+}
+
+/* 获得焦点的时候 鼠标松开时显示的颜色*/
+.an:focus {
+    text-decoration: none;
+    color: black
+}
+
+
+
+
+/*鼠标滑过时需要的左移的距离*/

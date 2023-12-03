@@ -20,39 +20,68 @@
             <RadzenRow AlignItems="AlignItems.Center">
                 <RadzenColumn Size="12">
 
-              
 
-                <RadzenRow>
-                    <RadzenButton Text="新建队伍" Click="@OnAddTeam" Style="width:150px;" />
 
-                    <RadzenDropDown Style="" @bind-Value="@propStyle"
-                                    Data=@(new DataItem[] { new DataItem("默认排序", 0),new DataItem("修改时间", 1),new DataItem("我喜爱的队伍", 2), })
-                                    ValueProperty="Value" TextProperty="name"></RadzenDropDown>
-                    <RadzenSwitch @bind-Value="@tooSimple" Style="margin-left:5px" />
-                    <RadzenText TextStyle="TextStyle.Subtitle1">简易显示</RadzenText>
-                </RadzenRow>
+                    <RadzenRow>
+                        <RadzenButton Text="新建队伍" Click="@OnAddTeam" Style="width:150px;" />
+
+                        <RadzenDropDown Style="" @bind-Value="@propStyle"
+                                        Data=@(new DataItem[] { new DataItem("默认排序", 0),new DataItem("修改时间", 1),new DataItem("我喜爱的队伍", 2), })
+                                        ValueProperty="Value" TextProperty="name"></RadzenDropDown>
+                        <RadzenSwitch @bind-Value="@tooSimple" Style="margin-left:5px" />
+                        <RadzenText TextStyle="TextStyle.Subtitle1">简易显示</RadzenText>
+                    </RadzenRow>
                 </RadzenColumn>
-                
-                @{
-                    IEnumerable<PokeTeam> teamListShow = teamList;
+                <RadzenColumn Size="12">
+                    @{
+                        IEnumerable<PokeTeam> teamListShow = teamList;
 
-                }
-                @if(tooSimple)
-                {
-                    
-                }
-                else
-                {
-                    <RadzenDataList WrapItems="true" Data="teamListShow" TItem="PokeTeam" PageSize="100" AllowPaging="true">
-                        <Template>
-                            <RadzenRow>
-                                <RadzenText>@context.Name</RadzenText>
-                                <RadzenButton Click="@(args =>OnOpenTeam(context))">编辑</RadzenButton>
-                            </RadzenRow>
+                    }
+                    @if (tooSimple)
+                    {
 
-                        </Template>
-                    </RadzenDataList>
-                }
+                    }
+                    else
+                    {
+                        <RadzenDataList WrapItems="true"
+                                        Data="teamListShow"
+                                        TItem="PokeTeam"
+                                        PageSize="100" AllowPaging="true">
+                            <Template>
+                                <RadzenRow class="w-100" JustifyContent="JustifyContent.Center"
+                                AlignItems="AlignItems.Center">
+                                    <RadzenColumn Size="12" SizeLG="1">
+                                        <RadzenText>@context.Name</RadzenText>
+
+                                    </RadzenColumn>
+
+                                    <RadzenColumn Size="12" SizeLG="8">
+                                        <RadzenRow>
+                                            @foreach (var poke in context.PokemonIds)
+                                            {
+                                                <RadzenColumn Size="12" SizeLG="2" SizeMD="4" SizeSM="6">
+                                                    <PokemonisshoniZ.Components.Common.PokeImg PokeId="poke" />
+
+                                                </RadzenColumn>
+                                            }
+                                        </RadzenRow>
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="12" SizeLG="2">
+                                        <RadzenStack Orientation="Orientation.Horizontal">
+                                            <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@(args =>OnOpenTeam(context))"></RadzenButton>
+                                            <RadzenButton Icon="close" Size="ButtonSize.Small" Click="@(args =>OnDeleteTeam(context))"></RadzenButton>
+
+                                        </RadzenStack>
+
+                                    </RadzenColumn>
+
+                                </RadzenRow>
+
+                            </Template>
+                        </RadzenDataList>
+                    }
+                </RadzenColumn>
+
             </RadzenRow>
         </RadzenTabsItem>
 
@@ -87,7 +116,8 @@
         // 是否为null return
         userId = authState.User.GetUserIdBlazor();
 
-        teamList = _context.PokeTeams.Where(s => s.UserId == userId).OrderByDescending(s => s.Id).ToList();
+        teamList = _context.PokeTeams.Where(s => s.UserId == userId)
+        .OrderByDescending(s => s.Id).ToList();
         await base.OnInitializedAsync();
 
     }
@@ -110,6 +140,20 @@
         editIdx = editTeamlist.Count;
     }
 
+    void OnDeleteTeam(PokeTeam team)
+    {
+        if (editTeamlist.Contains(team))
+        {
+            editTeamlist.Remove(team);
+            editIdx = 0;
+
+        }
+        teamList.Remove(team);
+        _context.PokeTeams.Remove(team);
+        _context.SaveChanges();
+
+    }
+
     void OnAddTeam()
     {
         if (editTeamlist.Count() >= 5)
@@ -124,9 +168,9 @@
             return;
         }
         PokeTeam pokeTeam = new PokeTeam
-        {
+            {
                 UserId = userId
-        };
+            };
         _context.PokeTeams.Add(pokeTeam);
         pokeTeam.Name = "未命名" + (teamList.Count() + 1);
         // 提取一下

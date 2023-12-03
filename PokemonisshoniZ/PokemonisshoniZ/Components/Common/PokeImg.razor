@@ -1,0 +1,36 @@
+﻿@using PokemonDataAccess.Models
+@using PokemonisshoniZ.Services
+@using Utils;
+
+@if (PokeId == null)
+{
+    <RadzenImage Style="@Style"
+                 class="@Class"
+    Path="@($"https://play.pokemonshowdown.com/sprites/gen5/primarina.png")" />
+
+}
+else if (PokeId == 0)
+{
+    
+}
+else
+{
+    <RadzenImage Style="@Style"
+        class="@Class"
+        Path="@($"https://play.pokemonshowdown.com/sprites/gen5/{Utils.PokeToPSPokemon[PokeId.Value].PSImgName}.png")" />
+
+}
+
+
+@code {
+    [Parameter]
+    public string Style { get; set; }
+    [Parameter]
+    public string Class { get; set; }
+
+
+
+    [Parameter]
+    public int? PokeId { get; set; }
+
+}
