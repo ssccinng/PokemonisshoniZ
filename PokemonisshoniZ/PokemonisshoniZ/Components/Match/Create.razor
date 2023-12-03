@@ -1,0 +1,28 @@
+﻿@page "/match/create"
+@using PokemonisshoniZ.Data
+
+@rendermode InteractiveAuto
+@attribute [StreamRendering]
+
+@inject ApplicationDbContext _context
+@inject NotificationService NotificationService
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize]
+@inject NavigationManager NavigationManager
+
+@inject ILogger<Create> _logger
+
+<RadzenRow>
+
+
+    <RadzenCard style="background-color:var(--rz-base-background-color)" class="w-100 px-5">
+        <RadzenText TextAlign="TextAlign.Center" TagName="TagName.H2">举办新的比赛</RadzenText>
+
+
+    </RadzenCard>
+</RadzenRow>
+
+@code {
+
+}
