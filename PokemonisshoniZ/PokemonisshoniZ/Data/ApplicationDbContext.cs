@@ -23,7 +23,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     #region 比赛
     public DbSet<PCLMatch> PCLMatches { get; set; }
 
-    #region
+    #endregion
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<PCLPokemon>().Property(e => e.Tags)
