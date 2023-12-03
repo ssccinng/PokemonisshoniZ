@@ -29,9 +29,14 @@ namespace PokemonisshoniZ.Services
             return cc;
         }
 
-        public GamePokemonTeam PSToPokeTeam(string text)
+        public async Task<GamePokemonTeam> PSToPokeTeam(string text)
         {
-            throw new NotImplementedException();
+            var aa = (await httpClient.PostAsJsonAsync($"{remotePSTranslateServiceBaseUrl}PSToPokeTeam", new { Value = text }));
+
+            var cc = await aa.Content.ReadFromJsonAsync<GamePokemonTeam>();
+
+            //var gg = JsonSerializer.Deserialize<GamePokemon>(cc, new JsonSerializerOptions {  PropertyNamingPolicy = JsonNamingPolicy.CamelCase }); ;
+            return cc;
 
 
         }

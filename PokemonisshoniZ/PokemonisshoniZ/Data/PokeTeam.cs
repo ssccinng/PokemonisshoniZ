@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PokemonisshoniZ.Data
 {
@@ -25,6 +26,9 @@ namespace PokemonisshoniZ.Data
         /// json化
         /// </summary>
         public List<string> Tags { get; set; } = new List<string>();
+
+        [Timestamp]
+        public byte[] ConcurrencyToken { get; set; }
     }
 
     public enum TeamType

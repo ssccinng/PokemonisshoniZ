@@ -5,13 +5,16 @@
 
 @using PokeCommon.Models
 @using PokemonisshoniZ.Data
+@using PokemonisshoniZ.Services
+
+@inject PokemonisshoniService PokemonisshoniService
 
 <RadzenCard style="background-color:var(--rz-base-background-color)">
     <RadzenRow>
 
         <RadzenColumn Size="12" SizeMD="4">
-            <RadzenTextBox class="w-100"></RadzenTextBox>
-            <RadzenTextArea Cols="50" Rows="50" Style="resize: none; width:100%" />
+            <RadzenTextBox class="w-100" @bind-Value="@Team.Name"></RadzenTextBox>
+            <RadzenTextArea Cols="50" Rows="50" Style="resize: none; width:100%" @bind-Value=Team.PSText />
         </RadzenColumn>
         <RadzenColumn Size="12" SizeMD="8">
 
@@ -34,4 +37,15 @@
     [Parameter] public PokeTeam Team { get; set; }
 
     GamePokemonTeam GamePokemon { get; set; } = new() { GamePokemons = [null, null, null, null, null, null] };
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Team == null)
+        {
+
+        }
+        GamePokemon = await PokemonisshoniService.PokeCommonService.PSToPokeTeam(Team.Name);
+        await base.OnInitializedAsync();
+    }
 }
