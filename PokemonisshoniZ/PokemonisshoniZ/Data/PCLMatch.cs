@@ -48,6 +48,12 @@ namespace PokemonisshoniZ.Data
 
         public int MaxPlayerNumber { get; set; } = 9999;
         public bool NotShow { get; set; } = false;
+
+        /// <summary>
+        /// 是否有密语
+        /// </summary>
+        public bool IsPrivate { get; set; } = false;
+
         /// <summary>
         /// 密语
         /// </summary>

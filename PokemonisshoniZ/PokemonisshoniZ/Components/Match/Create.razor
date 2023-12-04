@@ -17,12 +17,72 @@
 
 
     <RadzenCard style="background-color:var(--rz-base-background-color)" class="w-100 px-5">
-        <RadzenText TextAlign="TextAlign.Center" TagName="TagName.H2">举办新的比赛</RadzenText>
+        <RadzenStack Gap="5" Orientation="Orientation.Vertical">
+            <RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.DisplayH4">举办新的比赛</RadzenText>
+            <RadzenRow AlignItems="AlignItems.Center">
+                <RadzenColumn Size="12" SizeLG="4">
+                    <RadzenText>比赛名称: </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="8">
+                    <RadzenTextBox Style="width: 300px" @bind-Value=Match.Name></RadzenTextBox>
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeLG="4">
+                    <RadzenText>Logo: </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="8">
+                    <RadzenRow>
+                        <RadzenUpload Error=@(args => OnError(args, "FileInput")) Complete="@OnComplete" 
+                            Accept="image/*" Url="upload/image"></RadzenUpload>
+
+                    </RadzenRow>
+                    <RadzenImage Style="width: 300px" Path="@Match.Logo"></RadzenImage>
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeLG="4">
+                    <RadzenText>是否隐藏此比赛: </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="8">
+                    <RadzenCheckBox Style="width: 300px" @bind-Value=Match.NotShow></RadzenCheckBox>
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeLG="4">
+                    <RadzenText>比赛是否有密语: </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="8">
+                    <RadzenCheckBox Style="width: 300px" @bind-Value=Match.IsPrivate></RadzenCheckBox>
+                    <RadzenTextBox @bind-Value="@Match.Password" MaxLength="10" Placeholder="在此输入比赛密语"></RadzenTextBox>
+
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenStack>
 
 
     </RadzenCard>
 </RadzenRow>
 
 @code {
+    public PCLMatch Match = new PCLMatch();
 
+    void OnComplete(UploadCompleteEventArgs args)
+    {
+        Match.Logo = args.JsonResponse.RootElement.GetProperty("url").ToString();
+        //ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = args.JsonResponse.RootElement.GetProperty("url").ToString(), Detail = "", Duration = 4000 });
+
+    }
+    void OnError(UploadErrorEventArgs args, string name)
+    {
+        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "上传失败", Detail = args.Message, Duration = 4000 });
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+
+    }
+
+    async void Save()
+    {
+
+    }
 }
