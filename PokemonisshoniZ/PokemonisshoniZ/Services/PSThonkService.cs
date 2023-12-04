@@ -27,7 +27,7 @@ namespace PokemonisshoniZ.Services
 
         public Task<List<PSBattle>> GetNamePsBattle(string name)
         {
-            return httpClient.GetFromJsonAsync<List<PSBattle>>($"{remotePsbattleServiceBaseUrl}youbattle/{name}/0")!;
+            return httpClient.GetFromJsonAsync<List<PSBattle>>($"{remotePsbattleServiceBaseUrl}youbattle/{name}/-999")!;
 
         }
 

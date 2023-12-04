@@ -29,6 +29,8 @@ namespace PokemonisshoniZ.Data
 
         [Timestamp]
         public byte[] ConcurrencyToken { get; set; }
+
+        // 要再加类型
     }
 
     public enum TeamType

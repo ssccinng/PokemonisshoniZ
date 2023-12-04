@@ -1,0 +1,46 @@
+﻿@using EasyValueToRef
+@using PokemonisshoniZ.Data
+@inject Radzen.DialogService dialogService
+<RadzenRow>
+    <RadzenColumn Size="12">
+        <RadzenStack Orientation="Orientation.Horizontal">
+            <RadzenText Style="width: 100px">参赛Id: </RadzenText>
+            <RadzenTextBox @bind-Value=Player.ShadowId Style="width: 200px" />
+        </RadzenStack>
+    </RadzenColumn>
+
+    <RadzenColumn Size="12">
+        <RadzenStack Orientation="Orientation.Horizontal">
+            <RadzenText Style="width: 100px">参赛宣言: </RadzenText>
+            <RadzenTextBox @bind-Value=Player.Declaration Style="width: 200px" />
+        </RadzenStack>
+    </RadzenColumn>
+
+    <RadzenColumn Size="12">
+        <RadzenStack Orientation="Orientation.Horizontal">
+            <RadzenText Style="width: 100px">QQ: </RadzenText>
+            <RadzenTextBox @bind-Value=Player.QQ Style="width: 200px" />
+        </RadzenStack>
+    </RadzenColumn>
+
+    @if (Password.Value != null)
+    {
+        <RadzenColumn Size="12">
+            <RadzenStack Orientation="Orientation.Horizontal">
+                <RadzenText Style="width: 100px">密语: </RadzenText>
+                <RadzenTextBox @bind-Value=Password.Value Style="width: 200px" />
+            </RadzenStack>
+        </RadzenColumn>
+    }
+
+    <RadzenColumn Size="12">
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
+            <RadzenButton Click="@((args) => dialogService.Close(null))" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Light" Text="取消" Style="width: 120px" />
+            <RadzenButton Click="@((args) => dialogService.Close(true))" Variant="Variant.Flat" Text="报名" Style="width: 120px" />
+        </RadzenStack>
+    </RadzenColumn>
+</RadzenRow>
+@code {
+    [Parameter] public PCLMatchPlayer Player { get; set; }
+    [Parameter] public Ref<string> Password { get; set; }
+}

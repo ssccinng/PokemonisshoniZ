@@ -1,5 +1,7 @@
 ﻿@page "/match/detail/{Id:int}"
+@using EasyValueToRef
 @using Microsoft.EntityFrameworkCore
+@using PokemonisshoniZ.Components.PCLDialog
 @using PokemonisshoniZ.Data
 
 @rendermode InteractiveAuto
@@ -10,6 +12,9 @@
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
+
+@inject DialogService DialogService
+
 
 @inject ILogger<MatchDetail> _logger
 @if (_match == null)
@@ -101,7 +106,18 @@ else
                             var nowUserId = auth.User.GetUserIdBlazor();
                         }
                         <RadzenStack Orientation="Orientation.Horizontal" Gap="3" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap">
-                            <RadzenButton ButtonStyle="ButtonStyle.Success" Style="width:120px">@($"报名({_match.PCLMatchPlayerList.Count})")</RadzenButton>
+                                @if (_match.PCLMatchPlayerList.Any(s => s.UserId == nowUserId))
+                                {
+                                    <RadzenButton ButtonStyle="ButtonStyle.Success" Disabled=true
+                                    Style="width:120px">@($"已报名({_match.PCLMatchPlayerList.Count})")</RadzenButton>
+                                }
+                                else
+                                {
+                                    <RadzenButton ButtonStyle="ButtonStyle.Success"
+                                                  Style="width:120px" 
+                                                  Click="SignInMatch">@($"报名({_match.PCLMatchPlayerList.Count})")</RadzenButton>
+                                }
+
 
                             <RadzenButton ButtonStyle="ButtonStyle.Dark" Style="width:120px">比赛信息</RadzenButton>
 
@@ -148,6 +164,58 @@ else
 
 
         await base.OnInitializedAsync();
+    }
+
+
+    async void SignInMatch()
+    {
+        var nUser = new PCLMatchPlayer() { UserId = userId, PreTeam = new PokeTeam() { UserId = userId, TeamType = TeamType.Private } };
+        if (await OpenJoinCard(nUser))
+        {
+            _match.PCLMatchPlayerList.Add(nUser);
+            await _context.SaveChangesAsync();
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "报名成功" });
+
+            StateHasChanged();
+
+        }
+    }
+
+    public async Task<bool> OpenJoinCard(PCLMatchPlayer player)
+    {
+        Ref<string> pwd = new();
+        pwd.SetValue(null);
+        var param = new Dictionary<string, object>() { { "Player", player } };
+
+        if (_match.IsPrivate)
+        {
+            pwd.SetValue(string.Empty);
+
+        }
+        param["Password"] = pwd;
+
+        var res = await DialogService.OpenAsync<MatchJoinDialog>($"报名信息填写",
+               param,
+               new DialogOptions() { Width = "700px", Height = "312px", Resizable = false, Draggable = true });
+        if (res != null)
+        {
+            if (_match.IsPrivate && _match.Password != pwd.Value)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "报名失败", Detail = "密语不匹配" });
+
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+
     }
 
 }

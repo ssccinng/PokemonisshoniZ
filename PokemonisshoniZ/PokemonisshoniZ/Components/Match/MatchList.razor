@@ -39,6 +39,11 @@ else
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeLG="6">
                         <RadzenRow>
+                            <RadzenColumn Size="12" >
+                                <RadzenText TextStyle="TextStyle.DisplayH4" TextAlign="TextAlign.Center">
+                                    @match.Name
+                                </RadzenText>
+                            </RadzenColumn>
                             <RadzenColumn Size="12" SizeLG="4">
                                 <RadzenStack Gap="3">
                                     <RadzenText TextStyle="TextStyle.Caption">比赛开始时间:</RadzenText>
@@ -81,7 +86,7 @@ else
 
                     <RadzenColumn Size="12" SizeLG="3">
                         <RadzenRow class="h-100" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
-                            @if (match.IsPrivate)
+                            @if (!match.IsPrivate)
                             {
                                 <RadzenLink Path=@($"match/detail/{match.Id}") Icon="chevron_right" Style="color:gray; font-size:50px" />
 

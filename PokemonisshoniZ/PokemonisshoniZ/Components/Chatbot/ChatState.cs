@@ -12,6 +12,7 @@ using PokemonisshoniZ.Data;
 using PokemonisshoniZ.ServiceDefaults;
 using System.Linq.Dynamic.Core;
 using PokemonisshoniZ.Services;
+using PSThonk.Share.Models;
 
 namespace eShop.WebApp.Chatbot;
 
@@ -58,10 +59,10 @@ public class ChatState
         _chatHistory = _ai.GetService<IChatCompletion>().CreateNewChat("""
             You are an AI customer service agent for Pokemon.
             You NEVER respond about topics other than Pokemon.
-            Your job is to answer customer questions about Pokemon and Pokemon match.
+            Your job is to answer customer questions about Pokemon, Pokemon match 
             Add 洛托 after each sentence.
             You try to be concise and only provide longer responses if necessary.
-            If someone asks a question about anything other than Pokemon, Pokemon Match, or their account,
+            If someone asks a question about anything other than Pokemon, contest, 赛, 录像, or their account,
             you refuse to answer, and you instead ask 这些话题好像与宝可梦无关, 请'再来一次'吧洛托.
             """);
         //_chatHistory.AddAssistantMessage("阿罗拉!\n我是顺风而来的库库伊，需要我用华丽的招式帮你一些忙吗?");
@@ -148,12 +149,52 @@ public class ChatState
                 return Error(e, "查询失败");
             }
         }
+        //[SKFunction, Description("Sign up for the  contest")]
+        //public string NavigateToMatchList()
+        //{
+        //    chatState._navigationManager.NavigateTo("match/list");
+        //    return "帮你转到了比赛列表页面，请找到你想报名的比赛";
+        //}
+
         [SKFunction, Description("Sign up for the contest")]
-        public string NavigateToMatchList()
+        public string NavigateToMatchDetail([Description("The name of contest")] string name)
         {
-            chatState._navigationManager.NavigateTo("match/list");
-            return "帮你转到了比赛列表页面，请找到你想报名的比赛";
+            var match = chatState._context.PCLMatches.OrderByDescending(s => s.Id).FirstOrDefault(c => c.Name.Contains(name));
+            if (match == null)
+            {
+                chatState._navigationManager.NavigateTo("match/list");
+                return "好像没有找到比赛，帮你转到了比赛列表页面";
+            }
+
+
+            chatState._navigationManager.NavigateTo($"match/detail/{match.Id}");
+            return "想报名的话, 请点击下面的报名按钮";
         }
+
+        [SKFunction, Description("Get user Replay")]
+        public string GetUserPsReplay([Description("The name of user")] string name)
+        {
+            var username = chatState._context.PSUsername.FirstOrDefault(s => s.PSName.Contains(name));
+            if (username == null)
+            {
+                chatState._navigationManager.NavigateTo($"/PS/MyId");
+
+                return "你没有这个id的权限，想要观看请先绑定Id";
+            }
+
+            // todo: 权限问题记得
+            chatState._navigationManager.NavigateTo($"/PS/MyId/{username.PSName}");
+            // 下载插件
+            return $"正在给你展示{username.PSName}的录像";
+        }
+        [SKFunction, Description("store pokemon team")] 
+        public string StoreTeam()
+        {
+            chatState._navigationManager.NavigateTo($"/TeamManager");
+            return "在宝可梦盒子中就可以存储队伍";
+
+        }
+
 
 
         [SKFunction, Description("modify user infomation")]
@@ -164,6 +205,11 @@ public class ChatState
         }
 
 
+        [SKFunction, Description("Introducing website features\r\n\r\nn")]
+        public string Introducing()
+        {
+            return "这是pokemonisshoniZ网站，可以用于举办比赛，存储队伍，观看ps录像，查看排名等用途";
+        }
 
 
         //[SKFunction, Description("how to use this page")]
