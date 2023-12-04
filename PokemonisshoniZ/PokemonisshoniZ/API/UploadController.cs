@@ -89,31 +89,31 @@ namespace PokemonisshoniZ.API
 
 
         [HttpPost("/upload/teamimage")]
-        public IActionResult TeamImage(IFormFile files)
+        public IActionResult TeamImage(IFormFile file)
         {
 
             try
             {
-                if (files.Length > 1024 * 1024)
+                if (file.Length > 1024 * 1024)
                     throw new Exception("文件太大了! 最大为1mb");
                 var uploadPath = _environment.WebRootPath + @"/Upload";
                 if (!Directory.Exists(uploadPath))
                 {
                     Directory.CreateDirectory(uploadPath);
                 }
-                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(files.FileName)}";
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
 
 
 
                 using var stream = new MemoryStream() ;
                 using var filestream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create) ;
 
-                    byte[] aa = new byte[files.Length];
+                    byte[] aa = new byte[file.Length];
 
                     // Save the file
-                    files.CopyTo(stream);
+                    file.CopyTo(stream);
                     var fileBytes = stream.ToArray();
-                filestream.Write(fileBytes, 0, (int)files.Length);
+                filestream.Write(fileBytes, 0, (int)file.Length);
 
                     // Return the URL of the file
                     var url = Url.Content($"~/Upload/{fileName}");

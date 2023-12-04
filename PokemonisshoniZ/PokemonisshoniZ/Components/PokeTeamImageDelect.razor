@@ -14,7 +14,7 @@
 
             <RadzenRow>
                 <RadzenColumn Size="12" SizeLG="6">
-                    <RadzenUpload Multiple="true" Accept="image/*"
+                    <RadzenUpload Accept="image/*"
                                   ChooseText="选择图片"
                                   Url="upload/teamimage"
                                   Complete="(args => OnComplete(args))">
@@ -29,7 +29,7 @@
                 </RadzenColumn>
                 <RadzenColumn Size="12" SizeLG="2">
 
-                    <RadzenButton BusyText="识别中" IsBusy=busy Click="() => Change()">识别</RadzenButton>
+                    <RadzenButton BusyText="识别中" IsBusy=busy Click="() => Change()" Text="识别" />
                 </RadzenColumn>
 
             </RadzenRow>

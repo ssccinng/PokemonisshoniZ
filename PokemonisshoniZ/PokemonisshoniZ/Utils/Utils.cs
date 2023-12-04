@@ -73,8 +73,9 @@ namespace PokemonisshoniZ.Utils
                 source.MetaPokemon = Name2Poke[pokemon.Name];
                 source.Item = Name2Items[pokemon.Item];
                 source.Ability = Name2Abilitiy[pokemon.Ability];
-                for (int i = 0; i < source.Moves.Count; i++)
+                for (int i = 0; i < pokemon.Move.Length; i++)
                 {
+                    while (source.Moves.Count <= i) source.Moves.Add(new GameMove());
                     source.Moves[i].MetaMove = Name2Move[pokemon.Move[i]];
                 }
 

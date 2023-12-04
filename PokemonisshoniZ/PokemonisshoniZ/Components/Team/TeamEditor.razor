@@ -6,6 +6,8 @@
 @using PokeCommon.Models
 @using PokemonisshoniZ.Data
 @using PokemonisshoniZ.Services
+@using System.Text.Json
+@using PokemonisshoniZ.Utils
 
 @inject ApplicationDbContext context
 
@@ -28,7 +30,12 @@
                         ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" />
 
                 </RadzenColumn>
-                    <RadzenUpload ChooseText="从朱紫队伍图识别"></RadzenUpload>
+                    <RadzenUpload ChooseText="从朱紫队伍图识别"
+                                  Url="upload/teamimage"
+                               
+                                  Complete="(args => OnComplete(args))"></RadzenUpload>
+                    <RadzenDropDown @bind-Value="_languageType" Data="_types" Style="width: 100px" />
+                    <RadzenButton Variant="Variant.Text" Click="Delect" IsBusy=@isBusy BusyText="识别中.." Text="识别" />
             </RadzenRow>
         </RadzenColumn>
         <RadzenColumn Size="12" SizeMD="4">
@@ -58,6 +65,54 @@
 
     GamePokemonTeam GamePokemon { get; set; } // = new() { GamePokemons = [null, null, null, null, null, null] };
 
+    LanguageType _languageType = LanguageType.JPN;
+    LanguageType[] _types = Enum.GetValues<LanguageType>();
+    bool isBusy;
+
+    byte[] imgData = null;
+
+    async void OnComplete(UploadCompleteEventArgs args)
+    {
+
+        imgData = JsonSerializer.Deserialize<byte[]>(args.JsonResponse.RootElement.GetProperty("data"));
+
+       
+
+    }
+
+    async void Delect()
+    {
+        if (imgData == null || imgData.Length == 0)
+        {
+
+            return;
+        }
+
+        isBusy = true;
+        StateHasChanged();
+        var res = await PokemonisshoniService.PokeOCRService.GetImageTeamJson(imgData, _languageType);
+        // GamePokemon.GamePokemons.Clear();
+        for (int i = 0; i < res.Count; i++)
+        {
+            TextPokemon textPokemon = new();
+
+            textPokemon.Name = res[i][0].FirstOrDefault() ?? "";
+            textPokemon.Item = res[i][2].FirstOrDefault() ?? "";
+            textPokemon.Ability = res[i][1].FirstOrDefault() ?? "";
+            GamePokemon.GamePokemons[i].TreaType = Utils.PokeTypes.FirstOrDefault(s => s.Name_Chs == (res[i][4].FirstOrDefault() ?? ""));
+            for (int j = 0; j < res[i][3].Count && j < 4; j++)
+            {
+                textPokemon.Move[j] = res[i][3][j];
+            }
+            Utils.ModifyGamePokemon(GamePokemon.GamePokemons[i], textPokemon);
+        }
+        await OnPokeToPS();
+        isBusy = false;
+
+        StateHasChanged();
+
+        
+    }
     void Save()
     {
         context.SaveChanges();
@@ -66,11 +121,12 @@
     async Task OnPokeToPS()
     {
         Team.PSText = await PokemonisshoniService.PokeCommonService.PokeTeamToPS(GamePokemon);
+        await OnChangeText();
     }
     async Task OnChangeText()
     {
         GamePokemon = await PokemonisshoniService.PokeCommonService.PSToPokeTeam(Team.PSText);
-        Team.PokemonIds = GamePokemon.GamePokemons.Select(s => s.MetaPokemon.Id).ToArray();
+        Team.PokemonIds = GamePokemon.GamePokemons.Select(s => s.MetaPokemon?.Id ?? 0).ToArray();
         context.SaveChanges();
     }
 

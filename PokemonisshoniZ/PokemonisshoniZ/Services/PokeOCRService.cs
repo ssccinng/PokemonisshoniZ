@@ -14,6 +14,16 @@ namespace PokemonisshoniZ.Services
 
 
         }
+
+        public async Task<List<List<string>[]>> GetImageTeamJson(byte[] image, LanguageType languageType)
+        {
+
+            ByteArrayContent content = new(image);
+            return await (await httpClient.PostAsync($"{remoteServiceBaseUrl}GetImageJson/{GetLangStr(languageType)}", content)).Content.ReadFromJsonAsync<List<List<string>[]>>();
+
+
+        }
+
         public string GetLangStr(LanguageType lang)
         {
             switch (lang)
