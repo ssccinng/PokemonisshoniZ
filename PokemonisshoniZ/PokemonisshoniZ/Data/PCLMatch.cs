@@ -23,7 +23,7 @@ namespace PokemonisshoniZ.Data
 
         public MatchStatus MatchStatus { get; set; } // 是否正在举办
         public MatchType MatchType { get; set; } // 比赛类型 可能改成枚举类型
-        public bool IsOnline { get; set; } // 是否是线上赛
+        public MatchOnline MatchOnline { get; set; } // 是否是线上赛
 
 
         [Column(TypeName = "nvarchar(200)")]
@@ -43,11 +43,26 @@ namespace PokemonisshoniZ.Data
         public int GuestId { get; set; } = 1;
 
 
-        public bool IsTeamCompeition { get; set; } = false;
+        public MatchMode MatchMode { get; set; }
         public int TeamNumberLimit { get; set; } = 5;
 
         public int MaxPlayerNumber { get; set; } = 9999;
         public bool NotShow { get; set; } = false;
+        /// <summary>
+        /// 密语
+        /// </summary>
+        [Column(TypeName = "varchar(50)")]
+        public string Password { get; set; } = "";
+
+        /// <summary>
+        /// 需要签到
+        /// </summary>
+        public bool NeedCheck { get; set; } = false;
+
+        /// <summary>
+        /// 进行到的阶段数
+        /// </summary>
+        public int RoundIdx { get; set; } = -1;
 
         [Timestamp]
         public byte[] ConcurrencyToken { get; set; }
@@ -64,6 +79,18 @@ namespace PokemonisshoniZ.Data
         Registering,
         Running,
         Finished
+    }
+
+    public enum MatchOnline
+    {
+        Online,
+        Offline,
+    }
+
+    public enum MatchMode
+    {
+        Personal,
+        Team
     }
 
 }
