@@ -29,7 +29,7 @@
                 </RadzenColumn>
                 <RadzenColumn Size="12" SizeLG="2">
 
-                    <RadzenButton Click="() => Change()">识别</RadzenButton>
+                    <RadzenButton BusyText="识别中" IsBusy=busy Click="() => Change()">识别</RadzenButton>
                 </RadzenColumn>
 
             </RadzenRow>
@@ -38,7 +38,7 @@
             @if (imgPre != null)
             {
                 <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" class="mt-5">
-                    <RadzenImage Path="@imgPre" Style="width: 540px; height: 360px"></RadzenImage>
+                    <RadzenImage Path="@imgPre" class="w-100"></RadzenImage>
 
                 </RadzenRow>
 
@@ -47,7 +47,7 @@
     </RadzenColumn>
     <RadzenColumn Size="12" SizeLG="6">
         <RadzenCard style="background-color:var(--rz-base-background-color)">
-            <RadzenTextArea @bind-Value=@teamText Rows="30" Cols="50">
+            <RadzenTextArea @bind-Value=@teamText Rows="30" Cols="50" class="w-100">
 
             </RadzenTextArea>
         </RadzenCard>
@@ -58,6 +58,7 @@
     string teamText;
     string imgPre;
     byte[] imgData;
+    bool busy = false;
     LanguageType _languageType = LanguageType.JPN;
     LanguageType[] _types = Enum.GetValues<LanguageType>();
 
@@ -71,7 +72,12 @@
 
     async Task Change()
     {
+        busy = true;
+        StateHasChanged();
+
         teamText = await PokeOCRService.GetImageTeamData(imgData, _languageType);
+        busy = false;
+
         StateHasChanged();
     }
 }

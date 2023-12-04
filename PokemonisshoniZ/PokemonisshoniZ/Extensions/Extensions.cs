@@ -46,6 +46,7 @@ namespace PokemonisshoniZ.Extensions
                     config.AttemptTimeout.Timeout = timeSpan;
                     config.CircuitBreaker.SamplingDuration = timeSpan * 2;
                     config.TotalRequestTimeout.Timeout = timeSpan * 3;
+
                 });
 
         }

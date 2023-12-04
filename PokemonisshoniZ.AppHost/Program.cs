@@ -54,31 +54,4 @@ webApp.WithEnvironmentForServiceBinding("CallBackUrl", webApp, bindingName: "htt
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 builder.Build().Run();

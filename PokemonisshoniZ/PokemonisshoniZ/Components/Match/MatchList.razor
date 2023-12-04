@@ -1,9 +1,117 @@
 ﻿@page "/match/list"
-<p>MatchList</p>
-<RadzenCard style="background-color:var(--rz-base-background-color)">
-    <RadzenText>比赛列表</RadzenText>
 
-</RadzenCard>
+@using PokemonisshoniZ.Data
+@rendermode InteractiveAuto
+@attribute [StreamRendering]
+
+@inject ApplicationDbContext _context
+@inject NotificationService NotificationService
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+@inject ILogger<MatchDetail> _logger
+
+    @if (_pCLMatches == null)
+{
+    <LoadPage />
+}
+else
+{
+    <RadzenCard style="background-color:var(--rz-base-background-color)">
+
+        <RadzenDataList Data="_pCLMatches" PageSize="5" WrapItems="false" AllowPaging="true" TItem="PCLMatch">
+            <Template Context="match">
+                <AuthorizeView Context="authContext">
+                    <Authorized>
+                        @if (authContext.User.GetUserIdBlazor() == userId)
+                        {
+                            <RadzenRow>
+                                <RadzenText>这是您创办的比赛!</RadzenText>
+                            </RadzenRow>
+                        }
+                    </Authorized>
+                </AuthorizeView>
+
+                <RadzenRow >
+                    <RadzenColumn Size="12" SizeLG="3" class="p-3">
+                        <RadzenImage class="w-100" Path="@match.Logo" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeLG="6">
+                        <RadzenRow>
+                            <RadzenColumn Size="12" SizeLG="4">
+                                <RadzenStack Gap="3">
+                                    <RadzenText TextStyle="TextStyle.Caption">比赛开始时间:</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.H4">@match.MatchStartDate.ToString("yyyy-MM-dd hh:mm")</RadzenText>
+                                </RadzenStack>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeLG="4">
+                                <RadzenStack Gap="3">
+                                    <RadzenText TextStyle="TextStyle.Caption">比赛状态:</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.H4">@match.MatchStatus</RadzenText>
+                                </RadzenStack>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeLG="4">
+                                <RadzenStack Gap="3">
+                                    <RadzenText TextStyle="TextStyle.Caption">比赛方式:</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.H4">@match.MatchOnline</RadzenText>
+                                </RadzenStack>
+                            </RadzenColumn>
+
+                            <RadzenColumn Size="12" >
+                                <RadzenStack Gap="3">
+                                    <RadzenText TextStyle="TextStyle.Caption">比赛简介:</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.H4">
+
+                                        @if (match.Description != null && match.Description.Length > 200)
+                                        {
+                                            @((MarkupString)(match.Description.Substring(0, 100).Replace(" ", "&nbsp; ").Replace("\n", "<br />")))
+
+                                            <text>...</text>
+                                        }
+                                        else
+                                        {
+                                            @((MarkupString)(match.Description.Replace(" ", "&nbsp; ").Replace("\n", "<br />")))
+                                        }
+                                    </RadzenText>
+                                </RadzenStack>
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenColumn>
+
+                    <RadzenColumn Size="12" SizeLG="3">
+                        <RadzenRow class="h-100" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
+                            @if (match.IsPrivate)
+                            {
+                                <RadzenLink Path=@($"match/detail/{match.Id}") Icon="chevron_right" Style="color:gray; font-size:50px" />
+
+                            }
+                            else
+                            {
+                                <RadzenLink Path=@($"match/detail/{match.Id}") Icon="lock" Style="color:gray; font-size:50px" />
+
+                            }
+                        </RadzenRow>
+                       
+                    </RadzenColumn>
+                </RadzenRow>
+            </Template>
+        </RadzenDataList>
+    </RadzenCard>
+}
+
+
 @code {
+    List<PCLMatch> _pCLMatches;
 
+    string userId = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        userId = auth.User.GetUserIdBlazor();
+
+        _pCLMatches = _context.PCLMatches.OrderByDescending(s => s.Id).ToList();
+        await base.OnInitializedAsync();
+    }
 }

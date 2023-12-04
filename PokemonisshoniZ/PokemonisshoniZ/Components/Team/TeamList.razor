@@ -28,8 +28,8 @@
                         <RadzenDropDown Style="" @bind-Value="@propStyle"
                                         Data=@(new DataItem[] { new DataItem("默认排序", 0),new DataItem("修改时间", 1),new DataItem("我喜爱的队伍", 2), })
                                         ValueProperty="Value" TextProperty="name"></RadzenDropDown>
-                        <RadzenSwitch @bind-Value="@tooSimple" Style="margin-left:5px" />
-                        <RadzenText TextStyle="TextStyle.Subtitle1">简易显示</RadzenText>
+                        <RadzenSwitch @bind-Value="@tooSimple" Style="margin-left:5px; margin-top:5px" />
+                        <RadzenText TextStyle="TextStyle.Subtitle1" Style="margin-top:3px">简易显示</RadzenText>
                     </RadzenRow>
                 </RadzenColumn>
                 <RadzenColumn Size="12">

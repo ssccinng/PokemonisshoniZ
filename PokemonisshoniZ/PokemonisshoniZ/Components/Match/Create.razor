@@ -19,15 +19,15 @@
     <RadzenCard style="background-color:var(--rz-base-background-color)" class="w-100 px-5">
         <RadzenStack Gap="5" Orientation="Orientation.Vertical">
             <RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.DisplayH4">举办新的比赛</RadzenText>
-            <RadzenRow AlignItems="AlignItems.Center">
-                <RadzenColumn Size="12" SizeLG="4">
+            <RadzenRow >
+                <RadzenColumn Size="12" SizeLG="3">
                     <RadzenText>比赛名称: </RadzenText>
                 </RadzenColumn>
                 <RadzenColumn Size="12" SizeLG="8">
                     <RadzenTextBox Style="width: 300px" @bind-Value=Match.Name></RadzenTextBox>
                 </RadzenColumn>
 
-                <RadzenColumn Size="12" SizeLG="4">
+                <RadzenColumn Size="12" SizeLG="3">
                     <RadzenText>Logo: </RadzenText>
                 </RadzenColumn>
                 <RadzenColumn Size="12" SizeLG="8">
@@ -39,21 +39,138 @@
                     <RadzenImage Style="width: 300px" Path="@Match.Logo"></RadzenImage>
                 </RadzenColumn>
 
-                <RadzenColumn Size="12" SizeLG="4">
+                <RadzenColumn Size="12" SizeLG="3">
                     <RadzenText>是否隐藏此比赛: </RadzenText>
                 </RadzenColumn>
                 <RadzenColumn Size="12" SizeLG="8">
-                    <RadzenCheckBox Style="width: 300px" @bind-Value=Match.NotShow></RadzenCheckBox>
+                    <RadzenCheckBox @bind-Value=Match.NotShow></RadzenCheckBox>
                 </RadzenColumn>
 
-                <RadzenColumn Size="12" SizeLG="4">
+                <RadzenColumn Size="12" SizeLG="3">
                     <RadzenText>比赛是否有密语: </RadzenText>
                 </RadzenColumn>
                 <RadzenColumn Size="12" SizeLG="8">
-                    <RadzenCheckBox Style="width: 300px" @bind-Value=Match.IsPrivate></RadzenCheckBox>
-                    <RadzenTextBox @bind-Value="@Match.Password" MaxLength="10" Placeholder="在此输入比赛密语"></RadzenTextBox>
+                    <RadzenStack Gap="10">
+                        <RadzenCheckBox @bind-Value=Match.IsPrivate></RadzenCheckBox>
+                        @if (Match.IsPrivate)
+                        {
+                            <RadzenTextBox Style="width: 300px"
+                                @bind-Value="@Match.Password" MaxLength="10" Placeholder="在此输入比赛密语"></RadzenTextBox>
+
+                        }
+                    </RadzenStack>
+                   
 
                 </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="3">
+                    <RadzenText>是否允许游客参赛: </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="8">
+                    <RadzenCheckBox  @bind-Value=Match.AllowGuest></RadzenCheckBox>
+                </RadzenColumn>
+
+
+                <RadzenColumn Size="12" SizeLG="3">
+                    <RadzenText>预计比赛开始时间: </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="8">
+                    <RadzenDatePicker @bind-Value="@Match.MatchStartDate"
+                    TValue="DateTime" ShowTime="true" ShowSeconds="true"
+                    HoursStep="1" MinutesStep="5" SecondsStep="10" DateFormat="yyyy/MM/dd HH:mm" />
+
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeLG="3">
+                    <RadzenText>预计比赛结束时间: </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="8">
+                    <RadzenDatePicker @bind-Value="@Match.MatchEndDate"
+                                      TValue="DateTime" ShowTime="true" ShowSeconds="true"
+                                      HoursStep="1" MinutesStep="5" SecondsStep="10" DateFormat="yyyy/MM/dd HH:mm" />
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeLG="3">
+                    <RadzenText>比赛简介: </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="8">
+                    <RadzenTextArea  @bind-Value=Match.Description Cols="100" Rows="10" Style="resize:none"></RadzenTextArea>
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeLG="3">
+                    <RadzenText>比赛人数限制: </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="8">
+                    <RadzenNumeric @bind-Value=Match.MaxPlayerNumber ></RadzenNumeric>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="3">
+                    <RadzenText>比赛类型: </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="8">
+                    <RadzenRadioButtonList @bind-Value=@Match.MatchType TValue="MatchType">
+                        <Items>
+                            <RadzenRadioButtonListItem Text="单打" Value="MatchType.Single" />
+                            <RadzenRadioButtonListItem Text="双打" Value="MatchType.Double" />
+                        </Items>
+                    </RadzenRadioButtonList>
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeLG="3">
+                    <RadzenText>比赛方式: </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="8">
+                    <RadzenRadioButtonList @bind-Value=@Match.MatchOnline TValue="MatchOnline">
+                        <Items>
+                            <RadzenRadioButtonListItem Text="线下" Value="MatchOnline.Offline" />
+                            <RadzenRadioButtonListItem Text="线上" Value="MatchOnline.Online" />
+                        </Items>
+                    </RadzenRadioButtonList>
+                </RadzenColumn>
+
+               
+                <RadzenColumn Size="12" SizeLG="3">
+                    <RadzenText>比赛阶段: </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="8">
+                    <RadzenRow AlignItems="AlignItems.Center">
+
+                    @foreach (var round in Match.PCLMatchRoundList)
+                    {
+                        <RadzenColumn Size="12" SizeMD="6">
+                                <RadzenDropDown Data=@(new DataItem[] {
+                                            new("瑞士轮", RoundType.Swiss),
+                                            new("循环赛", RoundType.Robin),
+                                            new("淘汰赛", RoundType.Elimination)
+                                }) ValueProperty="Value" TextProperty="Name" @bind-Value=round.PCLRoundType>
+                             
+                            </RadzenDropDown>
+                        </RadzenColumn>
+                        <RadzenColumn Size="12" SizeMD="6">
+                            <RadzenStack Orientation="Orientation.Horizontal">
+                                    <RadzenCheckBox @bind-Value=round.IsGroup />
+                                    <RadzenText class="mb-3 ml-3">是否是小组赛</RadzenText>
+                            </RadzenStack>
+                           
+                        </RadzenColumn>
+                    }
+                    </RadzenRow>
+
+                    <RadzenRow class="mt-3">
+                        <RadzenColumn Size="12" SizeLG="6">
+                            <RadzenButton Variant="Variant.Text" ButtonStyle=ButtonStyle.Dark Icon="add" Click="AddRound" Text="添加一个阶段"></RadzenButton>
+                        </RadzenColumn>
+                        <RadzenColumn Size="12" SizeLG="6">
+                            <RadzenButton Variant="Variant.Text" ButtonStyle=ButtonStyle.Dark Icon="delete" Click="DeleteRound" Text="删除一个阶段"></RadzenButton>
+                        </RadzenColumn>
+                    </RadzenRow>
+                </RadzenColumn>
+                <RadzenColumn Size="12" class="mt-3">
+                    <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+                        <RadzenButton Style="width:200px" Click="OnCreate">创建</RadzenButton>
+                    </RadzenRow>
+                </RadzenColumn>
+
+                
+              
             </RadzenRow>
         </RadzenStack>
 
@@ -62,7 +179,24 @@
 </RadzenRow>
 
 @code {
-    public PCLMatch Match = new PCLMatch();
+    record DataItem(string Name, RoundType Value);
+
+
+    public PCLMatch Match = new PCLMatch() { };
+    string userId = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        AddRound();
+
+        userId = auth.User.GetUserIdBlazor();
+
+        Match.UserId = userId;
+
+        await base.OnInitializedAsync();
+    }
 
     void OnComplete(UploadCompleteEventArgs args)
     {
@@ -81,8 +215,45 @@
 
     }
 
-    async void Save()
+    void AddRound()
     {
+        if (Match.PCLMatchRoundList.Count < 5)
+        {
+            Match.PCLMatchRoundList.Add(new());
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "添加失败", Detail = "轮数太多了" });
+        }
+    }
 
+    void DeleteRound()
+    {
+        if (Match.PCLMatchRoundList.Count > 1)
+        {
+            Match.PCLMatchRoundList.Remove(Match.PCLMatchRoundList.Last());
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "删除失败", Detail = "轮数太少" });
+        }
+    }
+
+    async Task OnCreate()
+    {
+        _context.PCLMatches.Add(Match);
+        int res = await Save();
+        if (res > 0)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "创建成功" });
+
+            NavigationManager.NavigateTo($"Match/Detail/{Match.Id}");
+        }
+        
+    }
+
+    async Task<int> Save()
+    {
+       return await _context.SaveChangesAsync();
     }
 }

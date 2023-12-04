@@ -16,10 +16,10 @@ namespace PokemonisshoniZ.Data
         public string Description { get; set; } = string.Empty;
 
         [DataType(DataType.Date)]
-        public DateTime MatchStartDate { get; set; } // 比赛日期
+        public DateTime MatchStartDate { get; set; } = DateTime.Today; // 比赛日期 
 
         [DataType(DataType.Date)]
-        public DateTime MatchEndDate { get; set; }
+        public DateTime MatchEndDate { get; set; } = DateTime.Today;
 
         public MatchStatus MatchStatus { get; set; } // 是否正在举办
         public MatchType MatchType { get; set; } // 比赛类型 可能改成枚举类型

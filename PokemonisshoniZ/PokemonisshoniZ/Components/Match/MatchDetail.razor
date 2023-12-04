@@ -1,0 +1,153 @@
+﻿@page "/match/detail/{Id:int}"
+@using Microsoft.EntityFrameworkCore
+@using PokemonisshoniZ.Data
+
+@rendermode InteractiveAuto
+@attribute [StreamRendering]
+
+@inject ApplicationDbContext _context
+@inject NotificationService NotificationService
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+@inject ILogger<MatchDetail> _logger
+@if (_match == null)
+{
+    <LoadPage />
+}
+else
+{
+    <RadzenCard style="background-color:var(--rz-base-background-color)" class="w-100 px-5">
+        <RadzenRow JustifyContent=" JustifyContent.Center">
+            <RadzenRow class="w-75">
+                <RadzenColumn Size="12">
+                    <RadzenText TextStyle="TextStyle.DisplayH4" TextAlign="TextAlign.Center">
+                       @_match.Name
+                    </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="4">
+                    <RadzenText TextStyle="TextStyle.Subtitle1">
+                        <b>比赛开始时间.</b>
+                    </RadzenText>
+                    <RadzenText>
+                        @_match.MatchStartDate.ToString("yyyy-MM-dd HH:mm")
+                    </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="3">
+                    <RadzenText TextStyle="TextStyle.Subtitle1">
+                       <b> 比赛状态.</b>
+                    </RadzenText>
+                    <RadzenText>
+
+                        @switch (_match.MatchStatus)
+                        {
+                            // 可能要显示冠军
+                            case MatchStatus.Registering:
+                                <b Style="color:red">接受报名中！</b>
+                                break;
+                            case MatchStatus.Running:
+                                <b Style="color:green">正在进行中~</b>
+                                break;
+                            case MatchStatus.Finished:
+                                <b Style="color:green">比赛已结束~</b>
+                                break;
+                        }
+                    </RadzenText>
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeLG="3">
+                    <RadzenText TextStyle="TextStyle.Subtitle1">
+                        <b>比赛方式.</b>
+                    </RadzenText>
+                    <RadzenText>
+                        @_match.MatchOnline
+                    </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="2">
+                    <RadzenText TextStyle="TextStyle.Subtitle1">
+                        <b>比赛模式.</b>
+                    </RadzenText>
+                    <RadzenText>
+                        @_match.MatchType
+                    </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="12">
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeLG="4">
+                    <RadzenText TextStyle="TextStyle.Subtitle1">
+                        <b>比赛Logo.</b>
+                    </RadzenText>
+                    <RadzenImage class="w-100" Path="@_match.Logo" />
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeLG="8">
+                    <RadzenText TextStyle="TextStyle.Subtitle1">
+                        <b>比赛介绍.</b>
+                    </RadzenText>
+                    <RadzenText>
+                        @((MarkupString)_match.Description.Replace("\n", "<br />"))
+                    </RadzenText>
+                </RadzenColumn>
+
+
+
+                <RadzenColumn Size="12" class="mt-5">
+
+                <AuthorizeView Context="auth">
+                    <Authorized>
+                        @{
+                            var nowUserId = auth.User.GetUserIdBlazor();
+                        }
+                        <RadzenStack Orientation="Orientation.Horizontal" Gap="3" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap">
+                            <RadzenButton ButtonStyle="ButtonStyle.Success" Style="width:120px">@($"报名({_match.PCLMatchPlayerList.Count})")</RadzenButton>
+
+                            <RadzenButton ButtonStyle="ButtonStyle.Dark" Style="width:120px">比赛信息</RadzenButton>
+
+                            @if (nowUserId == _match.UserId)
+                            {
+                                <RadzenButton ButtonStyle="ButtonStyle.Dark" Style="width:120px">比赛设置</RadzenButton>
+                                <RadzenButton ButtonStyle="ButtonStyle.Dark" Style="width:120px">比赛管理</RadzenButton>
+
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Style="width:120px">删除</RadzenButton>
+
+                            }
+                            
+
+                        </RadzenStack>
+                    </Authorized>
+                    <NotAuthorized>
+
+                    </NotAuthorized>
+                </AuthorizeView>
+
+
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenRow>
+    </RadzenCard>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    PCLMatch _match;
+
+    string userId = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // why await boom
+        _match = _context.PCLMatches
+            .Include(s => s.PCLMatchPlayerList)
+            .Include(s => s.PCLMatchRoundList)
+            .FirstOrDefaultAsync(s => s.Id == Id).Result;
+
+        var auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        userId = auth.User.GetUserIdBlazor();
+
+
+        await base.OnInitializedAsync();
+    }
+
+}

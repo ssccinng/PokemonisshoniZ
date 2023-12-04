@@ -138,7 +138,7 @@ namespace PokemonisshoniZ.API
         }
 
         [HttpPost("/upload/image")]
-        public IActionResult Image([FromBody] IFormFile file)
+        public IActionResult Image(IFormFile file)
         {
 
             try
