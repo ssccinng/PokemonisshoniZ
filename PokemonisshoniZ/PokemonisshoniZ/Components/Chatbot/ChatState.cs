@@ -157,6 +157,15 @@ public class ChatState
         //    return "帮你转到了比赛列表页面，请找到你想报名的比赛";
         //}
 
+        [SKFunction, Description("create contest")]
+        public string CreateContest()
+        {
+
+            chatState._navigationManager.NavigateTo($"match/create");
+            return "在这个页面创办比赛";
+        } 
+        
+        
         [SKFunction, Description("Sign up for the contest")]
         public string NavigateToMatchDetail([Description("The name of contest")] string name)
         {
