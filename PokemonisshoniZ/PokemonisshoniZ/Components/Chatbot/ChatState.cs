@@ -13,6 +13,7 @@ using PokemonisshoniZ.ServiceDefaults;
 using System.Linq.Dynamic.Core;
 using PokemonisshoniZ.Services;
 using PSThonk.Share.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace eShop.WebApp.Chatbot;
 
@@ -205,13 +206,41 @@ public class ChatState
         }
 
 
-        [SKFunction, Description("Introducing website features\r\n\r\nn")]
+        [SKFunction, Description("Introducing website features")]
         public string Introducing()
         {
             return "这是pokemonisshoniZ网站，可以用于举办比赛，存储队伍，观看ps录像，查看排名等用途";
         }
 
+        [SKFunction, Description("Get recent match information")]
+        public string GetRecentMatch()
+        {
+            var items = chatState._context.PCLMatches.AsNoTracking().Take(3).ToArray();
+            foreach (var item in items)
+            {
+                item.Description = "";
+            }
 
+            return JsonSerializer.Serialize(items);
+        }
+
+        [SKFunction, Description("Obtain user registered competitions")]
+        public string GetUserMatch()
+        {
+            var userId = chatState._user.GetUserIdBlazor();
+
+            var items = chatState._context.PCLMatchPlayer.AsNoTracking().Where(s => s.UserId == userId).Select(s => s.PCLMatchId).Take(3).ToArray();
+
+            var vv = items.GetType();
+
+            var matches = items.Select(s => chatState._context.PCLMatches.Find(s)).ToArray();
+            foreach (var item in matches)
+            {
+                item.Description = "";
+            }
+
+            return JsonSerializer.Serialize(matches);
+        }
         //[SKFunction, Description("how to use this page")]
         //public string HelpUser()
         //{
@@ -223,56 +252,56 @@ public class ChatState
         //    return "这个页面好像没有帮助信息";
         //}
 
-        [SKFunction, Description("Searches the Northern Mountains catalog for a provided product description")]
-        public async Task<string> SearchCatalog([Description("The product description for which to search")] string productDescription)
-        {
-            try
-            {
-                return null;
-                //var results = await chatState._catalogService.GetCatalogItemsWithSemanticRelevance(0, 8, productDescription!);
-                //return JsonSerializer.Serialize(results);
-            }
-            catch (HttpRequestException e)
-            {
-                return Error(e, "Error accessing catalog.");
-            }
-        }
+        //[SKFunction, Description("Searches the Northern Mountains catalog for a provided product description")]
+        //public async Task<string> SearchCatalog([Description("The product description for which to search")] string productDescription)
+        //{
+        //    try
+        //    {
+        //        return null;
+        //        //var results = await chatState._catalogService.GetCatalogItemsWithSemanticRelevance(0, 8, productDescription!);
+        //        //return JsonSerializer.Serialize(results);
+        //    }
+        //    catch (HttpRequestException e)
+        //    {
+        //        return Error(e, "Error accessing catalog.");
+        //    }
+        //}
 
-        [SKFunction, Description("Adds a product to the user's shopping cart.")]
-        public async Task<string> AddToCart([Description("The id of the product to add to the shopping cart (basket)")] int itemId)
-        {
-            try
-            {
-                return null;
+        //[SKFunction, Description("Adds a product to the user's shopping cart.")]
+        //public async Task<string> AddToCart([Description("The id of the product to add to the shopping cart (basket)")] int itemId)
+        //{
+        //    try
+        //    {
+        //        return null;
 
-                //var item = await chatState._catalogService.GetCatalogItem(itemId);
-                //await chatState._basketState.AddAsync(item!);
-                return "Item added to shopping cart.";
-            }
-            catch (Grpc.Core.RpcException e) when (e.StatusCode == Grpc.Core.StatusCode.Unauthenticated)
-            {
-                return "Unable to add an item to the cart. You must be logged in.";
-            }
-            catch (Exception e)
-            {
-                return Error(e, "Unable to add the item to the cart.");
-            }
-        }
+        //        //var item = await chatState._catalogService.GetCatalogItem(itemId);
+        //        //await chatState._basketState.AddAsync(item!);
+        //        return "Item added to shopping cart.";
+        //    }
+        //    catch (Grpc.Core.RpcException e) when (e.StatusCode == Grpc.Core.StatusCode.Unauthenticated)
+        //    {
+        //        return "Unable to add an item to the cart. You must be logged in.";
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return Error(e, "Unable to add the item to the cart.");
+        //    }
+        //}
 
-        [SKFunction, Description("Gets information about the contents of the user's shopping cart (basket)")]
-        public async Task<string> GetCartContents()
-        {
-            try
-            {
-                return null;
-                //var basketItems = await chatState._basketState.GetBasketItemsAsync();
-                //return JsonSerializer.Serialize(basketItems);
-            }
-            catch (Exception e)
-            {
-                return Error(e, "Unable to get the cart's contents.");
-            }
-        }
+        //[SKFunction, Description("Gets information about the contents of the user's shopping cart (basket)")]
+        //public async Task<string> GetCartContents()
+        //{
+        //    try
+        //    {
+        //        return null;
+        //        //var basketItems = await chatState._basketState.GetBasketItemsAsync();
+        //        //return JsonSerializer.Serialize(basketItems);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return Error(e, "Unable to get the cart's contents.");
+        //    }
+        //}
 
         private string Error(Exception e, string message)
         {

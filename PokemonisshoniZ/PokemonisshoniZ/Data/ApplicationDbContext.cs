@@ -22,6 +22,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     #region 比赛
     public DbSet<PCLMatch> PCLMatches { get; set; }
+    public DbSet<PCLMatchPlayer> PCLMatchPlayer { get; set; }
 
     #endregion
     protected override void OnModelCreating(ModelBuilder builder)
