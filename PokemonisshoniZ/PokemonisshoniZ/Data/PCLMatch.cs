@@ -64,6 +64,10 @@ namespace PokemonisshoniZ.Data
         /// </summary>
         public int RoundIdx { get; set; } = -1;
 
+
+        public List<PCLMatchRound> PCLMatchRoundList { get; set; } = new List<PCLMatchRound>();
+        public List<PCLMatchPlayer> PCLMatchPlayerList { get; set; } = new List<PCLMatchPlayer>();
+
         [Timestamp]
         public byte[] ConcurrencyToken { get; set; }
     }
