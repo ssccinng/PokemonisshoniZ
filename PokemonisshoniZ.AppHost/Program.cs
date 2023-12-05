@@ -38,7 +38,7 @@ pokeIdentityApi.WithEnvironmentForServiceBinding("PSThonkApiClient", psthonkApi)
            .WithEnvironmentForServiceBinding("PSReplayClient", psreplayApi)
            .WithEnvironmentForServiceBinding("WebAppClient", webApp, bindingName: "https");
 
-var identityApi = builder.AddProject<Projects.Identity_API>("identity.api");
+//var identityApi = builder.AddProject<Projects.Identity_API>("identity.api");
 
 
 
